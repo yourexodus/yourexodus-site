@@ -1,36 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Your Exodus</title>
 
 <style>
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #0f172a;
-    color: #f8fafc;
+    background: #0b0f19;
+    color: #e5e7eb;
 }
 
+/* HEADER (Signify-style) */
 header {
+    background: #111827;
+    padding: 18px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 40px;
-    background: #111827;
+    border-bottom: 1px solid #1f2937;
 }
 
 .logo {
     font-size: 20px;
     font-weight: bold;
-    color: #60a5fa;
+    color: #93c5fd;
+    letter-spacing: 1px;
 }
 
 nav a {
-    color: #f8fafc;
+    color: #e5e7eb;
     text-decoration: none;
-    margin-left: 20px;
+    margin-left: 18px;
     font-size: 14px;
 }
 
@@ -38,63 +41,65 @@ nav a:hover {
     color: #60a5fa;
 }
 
+/* HERO (like WordPress header media) */
 .hero {
-    padding: 100px 40px;
+    padding: 120px 20px;
     text-align: center;
-    background: linear-gradient(135deg, #1e293b, #0f172a);
+    background: linear-gradient(135deg, #111827, #0b0f19);
 }
 
 .hero h1 {
-    font-size: 48px;
-    margin-bottom: 15px;
+    font-size: 44px;
+    margin-bottom: 10px;
 }
 
 .hero p {
-    font-size: 18px;
-    max-width: 600px;
+    max-width: 650px;
     margin: auto;
-    color: #cbd5e1;
+    color: #9ca3af;
+    font-size: 18px;
 }
 
 .btn {
     margin-top: 25px;
     display: inline-block;
-    padding: 12px 24px;
-    background: #3b82f6;
-    color: white;
-    text-decoration: none;
-    border-radius: 6px;
-}
-
-.btn:hover {
+    padding: 12px 26px;
     background: #2563eb;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
 }
 
+/* SECTIONS */
 .section {
-    padding: 60px 40px;
+    padding: 60px 20px;
     max-width: 1000px;
     margin: auto;
 }
 
 .card {
-    background: #1e293b;
+    background: #111827;
     padding: 20px;
     border-radius: 10px;
-    margin-top: 20px;
+    border: 1px solid #1f2937;
+    margin-top: 15px;
 }
 
+/* GRID (like theme widgets) */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
 }
 
+/* FOOTER */
 footer {
     text-align: center;
     padding: 30px;
     background: #111827;
+    border-top: 1px solid #1f2937;
     font-size: 13px;
-    color: #94a3b8;
+    color: #6b7280;
 }
 </style>
 </head>
@@ -102,7 +107,7 @@ footer {
 <body>
 
 <header>
-    <div class="logo">Your Exodus</div>
+    <div class="logo">YOUR EXODUS</div>
     <nav>
         <a href="#about">About</a>
         <a href="#mission">Mission</a>
@@ -112,45 +117,45 @@ footer {
 </header>
 
 <section class="hero">
-    <h1>Your Story Does Not End Here</h1>
-    <p>A platform for healing, memory sharing, and rebuilding life through experience, truth, and community.</p>
-    <a class="btn" href="#about">Start Here</a>
+    <h1>Here Your Story Does Not End</h1>
+    <p>A platform built for healing, memory, and rebuilding through lived experience and truth.</p>
+    <a class="btn" href="#about">Enter</a>
 </section>
 
 <section id="about" class="section">
-    <h2>About</h2>
+    <h2>About Us</h2>
     <div class="card">
-        We are the Francis family. This platform exists to share real-life experiences,
-        healing journeys, and stories that help others navigate loss, trauma, and rebuilding.
+        We are the Francis family. This platform exists to give people a place to share,
+        heal, and document life experiences that matter.
     </div>
 </section>
 
 <section id="mission" class="section">
     <h2>Mission</h2>
     <div class="grid">
-        <div class="card">Support families through grief</div>
-        <div class="card">Provide a space for storytelling</div>
-        <div class="card">Build a community of resilience</div>
+        <div class="card">Memory preservation</div>
+        <div class="card">Family storytelling</div>
+        <div class="card">Community healing</div>
+        <div class="card">Life documentation</div>
     </div>
 </section>
 
 <section id="stories" class="section">
     <h2>Stories</h2>
     <div class="card">
-        Share memories, experiences, and life journeys. This section will later connect to your form system or posts.
+        This is where your future submission system or blog feed will plug in.
     </div>
 </section>
 
 <section id="contact" class="section">
     <h2>Contact</h2>
     <div class="card">
-        Email: support@yourexodus.com<br/>
-        Or use your contact form page.
+        Email: support@yourexodus.com
     </div>
 </section>
 
 <footer>
-    © 2026 Your Exodus • Built with resilience
+    © 2026 Your Exodus • Built with purpose
 </footer>
 
 </body>
