@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 
 <head>
 
@@ -31,7 +31,7 @@ body{
 
 
 /* =========================
-NAVIGATION
+HEADER / NAVIGATION
 ========================= */
 
 
@@ -39,10 +39,11 @@ NAVIGATION
 
     position:fixed;
     top:0;
+    left:0;
     width:100%;
     z-index:1000;
 
-    background:rgba(18,18,20,.92);
+    background:rgba(18,18,20,.95);
 
     backdrop-filter:blur(14px);
 
@@ -53,6 +54,7 @@ NAVIGATION
 }
 
 
+
 .brand{
 
     display:flex;
@@ -61,28 +63,32 @@ NAVIGATION
 }
 
 
+
 .logo{
 
     font-family:'Cormorant Garamond',serif;
 
-    font-size:30px;
+    color:white;
+
+    font-size:32px;
 
     letter-spacing:3px;
 
-    color:white;
-
 }
+
 
 
 .tagline{
 
-    font-size:13px;
-
     color:#9ca3af;
+
+    font-size:13px;
 
     font-style:italic;
 
 }
+
+
 
 
 .nav{
@@ -98,6 +104,7 @@ NAVIGATION
 }
 
 
+
 .nav a{
 
     color:#d1d5db;
@@ -109,6 +116,7 @@ NAVIGATION
 }
 
 
+
 .nav a:hover{
 
     color:white;
@@ -117,31 +125,33 @@ NAVIGATION
 
 
 
+
 /* =========================
-WELCOME HERO
+MAIN INTRO
 ========================= */
 
 
 .hero{
 
-    padding:180px 25px 80px;
-
-    text-align:center;
+    padding:220px 25px 90px;
 
     max-width:950px;
 
     margin:auto;
 
+    text-align:center;
+
 }
+
 
 
 .hero h1{
 
     font-family:'Cormorant Garamond',serif;
 
-    font-size:70px;
-
     color:white;
+
+    font-size:70px;
 
     line-height:1.1;
 
@@ -150,24 +160,26 @@ WELCOME HERO
 }
 
 
+
 .hero p{
 
-    font-size:22px;
-
     color:#d1d5db;
+
+    font-size:22px;
 
 }
 
 
 
+
 /* =========================
-CHOICES
+CHOICE CARDS
 ========================= */
 
 
 .cards{
 
-    max-width:1100px;
+    max-width:1150px;
 
     margin:auto;
 
@@ -183,6 +195,7 @@ CHOICES
 
 
 
+
 .card{
 
     background:#1a1c21;
@@ -191,7 +204,7 @@ CHOICES
 
     border-radius:10px;
 
-    padding:40px 30px;
+    padding:45px 30px;
 
     text-align:center;
 
@@ -212,6 +225,7 @@ CHOICES
 }
 
 
+
 .card p{
 
     color:#d1d5db;
@@ -222,11 +236,10 @@ CHOICES
 
 
 
+
 .btn{
 
     display:inline-block;
-
-    padding:14px 30px;
 
     background:#b08b41;
 
@@ -234,13 +247,17 @@ CHOICES
 
     text-decoration:none;
 
-    letter-spacing:1px;
-
-    text-transform:uppercase;
+    padding:14px 32px;
 
     font-size:13px;
 
+    text-transform:uppercase;
+
+    letter-spacing:1px;
+
 }
+
+
 
 
 
@@ -253,7 +270,7 @@ SCRIPTURE
 
     max-width:850px;
 
-    margin:70px auto;
+    margin:80px auto;
 
     padding:45px;
 
@@ -265,13 +282,14 @@ SCRIPTURE
 
     font-family:'Cormorant Garamond',serif;
 
-    font-size:28px;
+    font-size:30px;
 
     font-style:italic;
 
     text-align:center;
 
 }
+
 
 
 
@@ -284,7 +302,7 @@ footer{
 
     text-align:center;
 
-    padding:55px;
+    padding:60px 20px;
 
     border-top:1px solid #2a2a30;
 
@@ -293,15 +311,17 @@ footer{
 }
 
 
+
 footer h3{
 
     font-family:'Cormorant Garamond',serif;
 
-    font-size:35px;
-
     color:white;
 
+    font-size:36px;
+
 }
+
 
 
 
@@ -313,7 +333,17 @@ font-size:45px;
 
 }
 
+
+.hero p{
+
+font-size:18px;
+
 }
+
+
+}
+
+
 
 </style>
 
@@ -321,7 +351,6 @@ font-size:45px;
 
 
 <body>
-
 
 
 <header class="topbar">
@@ -345,17 +374,36 @@ Here your story does not have to end
 
 <nav class="nav">
 
-<a href="../index.html">Home</a>
 
-<a href="../about-us/">About Us</a>
+<a href="../index.html">
+Home
+</a>
 
-<a href="../stories/">I Need Hope</a>
 
-<a href="../create-story/">Share My Story</a>
+<a href="../about-us/index.html">
+About Us
+</a>
 
-<a href="../testimonies/">Testimonies</a>
 
-<a href="../contact/">Contact</a>
+<a href="../stories/index.html">
+I Need Hope
+</a>
+
+
+<a href="../create-story/index.html">
+Share My Story
+</a>
+
+
+<a href="../testimonies/index.html">
+Testimonies
+</a>
+
+
+<a href="../contact/index.html">
+Contact
+</a>
+
 
 </nav>
 
@@ -379,7 +427,7 @@ Your Story Matters
 Every life has a journey.
 Every journey has moments of struggle, healing, faith, and transformation.
 
-Your story can encourage someone else who is still walking through their storm.
+Your story may be the encouragement someone else needs today.
 
 </p>
 
@@ -394,11 +442,11 @@ Your story can encourage someone else who is still walking through their storm.
 <section class="cards">
 
 
+
 <div class="card">
 
-
 <h2>
-❤️ I Need Hope
+I Need Hope
 </h2>
 
 
@@ -406,12 +454,12 @@ Your story can encourage someone else who is still walking through their storm.
 
 Are you walking through a difficult season?
 
-Find real stories from people who have faced loss, illness, fear, grief, addiction, or hardship and discovered that God was still working.
+Find real stories from people who have faced loss, illness, grief, fear, and hardship — and discovered that God was still working.
 
 </p>
 
 
-<a class="btn" href="../stories/">
+<a class="btn" href="../stories/index.html">
 Find Hope
 </a>
 
@@ -424,23 +472,24 @@ Find Hope
 
 <div class="card">
 
-
 <h2>
-✍️ Share My Story
+Share My Story
 </h2>
 
 
 <p>
 
-Your journey may become someone else's encouragement.
+Your journey matters.
 
-Preserve your memories, testimony, photos, and the moments that shaped your faith.
+Preserve your memories, photos, testimony, and the moments that shaped your faith.
+
+Your story may help someone else keep believing.
 
 </p>
 
 
-<a class="btn" href="../create-story/">
-Create Your Exodus
+<a class="btn" href="../create-story/index.html">
+Create My Exodus
 </a>
 
 
@@ -452,22 +501,21 @@ Create Your Exodus
 
 <div class="card">
 
-
 <h2>
-📖 Explore Testimonies
+Explore Testimonies
 </h2>
 
 
 <p>
 
-Read stories of healing, restoration, faith, and perseverance.
+Read stories of healing, restoration, perseverance, and faith.
 
 See how God has worked through the journeys of others.
 
 </p>
 
 
-<a class="btn" href="../testimonies/">
+<a class="btn" href="../testimonies/index.html">
 Read Stories
 </a>
 
@@ -481,17 +529,21 @@ Read Stories
 
 
 
-<div class="scripture">
+
+<section class="scripture">
 
 
 "And we know that all things work together for good to them that love God, to them who are the called according to his purpose."
 
+
 <br><br>
+
 
 Romans 8:28 (KJV)
 
 
-</div>
+</section>
+
 
 
 
@@ -500,17 +552,23 @@ Romans 8:28 (KJV)
 
 <footer>
 
+
 <h3>
 Your Exodus
 </h3>
+
 
 <p>
 Encouraging one another to keep believing.
 </p>
 
 
-</footer>
+<p>
+© 2026 Your Exodus • Built with purpose
+</p>
 
+
+</footer>
 
 
 
