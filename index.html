@@ -1,39 +1,39 @@
+<!DOCTYPE html>
+<html lang="en-US">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Your Exodus</title>
 
 <style>
-/* =========================
-   GLOBAL
-========================= */
 body {
     margin: 0;
     font-family: "Georgia", "Times New Roman", Garamond, serif;
     background: #0e0f12;
     color: #e5e7eb;
-    line-height: 1.7;
-    padding-top: 110px;
+    line-height: 1.6;
+    padding-top: 140px; /* more space for multi-row header */
 }
 
 /* =========================
-   TOP PORTAL HEADER
+   PORTAL HEADER (MATCHES YOUR STYLE SYSTEM)
 ========================= */
 .topbar {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(18,18,20,0.88);
-    backdrop-filter: blur(12px);
+    background: rgba(18,18,20,0.92);
+    backdrop-filter: blur(14px);
     border-bottom: 1px solid #2a2a30;
-    padding: 14px 18px;
+    padding: 12px 18px;
 }
 
+/* Identity block */
 .brand {
     display: flex;
     flex-direction: column;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .logo {
@@ -49,24 +49,19 @@ body {
     font-style: italic;
 }
 
-/* NAV PORTAL STRIP */
+/* NAV SYSTEM (MULTI-ROW LIKE YOUR ORIGINAL SITE) */
 .nav {
     display: flex;
-    gap: 18px;
-    overflow-x: auto;
-    white-space: nowrap;
-    padding-bottom: 6px;
-}
-
-.nav::-webkit-scrollbar {
-    display: none;
+    flex-wrap: wrap; /* IMPORTANT: allows full system menu */
+    gap: 14px 18px;
+    padding-top: 6px;
 }
 
 .nav a {
     color: #9ca3af;
     text-decoration: none;
     font-size: 13px;
-    flex: 0 0 auto;
+    white-space: nowrap;
     transition: 0.2s ease;
 }
 
@@ -75,10 +70,10 @@ body {
 }
 
 /* =========================
-   HERO SECTION
+   HERO (IMAGE IS PRIMARY ENTRY POINT)
 ========================= */
 .hero {
-    height: 85vh;
+    height: 88vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -94,14 +89,14 @@ body {
 }
 
 .hero-content {
-    max-width: 800px;
+    max-width: 850px;
 }
 
 .hero h1 {
-    font-size: 54px;
+    font-size: 56px;
     font-weight: normal;
     color: #ffffff;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .hero p {
@@ -112,7 +107,7 @@ body {
 
 .btn {
     display: inline-block;
-    margin-top: 25px;
+    margin-top: 22px;
     padding: 12px 28px;
     background: #ffffff;
     color: #0e0f12;
@@ -121,15 +116,10 @@ body {
     letter-spacing: 1px;
     text-decoration: none;
     border-radius: 2px;
-    transition: 0.2s ease;
-}
-
-.btn:hover {
-    background: #d1d5db;
 }
 
 /* =========================
-   SECTIONS
+   CONTENT SYSTEM
 ========================= */
 .section {
     max-width: 1000px;
@@ -146,17 +136,16 @@ body {
     color: #ffffff;
 }
 
-/* CARDS */
+/* CARD STYLE (SUBTLE + INSTITUTIONAL, NOT “STARTUP”) */
 .card {
-    background: rgba(26,26,30,0.7);
+    background: rgba(26,26,30,0.75);
     border: 1px solid #2a2a30;
     padding: 28px;
-    border-radius: 8px;
-    backdrop-filter: blur(6px);
+    border-radius: 6px;
     color: #d1d5db;
 }
 
-/* GRID */
+/* GRID SYSTEM */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -176,7 +165,6 @@ footer {
     font-size: 13px;
     color: #6b7280;
     border-top: 1px solid #2a2a30;
-    margin-top: 60px;
 }
 </style>
 </head>
@@ -184,9 +172,10 @@ footer {
 <body>
 
 <!-- =========================
-     HEADER
+     PORTAL HEADER
 ========================= -->
 <header class="topbar">
+
     <div class="brand">
         <div class="logo">Your Exodus</div>
         <div class="tagline">Here your story does not have to end</div>
@@ -207,10 +196,11 @@ footer {
         <a href="#resources">Resources</a>
         <a href="#samples">Samples</a>
     </nav>
+
 </header>
 
 <!-- =========================
-     HERO IMAGE
+     HERO IMAGE ENTRY POINT
 ========================= -->
 <section class="hero">
     <div class="hero-content">
@@ -221,7 +211,7 @@ footer {
 </section>
 
 <!-- =========================
-     ABOUT
+     CORE SECTIONS
 ========================= -->
 <section id="about" class="section">
     <h2>About Us</h2>
@@ -231,9 +221,6 @@ footer {
     </div>
 </section>
 
-<!-- =========================
-     MISSION
-========================= -->
 <section id="mission" class="section">
     <h2>Our Mission</h2>
     <div class="grid">
@@ -244,63 +231,22 @@ footer {
     </div>
 </section>
 
-<!-- =========================
-     PLACEHOLDERS
-========================= -->
-<section id="privacy" class="section">
-    <h2>Privacy Policy</h2>
-    <div class="card">Coming soon.</div>
-</section>
-
-<section id="terms" class="section">
-    <h2>Terms</h2>
-    <div class="card">Coming soon.</div>
-</section>
-
-<section id="bundle" class="section">
-    <h2>Bundle</h2>
-    <div class="card">Coming soon.</div>
-</section>
-
-<section id="affiliate" class="section">
-    <h2>Affiliate Dashboard</h2>
-    <div class="card">Coming soon.</div>
-</section>
+<section id="privacy" class="section"><h2>Privacy Policy</h2><div class="card">Coming soon.</div></section>
+<section id="terms" class="section"><h2>Terms</h2><div class="card">Coming soon.</div></section>
+<section id="bundle" class="section"><h2>Bundle</h2><div class="card">Coming soon.</div></section>
+<section id="affiliate" class="section"><h2>Affiliate Dashboard</h2><div class="card">Coming soon.</div></section>
 
 <section id="contact" class="section">
     <h2>Contact Us</h2>
     <div class="card">Email: support@yourexodus.com</div>
 </section>
 
-<section id="find" class="section">
-    <h2>Find My Page</h2>
-    <div class="card">Coming soon.</div>
-</section>
-
-<section id="jobs" class="section">
-    <h2>Jobs</h2>
-    <div class="card">Coming soon.</div>
-</section>
-
-<section id="order" class="section">
-    <h2>Order</h2>
-    <div class="card">Coming soon.</div>
-</section>
-
-<section id="checkout" class="section">
-    <h2>Checkout</h2>
-    <div class="card">Coming soon.</div>
-</section>
-
-<section id="resources" class="section">
-    <h2>Resources</h2>
-    <div class="card">Coming soon.</div>
-</section>
-
-<section id="samples" class="section">
-    <h2>Samples</h2>
-    <div class="card">Coming soon.</div>
-</section>
+<section id="find" class="section"><h2>Find My Page</h2><div class="card">Coming soon.</div></section>
+<section id="jobs" class="section"><h2>Jobs</h2><div class="card">Coming soon.</div></section>
+<section id="order" class="section"><h2>Order</h2><div class="card">Coming soon.</div></section>
+<section id="checkout" class="section"><h2>Checkout</h2><div class="card">Coming soon.</div></section>
+<section id="resources" class="section"><h2>Resources</h2><div class="card">Coming soon.</div></section>
+<section id="samples" class="section"><h2>Samples</h2><div class="card">Coming soon.</div></section>
 
 <!-- =========================
      FOOTER
