@@ -4,9 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Who We Are | Your Exodus</title>
+<title>About | Your Exodus</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
+
 *{
     margin:0;
     padding:0;
@@ -14,202 +17,252 @@
 }
 
 body{
-    font-family:Georgia,"Times New Roman",serif;
-    background:#0e1117;
-    color:#ececec;
-    line-height:1.8;
+
+    background:#f8f7f3;
+    color:#333;
+    font-family:'Open Sans',sans-serif;
+    line-height:1.9;
+
 }
 
-a{
-    color:#d4af37;
-    text-decoration:none;
-}
+.hero{
 
-header{
     position:relative;
-    height:420px;
+    overflow:hidden;
+    text-align:center;
+
+}
+
+.hero img{
+
+    width:100%;
+    height:500px;
+    object-fit:cover;
+    display:block;
+
+}
+
+.hero-overlay{
+
+    position:absolute;
+    inset:0;
+    background:rgba(0,0,0,.45);
+
     display:flex;
     align-items:center;
     justify-content:center;
-    text-align:center;
-    overflow:hidden;
-    background:
-    linear-gradient(rgba(0,0,0,.65),rgba(0,0,0,.75)),
-    url("images/about-hero.jpg") center center/cover;
+    flex-direction:column;
+
 }
 
-/* Replace images/about-hero.jpg later with your own image */
+.hero h1{
 
-header h1{
-    font-size:3.5rem;
-    margin-bottom:15px;
     color:white;
+    font-family:'Cormorant Garamond',serif;
+    font-size:4rem;
+    letter-spacing:2px;
+    margin-bottom:15px;
+
 }
 
-header p{
+.hero p{
+
+    color:#f1f1f1;
+    font-size:1.2rem;
     max-width:700px;
-    margin:auto;
-    font-size:1.25rem;
-    color:#ddd;
+
 }
 
 .container{
-    width:90%;
-    max-width:1000px;
+
+    max-width:900px;
     margin:auto;
-    padding:70px 0;
+    padding:80px 30px;
+
 }
 
-.card{
-    background:#171b23;
-    border-radius:16px;
-    padding:45px;
-    box-shadow:0 15px 40px rgba(0,0,0,.35);
-}
+h2{
 
-.card h2{
-    color:#d4af37;
-    margin-bottom:30px;
-    font-size:2rem;
-}
-
-.card p{
+    font-family:'Cormorant Garamond',serif;
+    color:#7a5c29;
+    font-size:2.4rem;
     margin-bottom:25px;
-    font-size:1.1rem;
+
 }
 
-.highlight{
-    color:#d4af37;
-    font-weight:bold;
+p{
+
+    margin-bottom:28px;
+    font-size:1.08rem;
+
 }
 
 .scripture{
-    margin-top:70px;
-    background:linear-gradient(135deg,#916f13,#d4af37);
-    color:white;
-    padding:60px;
-    text-align:center;
-}
 
-.scripture h3{
-    font-size:2rem;
-    margin-bottom:20px;
+    background:white;
+    border-left:6px solid #b08b41;
+
+    padding:35px;
+
+    margin:55px 0;
+
+    font-style:italic;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.07);
+
 }
 
 .scripture p{
-    font-size:1.3rem;
-    max-width:900px;
-    margin:auto;
-    font-style:italic;
+
+    margin-bottom:15px;
+
 }
 
-footer{
+.reference{
+
+    text-align:right;
+    font-weight:700;
+    color:#7a5c29;
+
+}
+
+.mission{
+
+    background:#ece6d7;
+
+    padding:50px;
+
+    margin-top:60px;
+
+    border-radius:8px;
+
+}
+
+.footer{
+
     text-align:center;
-    padding:40px;
-    color:#888;
-    font-size:.9rem;
+
+    padding:60px;
+
+    background:#222;
+
+    color:#ddd;
+
+}
+
+.footer h3{
+
+    color:white;
+    font-family:'Cormorant Garamond',serif;
+    font-size:2rem;
+    margin-bottom:15px;
+
 }
 
 @media(max-width:768px){
 
-header{
+.hero h1{
+
+font-size:2.7rem;
+
+}
+
+.hero img{
+
 height:320px;
-}
 
-header h1{
-font-size:2.4rem;
-}
-
-.card{
-padding:30px;
-}
-
-.scripture{
-padding:40px 25px;
 }
 
 }
+
 </style>
 
 </head>
 
 <body>
 
-<header>
+<section class="hero">
 
-<div>
+<img src="wp-content/uploads/2024/02/aboutUs_thepath.png" alt="The Narrow Path">
 
-<h1>Who We Are</h1>
+<div class="hero-overlay">
 
-<p>
-Sharing the hope of Jesus Christ, one testimony at a time.
-</p>
+<h1>About Your Exodus</h1>
+
+<p>Helping people discover purpose, hope, and the eternal life found in Jesus Christ.</p>
 
 </div>
 
-</header>
+</section>
 
-<section class="container">
+<div class="container">
 
-<div class="card">
+<h2>Living With Purpose</h2>
+
+<p>
+Many people spend their lives fearing death, yet often overlook the greater question:
+<strong>How are we living today?</strong>
+</p>
+
+<p>
+As followers of Jesus Christ, we believe our hope is not found in avoiding death, but in the promise of eternal life through Him. Because of that hope, we are free to live with courage, purpose, and compassion, knowing that every day is an opportunity to love God, serve others, and make a lasting difference.
+</p>
+
+<div class="scripture">
+
+<p>
+
+"Enter ye in at the strait gate: for wide is the gate, and broad is the way, that leadeth to destruction, and many there be which go in thereat:
+
+Because strait is the gate, and narrow is the way, which leadeth unto life, and few there be that find it."
+
+</p>
+
+<div class="reference">
+
+Matthew 7:13–14 (KJV)
+
+</div>
+
+</div>
+
+<p>
+
+At <strong>Your Exodus</strong>, we believe God has created every person with a unique purpose. Each experience, every trial, every victory, and every testimony can be used for His glory. Our mission is to encourage people not only to prepare for eternity, but to embrace the calling God has placed on their lives today.
+
+</p>
+
+<p>
+
+Life is more than simply existing until our final breath. It is about becoming the person God created us to be, walking faithfully with Christ, and leaving a legacy of faith, hope, and love for those who follow after us.
+
+</p>
+
+<div class="mission">
 
 <h2>Our Mission</h2>
 
 <p>
-<strong>Your Exodus</strong> is a Christ-centered ministry dedicated to proclaiming the hope of the Gospel and reminding the world that every person has the opportunity to experience new life through Jesus Christ.
-</p>
 
-<p>
-We are a <span class="highlight">body of believers</span> united by one purpose: to share the Good News that death is not the end, but the beginning of eternal life for all who place their faith in Jesus Christ. In a world filled with fear, brokenness, disappointment, and uncertainty, we believe God's story of redemption is still being written in the lives of ordinary people.
-</p>
+When we know where our eternal hope rests, we are no longer defined by the fear of death.
 
-<p>
-The name <strong>Your Exodus</strong> represents more than a journey—it represents God's power to lead His people out of darkness and into His marvelous light. Just as God delivered Israel from bondage, Christ delivers us from sin, shame, fear, addiction, regret, and hopelessness. Every believer has an Exodus story, and every testimony points to the faithfulness of God.
-</p>
+Instead, we are empowered to live with purpose, to share the Good News, and to help others discover the hope that is found in Jesus Christ.
 
-<p>
-As followers and disciples of Jesus Christ, we believe we have been commissioned to go and make disciples of all nations. Our mission is to encourage, equip, and inspire others by sharing biblical truth, personal testimonies, practical wisdom, and stories of God's transforming grace.
-</p>
-
-<p>
-Whether you are searching for answers, rebuilding after loss, overcoming hardship, or simply seeking a deeper relationship with God, we want you to know there is hope. Your past does not define your future. God's grace is greater than your failures, and His love is stronger than your fears.
-</p>
-
-<p>
-We believe every life has purpose, every story has value, and every person can become a testimony of God's redeeming power.
-</p>
-
-<p>
-Our prayer is that through the content shared here, you will come to know Jesus Christ more deeply, grow in your faith, and discover the freedom found in walking with Him.
-</p>
-
-<p style="font-size:1.25rem;text-align:center;margin-top:40px;color:#d4af37;">
-<strong>
-"The greatest Exodus is not simply leaving something behind—it is following Christ into the life He has prepared for you."
-</strong>
 </p>
 
 </div>
 
-</section>
+</div>
 
-<section class="scripture">
+<footer class="footer">
 
-<h3>Our Commission</h3>
+<h3>Your Exodus</h3>
 
 <p>
-"Go therefore and make disciples of all nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit, teaching them to observe all that I have commanded you. And behold, I am with you always, to the end of the age."
+
+"Every journey begins with one faithful step."
+
 </p>
-
-<br>
-
-<strong>Matthew 28:19–20 (ESV)</strong>
-
-</section>
-
-<footer>
-
-© 2026 Your Exodus • Sharing Hope. Building Faith. Pointing People to Christ.
 
 </footer>
 
