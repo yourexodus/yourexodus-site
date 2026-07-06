@@ -14,98 +14,170 @@
 <style>
 
 *{
-margin:0;
-padding:0;
-box-sizing:border-box;
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
 }
 
 
 body{
 
-background:#0e0f12;
-color:#e5e7eb;
-font-family:'Open Sans',sans-serif;
-line-height:1.7;
+    background:#0e0f12;
+    color:#e5e7eb;
+    font-family:'Open Sans',sans-serif;
+    line-height:1.7;
 
 }
 
 
-header{
+/* =========================
+NAVIGATION
+========================= */
 
-padding:25px;
-text-align:center;
 
-border-bottom:1px solid #2a2a30;
+.topbar{
+
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index:1000;
+
+    background:rgba(18,18,20,.92);
+
+    backdrop-filter:blur(14px);
+
+    border-bottom:1px solid #2a2a30;
+
+    padding:15px 25px;
+
+}
+
+
+.brand{
+
+    display:flex;
+    flex-direction:column;
 
 }
 
 
 .logo{
 
-font-family:'Cormorant Garamond',serif;
-font-size:42px;
-letter-spacing:3px;
-color:white;
+    font-family:'Cormorant Garamond',serif;
+
+    font-size:30px;
+
+    letter-spacing:3px;
+
+    color:white;
 
 }
 
 
 .tagline{
 
-color:#aaa;
-font-style:italic;
+    font-size:13px;
+
+    color:#9ca3af;
+
+    font-style:italic;
+
+}
+
+
+.nav{
+
+    display:flex;
+
+    flex-wrap:wrap;
+
+    gap:18px;
+
+    margin-top:12px;
+
+}
+
+
+.nav a{
+
+    color:#d1d5db;
+
+    text-decoration:none;
+
+    font-size:14px;
+
+}
+
+
+.nav a:hover{
+
+    color:white;
 
 }
 
 
 
+/* =========================
+WELCOME HERO
+========================= */
+
+
 .hero{
 
-text-align:center;
-padding:90px 25px;
+    padding:180px 25px 80px;
 
-max-width:900px;
-margin:auto;
+    text-align:center;
+
+    max-width:950px;
+
+    margin:auto;
 
 }
 
 
 .hero h1{
 
-font-family:'Cormorant Garamond',serif;
+    font-family:'Cormorant Garamond',serif;
 
-font-size:60px;
+    font-size:70px;
 
-color:white;
+    color:white;
 
-margin-bottom:25px;
+    line-height:1.1;
+
+    margin-bottom:25px;
 
 }
 
 
 .hero p{
 
-font-size:20px;
+    font-size:22px;
 
-color:#d1d5db;
+    color:#d1d5db;
 
 }
 
 
 
+/* =========================
+CHOICES
+========================= */
+
+
 .cards{
 
-max-width:1100px;
+    max-width:1100px;
 
-margin:auto;
+    margin:auto;
 
-padding:40px 25px;
+    padding:40px 25px;
 
-display:grid;
+    display:grid;
 
-grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
 
-gap:30px;
+    gap:30px;
 
 }
 
@@ -113,15 +185,15 @@ gap:30px;
 
 .card{
 
-background:#1a1c21;
+    background:#1a1c21;
 
-border:1px solid #2a2a30;
+    border:1px solid #2a2a30;
 
-border-radius:10px;
+    border-radius:10px;
 
-padding:40px 30px;
+    padding:40px 30px;
 
-text-align:center;
+    text-align:center;
 
 }
 
@@ -129,23 +201,22 @@ text-align:center;
 
 .card h2{
 
-font-family:'Cormorant Garamond',serif;
+    font-family:'Cormorant Garamond',serif;
 
-font-size:34px;
+    font-size:38px;
 
-color:#b08b41;
+    color:#b08b41;
 
-margin-bottom:15px;
+    margin-bottom:20px;
 
 }
 
 
-
 .card p{
 
-color:#d1d5db;
+    color:#d1d5db;
 
-margin-bottom:30px;
+    margin-bottom:30px;
 
 }
 
@@ -153,65 +224,98 @@ margin-bottom:30px;
 
 .btn{
 
-display:inline-block;
+    display:inline-block;
 
-padding:14px 28px;
+    padding:14px 30px;
 
-background:#b08b41;
+    background:#b08b41;
 
-color:white;
+    color:white;
 
-text-decoration:none;
+    text-decoration:none;
 
-letter-spacing:1px;
+    letter-spacing:1px;
 
-font-size:14px;
+    text-transform:uppercase;
+
+    font-size:13px;
 
 }
 
+
+
+/* =========================
+SCRIPTURE
+========================= */
 
 
 .scripture{
 
-max-width:850px;
+    max-width:850px;
 
-margin:60px auto;
+    margin:70px auto;
 
-padding:40px;
+    padding:45px;
 
-background:#f8f7f3;
+    background:#f8f7f3;
 
-color:#333;
+    color:#333;
 
-border-left:6px solid #b08b41;
+    border-left:6px solid #b08b41;
 
-font-family:'Cormorant Garamond',serif;
+    font-family:'Cormorant Garamond',serif;
 
-font-size:28px;
+    font-size:28px;
 
-font-style:italic;
+    font-style:italic;
 
-text-align:center;
+    text-align:center;
 
 }
 
+
+
+/* =========================
+FOOTER
+========================= */
 
 
 footer{
 
-text-align:center;
+    text-align:center;
 
-padding:50px;
+    padding:55px;
 
-color:#888;
+    border-top:1px solid #2a2a30;
 
-border-top:1px solid #2a2a30;
+    color:#9ca3af;
 
 }
 
 
-</style>
+footer h3{
 
+    font-family:'Cormorant Garamond',serif;
+
+    font-size:35px;
+
+    color:white;
+
+}
+
+
+
+@media(max-width:768px){
+
+.hero h1{
+
+font-size:45px;
+
+}
+
+}
+
+</style>
 
 </head>
 
@@ -219,17 +323,46 @@ border-top:1px solid #2a2a30;
 <body>
 
 
-<header>
+
+<header class="topbar">
+
+
+<div class="brand">
 
 <div class="logo">
 Your Exodus
 </div>
 
+
 <div class="tagline">
 Here your story does not have to end
 </div>
 
+
+</div>
+
+
+
+<nav class="nav">
+
+<a href="../index.html">Home</a>
+
+<a href="../about-us/">About Us</a>
+
+<a href="../stories/">I Need Hope</a>
+
+<a href="../create-story/">Share My Story</a>
+
+<a href="../testimonies/">Testimonies</a>
+
+<a href="../contact/">Contact</a>
+
+</nav>
+
+
 </header>
+
+
 
 
 
@@ -256,66 +389,88 @@ Your story can encourage someone else who is still walking through their storm.
 
 
 
+
+
 <section class="cards">
 
 
 <div class="card">
 
+
 <h2>
-Find Hope Through Stories
+❤️ I Need Hope
 </h2>
+
 
 <p>
 
-Read real testimonies from people who have experienced healing, restoration, faith, and perseverance.
+Are you walking through a difficult season?
+
+Find real stories from people who have faced loss, illness, fear, grief, addiction, or hardship and discovered that God was still working.
 
 </p>
 
+
 <a class="btn" href="../stories/">
-Find Stories
+Find Hope
 </a>
+
 
 </div>
 
 
 
 
+
 <div class="card">
 
+
 <h2>
-Create My Story
+✍️ Share My Story
 </h2>
+
 
 <p>
 
-Preserve your memories, photos, testimony, and the moments that shaped your journey.
+Your journey may become someone else's encouragement.
+
+Preserve your memories, testimony, photos, and the moments that shaped your faith.
 
 </p>
+
 
 <a class="btn" href="../create-story/">
 Create Your Exodus
 </a>
 
+
 </div>
+
 
 
 
 
 <div class="card">
 
+
 <h2>
-Explore Testimonies
+📖 Explore Testimonies
 </h2>
+
 
 <p>
 
-Discover stories of hope from people who have walked through difficult seasons and found God's faithfulness.
+Read stories of healing, restoration, faith, and perseverance.
+
+See how God has worked through the journeys of others.
 
 </p>
 
+
 <a class="btn" href="../testimonies/">
-Explore
+Read Stories
 </a>
+
 
 </div>
 
@@ -331,7 +486,6 @@ Explore
 
 "And we know that all things work together for good to them that love God, to them who are the called according to his purpose."
 
-
 <br><br>
 
 Romans 8:28 (KJV)
@@ -343,15 +497,20 @@ Romans 8:28 (KJV)
 
 
 
+
 <footer>
 
-<h3>Your Exodus</h3>
+<h3>
+Your Exodus
+</h3>
 
 <p>
 Encouraging one another to keep believing.
 </p>
 
+
 </footer>
+
 
 
 
