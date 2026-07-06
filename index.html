@@ -1,85 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Your Exodus</title>
 
 <style>
+/* =========================
+   GLOBAL
+========================= */
 body {
     margin: 0;
     font-family: "Georgia", "Times New Roman", Garamond, serif;
     background: #0e0f12;
     color: #e5e7eb;
     line-height: 1.7;
+    padding-top: 110px;
 }
 
-/* NAV */
-header {
+/* =========================
+   TOP PORTAL HEADER
+========================= */
+.topbar {
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 1000;
-    background: rgba(18,18,20,0.75);
-    backdrop-filter: blur(10px);
+    background: rgba(18,18,20,0.88);
+    backdrop-filter: blur(12px);
     border-bottom: 1px solid #2a2a30;
+    padding: 14px 18px;
+}
+
+.brand {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 18px 40px;
+    flex-direction: column;
+    margin-bottom: 10px;
 }
 
 .logo {
     font-size: 20px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: #fff;
-}
-
-nav a {
-    color: #9ca3af;
-    margin-left: 20px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: 0.2s;
-}
-
-nav a:hover {
     color: #ffffff;
 }
 
-/* HERO IMAGE SECTION (THIS IS YOUR "YOUR-EXODUS" FEEL) */
-.hero-image {
+.tagline {
+    font-size: 13px;
+    color: #9ca3af;
+    font-style: italic;
+}
+
+/* NAV PORTAL STRIP */
+.nav {
+    display: flex;
+    gap: 18px;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 6px;
+}
+
+.nav::-webkit-scrollbar {
+    display: none;
+}
+
+.nav a {
+    color: #9ca3af;
+    text-decoration: none;
+    font-size: 13px;
+    flex: 0 0 auto;
+    transition: 0.2s ease;
+}
+
+.nav a:hover {
+    color: #ffffff;
+}
+
+/* =========================
+   HERO SECTION
+========================= */
+.hero {
     height: 85vh;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(14,15,18,1)),
-                url('wp-content/uploads/2024/02/WalkingwithJesus.png');
-    background-size: cover;
-    background-position: center;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+
+    background:
+        linear-gradient(to bottom, rgba(0,0,0,0.25), rgba(14,15,18,1)),
+        url('images/WalkingwithJesus.png');
+
+    background-size: cover;
+    background-position: center;
     padding: 0 20px;
 }
 
-.hero-text {
+.hero-content {
     max-width: 800px;
 }
 
-.hero-text h1 {
+.hero h1 {
     font-size: 54px;
     font-weight: normal;
-    color: #fff;
+    color: #ffffff;
     margin-bottom: 15px;
 }
 
-.hero-text p {
+.hero p {
     font-size: 20px;
     color: #cbd5e1;
     font-style: italic;
 }
 
-/* BUTTON */
 .btn {
     display: inline-block;
     margin-top: 25px;
@@ -91,14 +121,16 @@ nav a:hover {
     letter-spacing: 1px;
     text-decoration: none;
     border-radius: 2px;
-    transition: 0.2s;
+    transition: 0.2s ease;
 }
 
 .btn:hover {
     background: #d1d5db;
 }
 
-/* SECTIONS */
+/* =========================
+   SECTIONS
+========================= */
 .section {
     max-width: 1000px;
     margin: auto;
@@ -111,10 +143,10 @@ nav a:hover {
     border-bottom: 1px solid #2a2a30;
     padding-bottom: 10px;
     margin-bottom: 25px;
-    color: #fff;
+    color: #ffffff;
 }
 
-/* GLASS CARD (THIS IS THE UPGRADE LOOK) */
+/* CARDS */
 .card {
     background: rgba(26,26,30,0.7);
     border: 1px solid #2a2a30;
@@ -135,43 +167,62 @@ nav a:hover {
     text-align: center;
 }
 
-/* FOOTER */
+/* =========================
+   FOOTER
+========================= */
 footer {
     text-align: center;
     padding: 50px;
     font-size: 13px;
     color: #6b7280;
     border-top: 1px solid #2a2a30;
-}
-
-/* SPACING FIX FOR FIXED NAV */
-body {
-    padding-top: 70px;
+    margin-top: 60px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-    <div class="logo">Your Exodus</div>
-    <nav>
-        <a href="#about">About</a>
-        <a href="#mission">Mission</a>
-        <a href="#stories">Stories</a>
-        <a href="#contact">Contact</a>
+<!-- =========================
+     HEADER
+========================= -->
+<header class="topbar">
+    <div class="brand">
+        <div class="logo">Your Exodus</div>
+        <div class="tagline">Here your story does not have to end</div>
+    </div>
+
+    <nav class="nav">
+        <a href="#about">About Us</a>
+        <a href="#mission">Our Mission</a>
+        <a href="#privacy">Privacy Policy</a>
+        <a href="#terms">Terms</a>
+        <a href="#bundle">Bundle</a>
+        <a href="#affiliate">Affiliate Dashboard</a>
+        <a href="#contact">Contact Us</a>
+        <a href="#find">Find-My-Page</a>
+        <a href="#jobs">Jobs</a>
+        <a href="#order">Order</a>
+        <a href="#checkout">Checkout</a>
+        <a href="#resources">Resources</a>
+        <a href="#samples">Samples</a>
     </nav>
 </header>
 
-<!-- HERO IMAGE -->
-<section class="hero-image">
-    <div class="hero-text">
+<!-- =========================
+     HERO IMAGE
+========================= -->
+<section class="hero">
+    <div class="hero-content">
         <h1>Here Your Story Does Not End</h1>
-        <p>A platform built for healing, memory, and rebuilding through lived experience.</p>
+        <p>A platform built for healing, memory, and rebuilding through lived experience and truth.</p>
         <a class="btn" href="#about">Enter Site</a>
     </div>
 </section>
 
+<!-- =========================
+     ABOUT
+========================= -->
 <section id="about" class="section">
     <h2>About Us</h2>
     <div class="card">
@@ -180,8 +231,11 @@ body {
     </div>
 </section>
 
+<!-- =========================
+     MISSION
+========================= -->
 <section id="mission" class="section">
-    <h2>Mission</h2>
+    <h2>Our Mission</h2>
     <div class="grid">
         <div class="card">Memory Preservation</div>
         <div class="card">Family Storytelling</div>
@@ -190,20 +244,67 @@ body {
     </div>
 </section>
 
-<section id="stories" class="section">
-    <h2>Stories</h2>
-    <div class="card">
-        This is where your future submission system or blog feed will plug in.
-    </div>
+<!-- =========================
+     PLACEHOLDERS
+========================= -->
+<section id="privacy" class="section">
+    <h2>Privacy Policy</h2>
+    <div class="card">Coming soon.</div>
+</section>
+
+<section id="terms" class="section">
+    <h2>Terms</h2>
+    <div class="card">Coming soon.</div>
+</section>
+
+<section id="bundle" class="section">
+    <h2>Bundle</h2>
+    <div class="card">Coming soon.</div>
+</section>
+
+<section id="affiliate" class="section">
+    <h2>Affiliate Dashboard</h2>
+    <div class="card">Coming soon.</div>
 </section>
 
 <section id="contact" class="section">
-    <h2>Contact</h2>
-    <div class="card">
-        Email: support@yourexodus.com
-    </div>
+    <h2>Contact Us</h2>
+    <div class="card">Email: support@yourexodus.com</div>
 </section>
 
+<section id="find" class="section">
+    <h2>Find My Page</h2>
+    <div class="card">Coming soon.</div>
+</section>
+
+<section id="jobs" class="section">
+    <h2>Jobs</h2>
+    <div class="card">Coming soon.</div>
+</section>
+
+<section id="order" class="section">
+    <h2>Order</h2>
+    <div class="card">Coming soon.</div>
+</section>
+
+<section id="checkout" class="section">
+    <h2>Checkout</h2>
+    <div class="card">Coming soon.</div>
+</section>
+
+<section id="resources" class="section">
+    <h2>Resources</h2>
+    <div class="card">Coming soon.</div>
+</section>
+
+<section id="samples" class="section">
+    <h2>Samples</h2>
+    <div class="card">Coming soon.</div>
+</section>
+
+<!-- =========================
+     FOOTER
+========================= -->
 <footer>
     © 2026 Your Exodus • Built with purpose
 </footer>
