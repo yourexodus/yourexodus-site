@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -17,198 +18,383 @@
 }
 
 body{
-
     background:#f8f7f3;
     color:#333;
     font-family:'Open Sans',sans-serif;
-    line-height:1.9;
+    line-height:1.8;
+    padding-top:120px;
+}
+
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.topbar{
+
+    position:fixed;
+    top:0;
+    width:100%;
+    z-index:1000;
+
+    background:rgba(18,18,20,.95);
+    backdrop-filter:blur(14px);
+
+    border-bottom:1px solid #2a2a30;
+
+    padding:12px 18px;
 
 }
+
+
+.brand{
+
+    display:flex;
+    flex-direction:column;
+    margin-bottom:10px;
+
+}
+
+
+.logo{
+
+    color:white;
+    font-size:22px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+
+}
+
+
+.tagline{
+
+    color:#9ca3af;
+    font-size:13px;
+    font-style:italic;
+
+}
+
+
+.nav{
+
+    display:flex;
+    flex-wrap:wrap;
+    gap:15px;
+
+}
+
+
+.nav a{
+
+    color:#d1d5db;
+    text-decoration:none;
+    font-size:13px;
+
+}
+
+
+.nav a:hover{
+
+    color:white;
+
+}
+
+
+
+/* =========================
+   HERO
+========================= */
 
 .hero{
 
     position:relative;
+    height:500px;
     overflow:hidden;
-    text-align:center;
 
 }
+
 
 .hero img{
 
     width:100%;
-    height:500px;
+    height:100%;
     object-fit:cover;
-    display:block;
 
 }
+
 
 .hero-overlay{
 
     position:absolute;
     inset:0;
+
     background:rgba(0,0,0,.45);
 
     display:flex;
-    align-items:center;
-    justify-content:center;
     flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    text-align:center;
+
+    padding:20px;
 
 }
+
 
 .hero h1{
 
     color:white;
     font-family:'Cormorant Garamond',serif;
+
     font-size:4rem;
     letter-spacing:2px;
-    margin-bottom:15px;
 
 }
+
 
 .hero p{
 
     color:#f1f1f1;
+
     font-size:1.2rem;
+
     max-width:700px;
 
 }
+
+
+
+/* =========================
+   CONTENT
+========================= */
 
 .container{
 
     max-width:900px;
     margin:auto;
-    padding:80px 30px;
+
+    padding:70px 30px;
 
 }
+
 
 h2{
 
     font-family:'Cormorant Garamond',serif;
+
     color:#7a5c29;
-    font-size:2.4rem;
+
+    font-size:2.5rem;
+
     margin-bottom:25px;
 
 }
 
+
 p{
 
-    margin-bottom:28px;
     font-size:1.08rem;
 
+    margin-bottom:25px;
+
 }
+
+
+
+/* =========================
+   SCRIPTURE
+========================= */
 
 .scripture{
 
     background:white;
+
     border-left:6px solid #b08b41;
 
     padding:35px;
 
-    margin:55px 0;
+    margin:50px 0;
 
     font-style:italic;
 
-    box-shadow:0 15px 35px rgba(0,0,0,.07);
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
 
 }
 
-.scripture p{
-
-    margin-bottom:15px;
-
-}
 
 .reference{
 
     text-align:right;
-    font-weight:700;
+
+    font-weight:bold;
+
     color:#7a5c29;
 
 }
+
+
+
+/* =========================
+   MISSION
+========================= */
+
 
 .mission{
 
     background:#ece6d7;
 
-    padding:50px;
-
-    margin-top:60px;
+    padding:45px;
 
     border-radius:8px;
 
+    margin-top:50px;
+
 }
 
+
+
+/* =========================
+   FOOTER
+========================= */
+
+
 .footer{
-
-    text-align:center;
-
-    padding:60px;
 
     background:#222;
 
     color:#ddd;
 
+    text-align:center;
+
+    padding:50px;
+
 }
+
 
 .footer h3{
 
     color:white;
+
     font-family:'Cormorant Garamond',serif;
+
     font-size:2rem;
-    margin-bottom:15px;
 
 }
+
+
+
+/* MOBILE */
 
 @media(max-width:768px){
 
 .hero h1{
 
-font-size:2.7rem;
+    font-size:2.7rem;
 
 }
 
-.hero img{
+.hero{
 
-height:320px;
+    height:350px;
+
+}
 
 }
 
-}
 
 </style>
 
 </head>
 
+
 <body>
+
+
+<header class="topbar">
+
+<div class="brand">
+
+<div class="logo">
+Your Exodus
+</div>
+
+<div class="tagline">
+Here your story does not have to end
+</div>
+
+</div>
+
+
+<nav class="nav">
+
+<a href="../index.html">Home</a>
+
+<a href="./index.html">About Us</a>
+
+<a href="../index.html#mission">Our Mission</a>
+
+<a href="../index.html#contact">Contact</a>
+
+<a href="../index.html#resources">Resources</a>
+
+</nav>
+
+
+</header>
+
+
+
 
 <section class="hero">
 
-<img src="wp-content/uploads/2024/02/aboutUs_thepath.png" alt="The Narrow Path">
+<img src="../wp-content/uploads/2024/02/aboutUs_thepath.png" 
+alt="The Narrow Path">
+
 
 <div class="hero-overlay">
 
-<h1>About Your Exodus</h1>
 
-<p>Helping people discover purpose, hope, and the eternal life found in Jesus Christ.</p>
+<h1>
+About Your Exodus
+</h1>
+
+
+<p>
+Helping people discover purpose, hope, and the eternal life found in Jesus Christ.
+</p>
+
 
 </div>
 
 </section>
 
-<div class="container">
 
-<h2>Living With Purpose</h2>
+
+
+
+<main class="container">
+
+
+<h2>
+Living With Purpose
+</h2>
+
 
 <p>
 Many people spend their lives fearing death, yet often overlook the greater question:
 <strong>How are we living today?</strong>
 </p>
 
+
 <p>
 As followers of Jesus Christ, we believe our hope is not found in avoiding death, but in the promise of eternal life through Him. Because of that hope, we are free to live with courage, purpose, and compassion, knowing that every day is an opportunity to love God, serve others, and make a lasting difference.
 </p>
 
+
+
 <div class="scripture">
+
 
 <p>
 
@@ -218,53 +404,71 @@ Because strait is the gate, and narrow is the way, which leadeth unto life, and 
 
 </p>
 
+
 <div class="reference">
 
 Matthew 7:13–14 (KJV)
 
 </div>
 
+
 </div>
 
-<p>
 
+
+
+<p>
 At <strong>Your Exodus</strong>, we believe God has created every person with a unique purpose. Each experience, every trial, every victory, and every testimony can be used for His glory. Our mission is to encourage people not only to prepare for eternity, but to embrace the calling God has placed on their lives today.
-
 </p>
 
-<p>
 
+
+<p>
 Life is more than simply existing until our final breath. It is about becoming the person God created us to be, walking faithfully with Christ, and leaving a legacy of faith, hope, and love for those who follow after us.
-
 </p>
 
-<div class="mission">
 
-<h2>Our Mission</h2>
+
+
+<section class="mission">
+
+
+<h2>
+Our Mission
+</h2>
+
 
 <p>
-
 When we know where our eternal hope rests, we are no longer defined by the fear of death.
 
 Instead, we are empowered to live with purpose, to share the Good News, and to help others discover the hope that is found in Jesus Christ.
-
 </p>
 
-</div>
 
-</div>
+</section>
+
+
+
+</main>
+
+
+
+
 
 <footer class="footer">
 
-<h3>Your Exodus</h3>
+<h3>
+Your Exodus
+</h3>
+
 
 <p>
-
 "Every journey begins with one faithful step."
-
 </p>
 
+
 </footer>
+
 
 </body>
 </html>
