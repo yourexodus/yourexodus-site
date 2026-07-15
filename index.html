@@ -166,7 +166,68 @@ body {
 .grid .card {
     text-align: center;
 }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+}
 
+.grid .card {
+    text-align: center;
+}
+
+/* =========================
+   JOURNEY DASHBOARD
+========================= */
+
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+    margin-top: 40px;
+}
+
+.dashboard-card {
+    background: rgba(26,26,30,.85);
+    border: 1px solid #2a2a30;
+    border-radius: 10px;
+    padding: 35px 30px;
+    text-align: center;
+    transition: .3s;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+}
+
+.dashboard-card:hover {
+    transform: translateY(-8px);
+    border-color: #b08b41;
+    box-shadow: 0 18px 45px rgba(176,139,65,.25);
+}
+
+.dashboard-card h3 {
+    color: white;
+    margin-top: 15px;
+    font-size: 22px;
+}
+
+.dashboard-card p {
+    color: #cbd5e1;
+    min-height: 70px;
+}
+
+.dashboard-card a {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 28px;
+    background: #b08b41;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    letter-spacing: 1px;
+}
+
+.icon {
+    font-size: 48px;
+}
 /* =========================
    FOOTER
 ========================= */
@@ -219,7 +280,7 @@ footer {
         or looking to grow in your faith,
         we'd love for you to become part of
         the Your Exodus community. </p>
-        <a class="btn" href="welcome/">Begin Your Journey</a>
+        <a class="btn" href="#journey">Begin Your Journey</a>
     </div>
 </section>
 
@@ -247,7 +308,119 @@ footer {
         To create a safe place where people can preserve their testimony, encourage one another through authentic stories, and grow in Christ through prayer, Scripture, and community.
     </div>
 </section>
+<section id="journey" class="section">
 
+<h2>Choose Your Journey</h2>
+
+<p style="font-size:18px;color:#cbd5e1;text-align:center;max-width:800px;margin:auto;">
+
+Every journey is different.
+
+Whether you are seeking hope, growing your faith, documenting your walk with Christ, or encouraging others, Your Exodus provides a place to begin.
+
+</p>
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<div class="icon">📝</div>
+
+<h3>Journal</h3>
+
+<p>
+
+Capture your thoughts, prayers, victories, and daily reflections.
+
+</p>
+
+<a href="journal-dashboard/">Open Journal</a>
+
+</div>
+
+<div class="dashboard-card">
+
+<div class="icon">🙏</div>
+
+<h3>Prayer Center</h3>
+
+<p>
+
+Submit prayer requests, celebrate answered prayers, and pray for others.
+
+</p>
+
+<a href="prayer-dashboard/">Open Prayer Center</a>
+
+</div>
+
+<div class="dashboard-card">
+
+<div class="icon">📖</div>
+
+<h3>Bible Study</h3>
+
+<p>
+
+Study Scripture, save notes, and grow in God's Word.
+
+</p>
+
+<a href="bible-dashboard/">Open Bible Study</a>
+
+</div>
+
+<div class="dashboard-card">
+
+<div class="icon">💬</div>
+
+<h3>Testimonies</h3>
+
+<p>
+
+Discover stories of hope and share your own Exodus journey.
+
+</p>
+
+<a href="testimonies/">View Testimonies</a>
+
+</div>
+
+<div class="dashboard-card">
+
+<div class="icon">📚</div>
+
+<h3>Resources</h3>
+
+<p>
+
+Find guidance for parenting, finances, healthcare, housing, and life transitions.
+
+</p>
+
+<a href="resources/">Browse Resources</a>
+
+</div>
+
+<div class="dashboard-card">
+
+<div class="icon">👤</div>
+
+<h3>My Dashboard</h3>
+
+<p>
+
+Access your journals, prayer requests, saved studies, and personal profile.
+
+</p>
+
+<a href="dashboard/">Open Dashboard</a>
+
+</div>
+
+</div>
+
+</section>
  <section id="about" class="section">
     <h2>Featured Testimony</h2>
     <div class="card">
