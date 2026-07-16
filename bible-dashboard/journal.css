@@ -1,0 +1,446 @@
+/* ==========================================
+   YOUR EXODUS - JOURNAL DASHBOARD CSS
+========================================== */
+
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+
+body{
+
+    font-family:Georgia,"Times New Roman",serif;
+
+    background:#0e0f12;
+
+    color:#e5e7eb;
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+
+
+/* ==========================================
+   SIDEBAR
+========================================== */
+
+
+.sidebar{
+
+    width:280px;
+
+    background:#17181c;
+
+    border-right:1px solid #2a2a30;
+
+    position:fixed;
+
+    height:100vh;
+
+    padding:35px 25px;
+
+}
+
+
+
+.logo h2{
+
+    color:white;
+
+    letter-spacing:2px;
+
+    font-weight:normal;
+
+}
+
+
+
+.logo p{
+
+    color:#9ca3af;
+
+    font-size:14px;
+
+    font-style:italic;
+
+    margin-top:8px;
+
+}
+
+
+
+nav{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+    margin-top:40px;
+
+}
+
+
+
+nav a{
+
+    color:#cbd5e1;
+
+    text-decoration:none;
+
+    padding:14px;
+
+    border-radius:6px;
+
+    transition:.3s;
+
+}
+
+
+
+nav a:hover,
+nav .active{
+
+    background:#b08b41;
+
+    color:white;
+
+}
+
+
+
+
+
+/* ==========================================
+   MAIN AREA
+========================================== */
+
+
+.main{
+
+    margin-left:280px;
+
+    padding:45px;
+
+    width:calc(100% - 280px);
+
+}
+
+
+
+header h1{
+
+    font-size:42px;
+
+    font-weight:normal;
+
+    color:white;
+
+}
+
+
+
+header p{
+
+    margin-top:10px;
+
+    color:#cbd5e1;
+
+    font-size:18px;
+
+}
+
+
+
+
+
+/* ==========================================
+   SECTIONS / CARDS
+========================================== */
+
+
+.scripture,
+.card,
+.journal-card,
+.memory{
+
+    background:rgba(26,26,30,.85);
+
+    border:1px solid #2a2a30;
+
+    border-radius:10px;
+
+    padding:30px;
+
+    margin:30px 0;
+
+}
+
+
+
+.scripture{
+
+    border-left:5px solid #b08b41;
+
+}
+
+
+
+h2{
+
+    color:white;
+
+    font-weight:normal;
+
+    margin-bottom:20px;
+
+}
+
+
+
+h3{
+
+    color:white;
+
+    font-weight:normal;
+
+    margin-bottom:10px;
+
+}
+
+
+
+p{
+
+    color:#d1d5db;
+
+}
+
+
+
+
+
+/* ==========================================
+   SCRIPTURE
+========================================== */
+
+
+blockquote{
+
+    font-size:22px;
+
+    font-style:italic;
+
+    line-height:1.8;
+
+    color:#f1f1f1;
+
+}
+
+
+
+
+
+/* ==========================================
+   FORM
+========================================== */
+
+
+label{
+
+    display:block;
+
+    margin-top:15px;
+
+    color:#cbd5e1;
+
+}
+
+
+
+input,
+textarea{
+
+    width:100%;
+
+    padding:15px;
+
+    margin-top:8px;
+
+    background:#0e0f12;
+
+    border:1px solid #2a2a30;
+
+    color:white;
+
+    border-radius:5px;
+
+    font-family:inherit;
+
+}
+
+
+
+textarea{
+
+    height:160px;
+
+    resize:vertical;
+
+}
+
+
+
+button{
+
+    margin-top:20px;
+
+    padding:14px 30px;
+
+    background:#b08b41;
+
+    border:none;
+
+    color:white;
+
+    cursor:pointer;
+
+    border-radius:5px;
+
+    font-size:15px;
+
+}
+
+
+
+button:hover{
+
+    background:#8f6d30;
+
+}
+
+
+
+
+
+/* ==========================================
+   JOURNAL ENTRIES
+========================================== */
+
+
+.journal-list{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+
+    gap:20px;
+
+}
+
+
+
+.journal-card{
+
+    transition:.3s;
+
+}
+
+
+
+.journal-card:hover{
+
+    transform:translateY(-5px);
+
+    border-color:#b08b41;
+
+}
+
+
+
+.date{
+
+    color:#b08b41;
+
+    font-size:14px;
+
+    margin-bottom:15px;
+
+}
+
+
+
+
+
+/* ==========================================
+   MEMORY SECTION
+========================================== */
+
+
+.memory{
+
+    border-left:5px solid #b08b41;
+
+    text-align:center;
+
+}
+
+
+
+.memory p{
+
+    font-size:18px;
+
+    line-height:1.8;
+
+}
+
+
+
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+
+@media(max-width:900px){
+
+
+.sidebar{
+
+    position:relative;
+
+    width:100%;
+
+    height:auto;
+
+}
+
+
+
+.main{
+
+    margin-left:0;
+
+    width:100%;
+
+}
+
+
+
+body{
+
+    display:block;
+
+}
+
+
+}
