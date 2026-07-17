@@ -1,0 +1,359 @@
+/* ==========================================
+   YOUR EXODUS PROFILE
+========================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+
+    font-family:Georgia,"Times New Roman",Garamond,serif;
+
+    background:#0e0f12;
+
+    color:#e5e7eb;
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+/* ==========================================
+   SIDEBAR
+========================================== */
+
+.sidebar{
+
+    width:280px;
+
+    background:#17181c;
+
+    border-right:1px solid #2a2a30;
+
+    position:fixed;
+
+    left:0;
+
+    top:0;
+
+    bottom:0;
+
+    padding:35px 25px;
+
+}
+
+.logo{
+
+    margin-bottom:45px;
+
+}
+
+.logo h2{
+
+    color:white;
+
+    letter-spacing:2px;
+
+    font-weight:normal;
+
+    text-transform:uppercase;
+
+    margin-bottom:10px;
+
+}
+
+.logo p{
+
+    color:#9ca3af;
+
+    font-size:14px;
+
+    font-style:italic;
+
+}
+
+/* ==========================================
+   NAVIGATION
+========================================== */
+
+.sidebar nav{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:12px;
+
+}
+
+.sidebar nav a{
+
+    color:#cbd5e1;
+
+    text-decoration:none;
+
+    padding:14px 16px;
+
+    border-radius:6px;
+
+    transition:.3s;
+
+}
+
+.sidebar nav a:hover{
+
+    background:#b08b41;
+
+    color:white;
+
+}
+
+.sidebar nav a.active{
+
+    background:#b08b41;
+
+    color:white;
+
+}
+
+/* ==========================================
+   MAIN
+========================================== */
+
+.main{
+
+    margin-left:280px;
+
+    width:calc(100% - 280px);
+
+    padding:45px;
+
+}
+
+header{
+
+    margin-bottom:40px;
+
+}
+
+header h1{
+
+    color:white;
+
+    font-size:42px;
+
+    font-weight:normal;
+
+}
+
+header p{
+
+    margin-top:10px;
+
+    color:#cbd5e1;
+
+    font-size:18px;
+
+}
+
+/* ==========================================
+   PROFILE CARD
+========================================== */
+
+.profile-card{
+
+    background:rgba(26,26,30,.85);
+
+    border:1px solid #2a2a30;
+
+    border-radius:10px;
+
+    padding:40px;
+
+    text-align:center;
+
+    margin-bottom:40px;
+
+}
+
+.avatar{
+
+    width:120px;
+
+    height:120px;
+
+    margin:0 auto 25px;
+
+    border-radius:50%;
+
+    background:#b08b41;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:60px;
+
+}
+
+.profile-card h2{
+
+    color:white;
+
+    margin-bottom:10px;
+
+}
+
+.profile-card p{
+
+    color:#cbd5e1;
+
+}
+
+/* ==========================================
+   SECTION TITLES
+========================================== */
+
+section{
+
+    margin-bottom:50px;
+
+}
+
+section h2{
+
+    color:white;
+
+    margin-bottom:20px;
+
+    border-bottom:1px solid #2a2a30;
+
+    padding-bottom:10px;
+
+    font-weight:normal;
+
+}
+
+/* ==========================================
+   ACCOUNT INFO
+========================================== */
+
+.info-grid{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+
+    gap:20px;
+
+}
+
+.info-card{
+
+    background:rgba(26,26,30,.85);
+
+    border:1px solid #2a2a30;
+
+    border-radius:10px;
+
+    padding:30px;
+
+}
+
+.info-card h3{
+
+    color:#b08b41;
+
+    margin-bottom:10px;
+
+}
+
+.info-card p{
+
+    color:#cbd5e1;
+
+}
+
+/* ==========================================
+   STATS
+========================================== */
+
+.stats{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+
+    gap:20px;
+
+}
+
+.stat{
+
+    background:rgba(26,26,30,.85);
+
+    border:1px solid #2a2a30;
+
+    border-radius:10px;
+
+    padding:30px;
+
+    text-align:center;
+
+}
+
+.stat h3{
+
+    color:#b08b41;
+
+    font-size:40px;
+
+    margin-bottom:10px;
+
+}
+
+.stat p{
+
+    color:#cbd5e1;
+
+}
+
+/* ==========================================
+   RESPONSIVE
+========================================== */
+
+@media(max-width:900px){
+
+    body{
+
+        display:block;
+
+    }
+
+    .sidebar{
+
+        position:relative;
+
+        width:100%;
+
+        height:auto;
+
+    }
+
+    .main{
+
+        margin-left:0;
+
+        width:100%;
+
+        padding:25px;
+
+    }
+
+}
