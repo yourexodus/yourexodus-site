@@ -1,0 +1,329 @@
+/* ===============================
+   YOUR EXODUS - REGISTER PAGE
+   =============================== */
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+
+    min-height: 100vh;
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background:
+        linear-gradient(
+            rgba(0,0,0,0.55),
+            rgba(0,0,0,0.55)
+        ),
+        url("../assets/images/WalkingwithJesus.png");
+
+    background-size: cover;
+
+    background-position: center;
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+/* ===============================
+   HEADER
+   =============================== */
+
+
+.topbar {
+
+    width: 100%;
+
+    padding: 25px 40px;
+
+    background: rgba(255,255,255,0.92);
+
+}
+
+
+.brand {
+
+    text-align: center;
+
+}
+
+
+.logo {
+
+    font-size: 36px;
+
+    font-weight: bold;
+
+    color: #4b2e83;
+
+}
+
+
+.tagline {
+
+    margin-top: 8px;
+
+    font-size: 18px;
+
+    color: #555;
+
+    font-style: italic;
+
+}
+
+
+
+/* ===============================
+   REGISTER CARD
+   =============================== */
+
+
+.register-container {
+
+    flex: 1;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    padding: 40px 20px;
+
+}
+
+
+
+.register-card {
+
+
+    background: white;
+
+    width: 100%;
+
+    max-width: 450px;
+
+    padding: 40px;
+
+    border-radius: 15px;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.25);
+
+}
+
+
+
+.register-card h1 {
+
+    text-align: center;
+
+    color: #4b2e83;
+
+    margin-bottom: 15px;
+
+}
+
+
+
+.register-card p {
+
+    text-align: center;
+
+    color: #555;
+
+    margin-bottom: 25px;
+
+    line-height: 1.6;
+
+}
+
+
+
+/* ===============================
+   FORM
+   =============================== */
+
+
+form {
+
+    display: flex;
+
+    flex-direction: column;
+
+}
+
+
+
+label {
+
+    margin-bottom: 6px;
+
+    font-weight: bold;
+
+    color: #333;
+
+}
+
+
+
+input {
+
+
+    padding: 12px;
+
+    margin-bottom: 18px;
+
+    border-radius: 8px;
+
+    border: 1px solid #ccc;
+
+    font-size: 16px;
+
+}
+
+
+
+input:focus {
+
+
+    outline: none;
+
+    border-color: #4b2e83;
+
+    box-shadow:
+        0 0 5px rgba(75,46,131,.4);
+
+}
+
+
+
+/* ===============================
+   BUTTON
+   =============================== */
+
+
+button {
+
+
+    margin-top: 10px;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 8px;
+
+    background: #4b2e83;
+
+    color: white;
+
+    font-size: 17px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: .3s;
+
+}
+
+
+
+button:hover {
+
+
+    background: #35205d;
+
+}
+
+
+
+/* ===============================
+   MESSAGE AREA
+   =============================== */
+
+
+#message {
+
+    text-align: center;
+
+    margin-top: 20px;
+
+    font-weight: bold;
+
+}
+
+
+
+/* ===============================
+   LOGIN LINK
+   =============================== */
+
+
+.login-link {
+
+    margin-top: 20px;
+
+}
+
+
+
+.login-link a {
+
+    color: #4b2e83;
+
+    font-weight: bold;
+
+    text-decoration: none;
+
+}
+
+
+.login-link a:hover {
+
+    text-decoration: underline;
+
+}
+
+
+
+/* ===============================
+   MOBILE
+   =============================== */
+
+
+@media(max-width:600px){
+
+
+    .topbar {
+
+        padding:20px;
+
+    }
+
+
+    .logo {
+
+        font-size:28px;
+
+    }
+
+
+    .register-card {
+
+        padding:25px;
+
+    }
+
+
+}

@@ -1,0 +1,283 @@
+* {
+
+    box-sizing: border-box;
+    margin:0;
+    padding:0;
+
+}
+
+
+
+body {
+
+    min-height:100vh;
+
+    font-family:Arial, Helvetica, sans-serif;
+
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,.55),
+        rgba(0,0,0,.55)
+    ),
+    url("../assets/images/WalkingwithJesus.png");
+
+
+    background-size:cover;
+
+    background-position:center;
+
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+
+/* HEADER */
+
+.topbar {
+
+    background:white;
+
+    padding:25px;
+
+}
+
+
+.brand {
+
+    text-align:center;
+
+}
+
+
+.logo {
+
+    font-size:36px;
+
+    font-weight:bold;
+
+    color:#4b2e83;
+
+}
+
+
+
+.tagline {
+
+    margin-top:8px;
+
+    color:#555;
+
+    font-style:italic;
+
+}
+
+
+
+
+/* LOGIN BOX */
+
+
+.login-container {
+
+    flex:1;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding:30px;
+
+}
+
+
+
+.login-card {
+
+
+    background:white;
+
+    max-width:450px;
+
+    width:100%;
+
+    padding:40px;
+
+    border-radius:15px;
+
+
+    box-shadow:
+    0 10px 30px rgba(0,0,0,.25);
+
+
+}
+
+
+
+.login-card h1 {
+
+    text-align:center;
+
+    color:#4b2e83;
+
+    margin-bottom:15px;
+
+}
+
+
+
+.login-card p {
+
+    text-align:center;
+
+    color:#555;
+
+    margin-bottom:25px;
+
+}
+
+
+
+
+form {
+
+    display:flex;
+
+    flex-direction:column;
+
+}
+
+
+
+label {
+
+    font-weight:bold;
+
+    margin-bottom:5px;
+
+}
+
+
+
+input {
+
+
+    padding:12px;
+
+    margin-bottom:18px;
+
+    border-radius:8px;
+
+    border:1px solid #ccc;
+
+    font-size:16px;
+
+
+}
+
+
+
+input:focus {
+
+
+    outline:none;
+
+    border-color:#4b2e83;
+
+}
+
+
+
+
+button {
+
+
+    padding:14px;
+
+    background:#4b2e83;
+
+    color:white;
+
+    border:none;
+
+    border-radius:8px;
+
+    font-size:17px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+
+}
+
+
+
+button:hover {
+
+    background:#35205d;
+
+}
+
+
+
+#message {
+
+
+    text-align:center;
+
+    margin-top:20px;
+
+    font-weight:bold;
+
+
+}
+
+
+
+.register-link {
+
+    margin-top:20px;
+
+}
+
+
+
+.register-link a {
+
+
+    color:#4b2e83;
+
+    font-weight:bold;
+
+    text-decoration:none;
+
+
+}
+
+
+
+@media(max-width:600px){
+
+
+.logo {
+
+    font-size:28px;
+
+}
+
+
+.login-card {
+
+    padding:25px;
+
+}
+
+
+}
