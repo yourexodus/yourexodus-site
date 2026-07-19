@@ -43,7 +43,7 @@ registerForm.addEventListener("submit", async function(event) {
 
 
         const response = await fetch(
-            "http://yourexodus-api.onrender.com/users/register",
+            "https://yourexodus-api.onrender.com/users/register",
             {
 
                 method: "POST",
