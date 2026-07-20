@@ -42,7 +42,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function getCurrentUser() {
 
-    const storedUser = localStorage.getItem("user");
+    const storedUser = localStorage.getItem("username");
+                       
 
 
     if (!storedUser) {
