@@ -3,46 +3,34 @@
 // Connects Frontend to Flask API
 // =====================================
 
-
 const loginForm = document.getElementById("loginForm");
 
 const messageBox = document.getElementById("message");
 
 
-
 loginForm.addEventListener("submit", async function(event){
-
 
     event.preventDefault();
 
-
-
+    // Get form values
     const username =
         document.getElementById("username").value;
-
-
 
     const password =
         document.getElementById("password").value;
 
 
-
-
+    // Build request body
     const loginData = {
-
 
         username: username,
 
         password: password
 
-
     };
 
 
-
-
     try {
-
 
         const response = await fetch(
 
@@ -50,112 +38,71 @@ loginForm.addEventListener("submit", async function(event){
 
             {
 
+                method: "POST",
 
-                method:"POST",
+                headers: {
 
-
-                headers:{
-
-
-                    "Content-Type":"application/json"
-
+                    "Content-Type": "application/json"
 
                 },
 
-
-                body:JSON.stringify(loginData)
-
+                body: JSON.stringify(loginData)
 
             }
 
         );
 
 
-
-
         const data = await response.json();
 
 
+        if (response.ok) {
 
-
-
-        if(response.ok){
-
-
-
-            messageBox.style.color="green";
-
+            messageBox.style.color = "green";
 
             messageBox.innerHTML =
-            "Login successful! Welcome back.";
+                "Login successful! Redirecting to your dashboard...";
 
-
-
-
-
-            // Save user session
-
+            // Save logged-in username
             localStorage.setItem(
-                "user",
-                JSON.stringify(data)
+                "username",
+                username
             );
 
-
-
-
-            setTimeout(function(){
-
+            // Redirect to dashboard
+            setTimeout(function () {
 
                 window.location.href =
-                "../index.html";
+                    "../dashboard/index.html";
 
-
-            },1500);
-
-
-
+            }, 1500);
 
         }
 
         else {
 
-
-
-            messageBox.style.color="red";
-
+            messageBox.style.color = "red";
 
             messageBox.innerHTML =
-            data.message ||
-            "Invalid username or password.";
-
-
+                data.message ||
+                "Invalid username or password.";
 
         }
 
-
-
     }
 
+    catch (error) {
 
+        console.error(
+            "Connection error:",
+            error
+        );
 
-    catch(error){
-
-
-
-        console.error(error);
-
-
-
-        messageBox.style.color="red";
-
+        messageBox.style.color = "red";
 
         messageBox.innerHTML =
-        "Cannot connect to server. Make sure Flask is running.";
-
-
+            "Unable to connect to the server.";
 
     }
-
-
 
 });
