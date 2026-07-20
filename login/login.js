@@ -4,47 +4,33 @@
 // Saves Logged-In User
 // =====================================
 
-
 const loginForm = document.getElementById("loginForm");
-
 const messageBox = document.getElementById("message");
 
+const API_URL = "https://yourexodus-api.onrender.com";
 
-
-loginForm.addEventListener("submit", async function(event) {
-
+loginForm.addEventListener("submit", async function (event) {
 
     event.preventDefault();
 
-
-
     const username =
-        document.getElementById("username").value;
-
+        document.getElementById("username").value.trim();
 
     const password =
         document.getElementById("password").value;
 
-
-
-
     const loginData = {
 
         username: username,
-
         password: password
 
     };
 
-
-
-
     try {
-
 
         const response = await fetch(
 
-            "https://yourexodus-api.onrender.com/users/login",
+            `${API_URL}/users/login`,
 
             {
 
@@ -62,140 +48,64 @@ loginForm.addEventListener("submit", async function(event) {
 
         );
 
-
-
-
-
         const data = await response.json();
-
-
-
 
         console.log("LOGIN RESPONSE:", data);
 
-
-
-
-
-        if (response.ok) {
-
-
-
-            messageBox.style.color = "green";
-
-
-            messageBox.innerHTML =
-                "Login successful! Redirecting to your dashboard...";
-
-
-
-
-
-            // =====================================
-            // SAVE USER SESSION
-            // =====================================
-
-
-            const loggedInUser = {
-
-                id: data.id,
-
-                username: data.username || username,
-
-                email: data.email || ""
-
-            };
-
-
-
-
-            localStorage.setItem(
-
-                "user",
-
-                JSON.stringify(loggedInUser)
-
-            );
-
-
-
-
-
-            // Optional username storage
-
-            localStorage.setItem(
-
-                "username",
-
-                 JSON.stringify(loggedInUser)
-
-            );
-
-
-
-
-
-
-            setTimeout(function () {
-
-
-                window.location.href =
-                    "../dashboard/index.html";
-
-
-            }, 1500);
-
-
-
-        }
-
-
-
-        else {
-
-
+        if (!response.ok) {
 
             messageBox.style.color = "red";
 
-
             messageBox.innerHTML =
+                data.message || "Invalid username or password.";
 
-                data.message ||
-
-                "Invalid username or password.";
-
+            return;
 
         }
 
+        // =====================================
+        // SAVE USER SESSION
+        // =====================================
 
+        const loggedInUser = {
+
+            id: data.id,
+            username: data.username || username,
+            email: data.email || ""
+
+        };
+
+        console.log("Logged In User:", loggedInUser);
+
+        // Store the entire user object
+        localStorage.setItem(
+            "username",
+            JSON.stringify(loggedInUser)
+        );
+
+        messageBox.style.color = "green";
+
+        messageBox.innerHTML =
+            "Login successful! Redirecting to your dashboard...";
+
+        setTimeout(function () {
+
+            window.location.href =
+                "../dashboard/index.html";
+
+        }, 1500);
 
     }
 
+    catch (error) {
 
-
-    catch(error) {
-
-
-
-        console.error(
-
-            "Connection error:",
-            error
-
-        );
-
-
+        console.error("Connection error:", error);
 
         messageBox.style.color = "red";
 
-
         messageBox.innerHTML =
-
             "Unable to connect to the server.";
 
-
     }
-
-
 
 });
