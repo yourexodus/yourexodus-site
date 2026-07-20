@@ -108,17 +108,7 @@ loginForm.addEventListener("submit", async function(event) {
 
 
 
-
-
-            // Optional backup username
-
-            localStorage.setItem(
-
-                "username",
-
-                data.username
-
-            );
+ 
 
 
 
@@ -191,4 +181,4 @@ loginForm.addEventListener("submit", async function(event) {
 
 
 });
-```
+ 
