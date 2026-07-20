@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en-US">
 
@@ -24,7 +25,9 @@
 
         <h2>Your Exodus</h2>
 
-        <p>Here your story does not have to end</p>
+        <p>
+        Here your story does not have to end
+        </p>
 
     </div>
 
@@ -47,7 +50,9 @@
 
     </nav>
 
+
 </aside>
+
 
 
 
@@ -59,12 +64,17 @@
 
 <header>
 
-<h1>📝 My Journey Journal</h1>
+<h1 id="journalWelcome">
+📝 My Journey Journal
+</h1>
+
 
 <p>
-A place to document your thoughts, prayers, lessons,
+A personal space to document your thoughts,
+prayers, lessons, scripture reflections,
 and moments where God is working in your life.
 </p>
+
 
 </header>
 
@@ -77,7 +87,7 @@ and moments where God is working in your life.
 <section class="scripture">
 
 
-<h2>Scripture Reflection</h2>
+<h2>Daily Scripture Reflection</h2>
 
 
 <blockquote>
@@ -86,7 +96,10 @@ and moments where God is working in your life.
 
 <br><br>
 
-<strong>Psalm 46:10</strong>
+<strong>
+Psalm 46:10
+</strong>
+
 
 </blockquote>
 
@@ -98,7 +111,9 @@ and moments where God is working in your life.
 
 
 
-<!-- NEW JOURNAL ENTRY -->
+
+<!-- CREATE JOURNAL ENTRY -->
+
 
 <section class="card">
 
@@ -109,16 +124,24 @@ and moments where God is working in your life.
 <form id="journalForm">
 
 
+
 <label>
 Entry Title
 </label>
 
 
-<input 
+<input
+
 type="text"
+
 id="journalTitle"
+
 placeholder="Example: A New Beginning"
+
+required
+
 >
+
 
 
 
@@ -128,17 +151,104 @@ Your Reflection
 </label>
 
 
-<textarea 
+<textarea
+
 id="journalEntry"
+
 placeholder="Write your thoughts, prayers, and reflections..."
+
+required
+
 ></textarea>
 
 
 
 
 
+<label>
+Scripture Reflection
+</label>
+
+
+<textarea
+
+id="journalScripture"
+
+placeholder="Example: Jeremiah 29:11 - For I know the plans I have for you..."
+
+></textarea>
+
+
+
+
+
+<label>
+How are you feeling today?
+</label>
+
+
+<select id="journalMood">
+
+
+<option value="Hopeful">
+Hopeful
+</option>
+
+
+<option value="Peaceful">
+Peaceful
+</option>
+
+
+<option value="Grateful">
+Grateful
+</option>
+
+
+<option value="Reflective">
+Reflective
+</option>
+
+
+<option value="Challenged">
+Challenged
+</option>
+
+
+</select>
+
+
+
+
+
+<label>
+Privacy Setting
+</label>
+
+
+<select id="journalPrivacy">
+
+
+<option value="true">
+Private
+</option>
+
+
+<option value="false">
+Public
+</option>
+
+
+</select>
+
+
+
+
+
 <button type="submit">
+
 Save Journal Entry
+
 </button>
 
 
@@ -153,56 +263,38 @@ Save Journal Entry
 
 
 
+
+
 <!-- JOURNAL HISTORY -->
+
 
 <section>
 
 
-<h2>Recent Journal Entries</h2>
+<h2>
+Recent Journal Entries
+</h2>
 
 
 
-<div class="journal-list">
+<div id="journalList" class="journal-list">
 
 
-
-<div class="journal-card">
-
-
-<h3>A New Beginning</h3>
-
-
-<p class="date">
-July 15, 2026
-</p>
-
-
-<p>
-Today I reflected on how God has guided my journey
-and prepared me for the next season of life.
-</p>
-
-
-</div>
-
-
-
+<!-- API JOURNAL DATA LOADS HERE -->
 
 
 <div class="journal-card">
 
 
-<h3>Lessons From My Journey</h3>
-
-
-<p class="date">
-July 10, 2026
-</p>
+<h3>
+Welcome To Your Journal
+</h3>
 
 
 <p>
-Every challenge has taught me patience, faith,
-and the importance of trusting God's timing.
+
+Your saved reflections will appear here.
+
 </p>
 
 
@@ -211,6 +303,7 @@ and the importance of trusting God's timing.
 
 
 </div>
+
 
 
 </section>
@@ -220,12 +313,17 @@ and the importance of trusting God's timing.
 
 
 
+
+
 <!-- MEMORY SECTION -->
+
 
 <section class="memory">
 
 
-<h2>Preserve Your Story</h2>
+<h2>
+Preserve Your Story
+</h2>
 
 
 <p>
@@ -242,7 +340,10 @@ moments that shape your testimony.
 
 
 
+
+
 </main>
+
 
 
 
@@ -253,3 +354,4 @@ moments that shape your testimony.
 </body>
 
 </html>
+```
