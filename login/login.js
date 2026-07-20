@@ -1,4 +1,3 @@
-```javascript
 // =====================================
 // YOUR EXODUS LOGIN
 // Connects Frontend to Flask API
@@ -19,8 +18,6 @@ loginForm.addEventListener("submit", async function(event) {
 
 
 
-    // Get form values
-
     const username =
         document.getElementById("username").value;
 
@@ -31,9 +28,6 @@ loginForm.addEventListener("submit", async function(event) {
 
 
 
-
-    // Build request body
-
     const loginData = {
 
         username: username,
@@ -41,7 +35,6 @@ loginForm.addEventListener("submit", async function(event) {
         password: password
 
     };
-
 
 
 
@@ -78,6 +71,11 @@ loginForm.addEventListener("submit", async function(event) {
 
 
 
+        console.log("LOGIN RESPONSE:", data);
+
+
+
+
 
         if (response.ok) {
 
@@ -94,29 +92,49 @@ loginForm.addEventListener("submit", async function(event) {
 
 
             // =====================================
-            // SAVE COMPLETE USER INFORMATION
+            // SAVE USER SESSION
             // =====================================
+
+
+            const loggedInUser = {
+
+                id: data.id,
+
+                username: data.username || username,
+
+                email: data.email || ""
+
+            };
+
+
+
 
             localStorage.setItem(
 
                 "user",
 
-                JSON.stringify(data)
+                JSON.stringify(loggedInUser)
 
             );
 
 
 
 
- 
+
+            // Optional username storage
+
+            localStorage.setItem(
+
+                "username",
+
+                loggedInUser.username
+
+            );
 
 
 
 
 
-
-
-            // Redirect to dashboard
 
             setTimeout(function () {
 
@@ -134,6 +152,7 @@ loginForm.addEventListener("submit", async function(event) {
 
 
         else {
+
 
 
             messageBox.style.color = "red";
@@ -154,14 +173,13 @@ loginForm.addEventListener("submit", async function(event) {
 
 
 
-    catch (error) {
+    catch(error) {
 
 
 
         console.error(
 
             "Connection error:",
-
             error
 
         );
@@ -181,4 +199,3 @@ loginForm.addEventListener("submit", async function(event) {
 
 
 });
- 
