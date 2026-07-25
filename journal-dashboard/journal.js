@@ -2,13 +2,9 @@
 // Your Exodus Journal Dashboard JavaScript
 // =====================================
 
-
 const API_URL = "https://yourexodus-api.onrender.com";
 
 let publicStories = [];
-
-
-
 
 
 // =====================================
@@ -17,35 +13,22 @@ let publicStories = [];
 
 document.addEventListener("DOMContentLoaded", function () {
 
-
     loadUserHeader();
 
     loadJournals();
 
+    const journalForm = document.getElementById("journalForm");
 
-    const journalForm =
-    document.getElementById("journalForm");
-
-
-    if(journalForm){
-
+    if (journalForm) {
         journalForm.addEventListener(
             "submit",
             createJournalEntry
         );
-
     }
-
 
     initializeDiscoverStories();
 
-
 });
-
-
-
-
-
 
 
 
@@ -53,84 +36,45 @@ document.addEventListener("DOMContentLoaded", function () {
 // GET CURRENT USER
 // =====================================
 
+function getCurrentUser() {
 
-function getCurrentUser(){
+    const storedUser = localStorage.getItem("username");
 
-
-    const storedUser =
-    localStorage.getItem("username");
-
-
-
-    if(!storedUser){
-
-        console.log(
-            "No logged in user."
-        );
-
+    if (!storedUser) {
         return null;
-
     }
 
 
+    try {
 
-    try{
+        const user = JSON.parse(storedUser);
 
-
-        const user =
-        JSON.parse(storedUser);
-
-
-
-        if(typeof user === "object"){
-
+        if (typeof user === "object") {
             return user;
-
         }
 
+    } catch(error) {
+
+        console.log("Username stored as text.");
 
     }
-
-    catch(error){
-
-
-        console.log(
-            "Using username string."
-        );
-
-
-    }
-
 
 
     return {
-
-        username:storedUser
-
+        username: storedUser
     };
-
 
 }
 
 
 
-
-
-
-
-
 // =====================================
-// USER HEADER
+// LOAD USER HEADER
 // =====================================
 
+function loadUserHeader() {
 
-function loadUserHeader(){
-
-
-    const user =
-    getCurrentUser();
-
-
+    const user = getCurrentUser();
 
     const header =
     document.getElementById(
@@ -138,51 +82,32 @@ function loadUserHeader(){
     );
 
 
-
-    if(user && header){
-
+    if (user && header) {
 
         header.innerHTML =
         `📝 ${user.username}'s Journal`;
 
-
     }
-
 
 }
 
 
 
-
-
-
-
-
-
 // =====================================
-// CREATE JOURNAL
+// CREATE JOURNAL ENTRY
 // =====================================
 
-
-async function createJournalEntry(event){
-
+async function createJournalEntry(event) {
 
     event.preventDefault();
 
 
-
-    const user =
-    getCurrentUser();
+    const user = getCurrentUser();
 
 
+    if (!user || !user.id) {
 
-    if(!user || !user.id){
-
-
-        alert(
-            "Please login again."
-        );
-
+        alert("Please login again.");
 
         return;
 
@@ -190,52 +115,36 @@ async function createJournalEntry(event){
 
 
 
-
-
     const journalData = {
 
-
         title:
-        document.getElementById(
-            "journalTitle"
-        ).value,
+        document.getElementById("journalTitle").value,
 
 
         entry:
-        document.getElementById(
-            "journalEntry"
-        ).value,
+        document.getElementById("journalEntry").value,
 
 
         scripture:
-        document.getElementById(
-            "journalScripture"
-        ).value,
+        document.getElementById("journalScripture").value,
 
 
         mood:
-        document.getElementById(
-            "journalMood"
-        ).value,
+        document.getElementById("journalMood").value,
 
 
         is_private:
-        document.getElementById(
-            "journalPrivacy"
-        ).value === "true",
+        document.getElementById("journalPrivacy").value === "true",
 
 
         user_id:
         user.id
 
-
     };
 
 
 
-
-
-    try{
+    try {
 
 
         const response =
@@ -246,34 +155,24 @@ async function createJournalEntry(event){
                 method:"POST",
 
                 headers:{
-
-                    "Content-Type":
-                    "application/json"
-
+                    "Content-Type":"application/json"
                 },
-
 
                 body:
                 JSON.stringify(journalData)
 
-
             }
-
         );
 
 
 
-
-        if(!response.ok){
-
+        if (!response.ok) {
 
             throw new Error(
-                "Unable to save journal."
+                "Unable to save journal"
             );
 
-
         }
-
 
 
 
@@ -282,45 +181,29 @@ async function createJournalEntry(event){
         );
 
 
-
         document
-        .getElementById(
-            "journalForm"
-        )
+        .getElementById("journalForm")
         .reset();
-
 
 
         loadJournals();
 
 
-
     }
 
-
-
-    catch(error){
-
+    catch(error) {
 
         console.error(
             error
         );
 
-
         alert(
             "Error saving journal."
         );
 
-
     }
 
-
 }
-
-
-
-
-
 
 
 
@@ -329,26 +212,20 @@ async function createJournalEntry(event){
 // LOAD USER JOURNALS
 // =====================================
 
-
-async function loadJournals(){
-
+async function loadJournals() {
 
 
     const user =
     getCurrentUser();
 
 
-
-    if(!user || !user.id){
-
+    if (!user || !user.id) {
         return;
-
     }
 
 
 
-
-    try{
+    try {
 
 
         const response =
@@ -357,10 +234,8 @@ async function loadJournals(){
         );
 
 
-
         const data =
         await response.json();
-
 
 
 
@@ -370,41 +245,33 @@ async function loadJournals(){
         );
 
 
-
-        if(!list){
-
+        if (!list) {
             return;
-
         }
 
 
 
-
-        list.innerHTML="";
-
+        list.innerHTML = "";
 
 
 
-        if(!data.journals ||
-           data.journals.length===0){
+        if (!data.journals ||
+            data.journals.length === 0) {
 
 
             list.innerHTML = `
 
             <div class="journal-card">
 
-            <h3>
-            No journal entries yet
-            </h3>
+                <h3>No journal entries yet</h3>
 
-            <p>
-            Begin your journey by creating your first reflection.
-            </p>
+                <p>
+                Begin your journey by creating your first reflection.
+                </p>
 
             </div>
 
             `;
-
 
             return;
 
@@ -413,24 +280,18 @@ async function loadJournals(){
 
 
 
-
-        data.journals.forEach(journal=>{
+        data.journals.forEach(journal => {
 
 
             const card =
-            document.createElement(
-                "div"
-            );
-
+            document.createElement("div");
 
 
             card.className =
             "journal-card";
 
 
-
             card.innerHTML = `
-
 
             <h3>
             ${journal.title}
@@ -443,7 +304,7 @@ async function loadJournals(){
 
 
             <p>
-            Mood:
+            🙏 Mood:
             ${journal.mood || "Not provided"}
             </p>
 
@@ -451,9 +312,7 @@ async function loadJournals(){
             `;
 
 
-
             list.appendChild(card);
-
 
 
         });
@@ -462,15 +321,12 @@ async function loadJournals(){
 
     }
 
-
-    catch(error){
-
+    catch(error) {
 
         console.error(
-            "Loading journals failed:",
+            "Journal loading error:",
             error
         );
-
 
     }
 
@@ -480,19 +336,11 @@ async function loadJournals(){
 
 
 
-
-
-
-
-
-
 // =====================================
 // DISCOVER STORIES
 // =====================================
 
-
-function initializeDiscoverStories(){
-
+function initializeDiscoverStories() {
 
 
     const button =
@@ -501,12 +349,10 @@ function initializeDiscoverStories(){
     );
 
 
-
     const overlay =
     document.getElementById(
         "discoverOverlay"
     );
-
 
 
     const close =
@@ -516,55 +362,41 @@ function initializeDiscoverStories(){
 
 
 
-
-
-    if(button){
+    if (button && overlay) {
 
 
         button.addEventListener(
             "click",
-            ()=>{
-
+            function(){
 
                 overlay.classList.add(
                     "open"
                 );
 
-
                 loadPublicStories();
 
-
             }
-
         );
-
 
     }
 
 
 
-
-
-    if(close){
+    if(close && overlay) {
 
 
         close.addEventListener(
             "click",
-            ()=>{
-
+            function(){
 
                 overlay.classList.remove(
                     "open"
                 );
 
-
             }
-
         );
 
-
     }
-
 
 
 
@@ -575,18 +407,14 @@ function initializeDiscoverStories(){
     );
 
 
-    if(refresh){
-
+    if(refresh) {
 
         refresh.addEventListener(
             "click",
             loadPublicStories
         );
 
-
     }
-
-
 
 
 
@@ -596,14 +424,12 @@ function initializeDiscoverStories(){
     );
 
 
-    if(search){
-
+    if(search) {
 
         search.addEventListener(
             "input",
             filterStories
         );
-
 
     }
 
@@ -616,18 +442,14 @@ function initializeDiscoverStories(){
     );
 
 
-    if(mood){
-
+    if(mood) {
 
         mood.addEventListener(
             "change",
             filterStories
         );
 
-
     }
-
-
 
 
 
@@ -637,27 +459,19 @@ function initializeDiscoverStories(){
     );
 
 
-    if(sort){
-
+    if(sort) {
 
         sort.addEventListener(
             "change",
             filterStories
         );
 
-
     }
-
-
 
 
     makeModalDraggable();
 
-
 }
-
-
-
 
 
 
@@ -668,9 +482,7 @@ function initializeDiscoverStories(){
 // LOAD PUBLIC STORIES
 // =====================================
 
-
-async function loadPublicStories(){
-
+async function loadPublicStories() {
 
 
     const container =
@@ -679,8 +491,13 @@ async function loadPublicStories(){
     );
 
 
+    if(!container){
+        return;
+    }
 
-    try{
+
+
+    try {
 
 
         const response =
@@ -700,11 +517,8 @@ async function loadPublicStories(){
 
 
 
-
-
         publicStories =
         await response.json();
-
 
 
 
@@ -716,13 +530,10 @@ async function loadPublicStories(){
     }
 
 
-
     catch(error){
 
 
-        console.error(
-            error
-        );
+        console.error(error);
 
 
         container.innerHTML = `
@@ -741,7 +552,6 @@ async function loadPublicStories(){
 
         `;
 
-
     }
 
 
@@ -750,15 +560,9 @@ async function loadPublicStories(){
 
 
 
-
-
-
-
-
 // =====================================
 // DISPLAY STORIES
 // =====================================
-
 
 function displayStories(stories){
 
@@ -769,12 +573,11 @@ function displayStories(stories){
     );
 
 
-
-    container.innerHTML="";
-
+    container.innerHTML = "";
 
 
-    if(stories.length===0){
+
+    if(stories.length === 0){
 
 
         container.innerHTML = `
@@ -789,7 +592,6 @@ function displayStories(stories){
 
         `;
 
-
         return;
 
     }
@@ -797,8 +599,8 @@ function displayStories(stories){
 
 
 
-    stories.forEach(
-        story=>{
+    stories.forEach(story => {
+
 
 
         const card =
@@ -812,12 +614,44 @@ function displayStories(stories){
 
 
 
+        const username =
+        story.username ||
+        story.user?.username ||
+        story.author ||
+        "Community Member";
+
+
+
+        const date =
+        story.created_at
+        ?
+        new Date(
+            story.created_at
+        ).toLocaleDateString()
+        :
+        "Date unavailable";
+
+
+
         card.innerHTML = `
 
 
         <h3>
-        ${story.title}
+        📝 ${story.title}
         </h3>
+
+
+
+        <p>
+        👤 ${username}
+        </p>
+
+
+
+        <p>
+        📅 ${date}
+        </p>
+
 
 
         <p>
@@ -825,14 +659,15 @@ function displayStories(stories){
         </p>
 
 
+
         <p>
-        Mood:
+        🙏 Mood:
         ${story.mood || "Not provided"}
         </p>
 
 
-        `;
 
+        `;
 
 
         container.appendChild(card);
@@ -848,64 +683,55 @@ function displayStories(stories){
 
 
 
-
-
-
-
 // =====================================
-// SEARCH + FILTER
+// SEARCH / FILTER / SORT
 // =====================================
-
 
 function filterStories(){
 
 
     const search =
-    document
-    .getElementById(
+    document.getElementById(
         "storySearch"
-    )
-    .value
-    .toLowerCase();
+    ).value.toLowerCase();
 
 
 
     const mood =
-    document
-    .getElementById(
+    document.getElementById(
         "moodFilter"
-    )
-    .value;
-
+    ).value;
 
 
 
     let filtered =
     publicStories.filter(
-        story=>{
+        story => {
 
 
-        const matchesSearch =
-        story.title.toLowerCase()
-        .includes(search)
-        ||
-        story.entry.toLowerCase()
-        .includes(search);
-
-
-
-        const matchesMood =
-        mood==="all"
-        ||
-        story.mood===mood;
+            const text =
+            `${story.title}
+            ${story.entry}`
+            .toLowerCase();
 
 
 
-        return matchesSearch && matchesMood;
+            const matchesSearch =
+            text.includes(search);
 
 
-    });
 
+            const matchesMood =
+            mood === "all" ||
+            story.mood === mood;
+
+
+
+            return matchesSearch &&
+                   matchesMood;
+
+        }
+    );
 
 
 
@@ -916,12 +742,9 @@ function filterStories(){
 
 
 
-
-    if(sort==="oldest"){
-
+    if(sort === "oldest"){
 
         filtered.reverse();
-
 
     }
 
@@ -931,14 +754,7 @@ function filterStories(){
         filtered
     );
 
-
 }
-
-
-
-
-
-
 
 
 
@@ -946,7 +762,6 @@ function filterStories(){
 // =====================================
 // DRAG MODAL
 // =====================================
-
 
 function makeModalDraggable(){
 
@@ -963,13 +778,17 @@ function makeModalDraggable(){
     );
 
 
+    if(!modal || !header){
+        return;
+    }
 
-    let offsetX=0;
 
-    let offsetY=0;
 
-    let dragging=false;
+    let dragging = false;
 
+    let offsetX = 0;
+
+    let offsetY = 0;
 
 
 
@@ -977,7 +796,7 @@ function makeModalDraggable(){
     function(e){
 
 
-        dragging=true;
+        dragging = true;
 
 
         offsetX =
@@ -994,39 +813,33 @@ function makeModalDraggable(){
 
 
 
-
-
     document.onmousemove =
     function(e){
 
 
         if(!dragging){
-
             return;
-
         }
 
 
+
         modal.style.left =
-        (e.clientX-offsetX)+"px";
+        (e.clientX - offsetX) + "px";
+
 
 
         modal.style.top =
-        (e.clientY-offsetY)+"px";
+        (e.clientY - offsetY) + "px";
 
 
     };
 
 
 
-
-
     document.onmouseup =
     function(){
 
-
-        dragging=false;
-
+        dragging = false;
 
     };
 
