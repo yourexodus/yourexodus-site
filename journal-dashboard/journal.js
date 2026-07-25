@@ -28,6 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     initializeDiscoverStories();
 
+    makeModalDraggable();
+
 });
 
 
@@ -49,7 +51,7 @@ function getCurrentUser() {
 
         const user = JSON.parse(storedUser);
 
-        if (typeof user === "object") {
+        if (typeof user === "object" && user !== null) {
             return user;
         }
 
@@ -118,23 +120,23 @@ async function createJournalEntry(event) {
     const journalData = {
 
         title:
-        document.getElementById("journalTitle").value,
+        document.getElementById("journalTitle")?.value || "",
 
 
         entry:
-        document.getElementById("journalEntry").value,
+        document.getElementById("journalEntry")?.value || "",
 
 
         scripture:
-        document.getElementById("journalScripture").value,
+        document.getElementById("journalScripture")?.value || "",
 
 
         mood:
-        document.getElementById("journalMood").value,
+        document.getElementById("journalMood")?.value || "",
 
 
         is_private:
-        document.getElementById("journalPrivacy").value === "true",
+        document.getElementById("journalPrivacy")?.value === "true",
 
 
         user_id:
@@ -183,7 +185,7 @@ async function createJournalEntry(event) {
 
         document
         .getElementById("journalForm")
-        .reset();
+        ?.reset();
 
 
         loadJournals();
@@ -469,7 +471,37 @@ function initializeDiscoverStories() {
     }
 
 
-    makeModalDraggable();
+    const usernameFilter =
+    document.getElementById(
+        "storyUsernameFilter"
+    );
+
+
+    if(usernameFilter) {
+
+        usernameFilter.addEventListener(
+            "input",
+            filterStories
+        );
+
+    }
+
+
+
+    const dateFilter =
+    document.getElementById(
+        "storyDateFilter"
+    );
+
+
+    if(dateFilter) {
+
+        dateFilter.addEventListener(
+            "change",
+            filterStories
+        );
+
+    }
 
 }
 
@@ -573,6 +605,11 @@ function displayStories(stories){
     );
 
 
+    if(!container){
+        return;
+    }
+
+
     container.innerHTML = "";
 
 
@@ -633,6 +670,8 @@ function displayStories(stories){
 
 
 
+        const snippet = story.entry ? story.entry.substring(0, 160) : "";
+
         card.innerHTML = `
 
 
@@ -655,7 +694,7 @@ function displayStories(stories){
 
 
         <p>
-        ${story.entry.substring(0,160)}...
+        ${snippet}...
         </p>
 
 
@@ -689,66 +728,76 @@ function displayStories(stories){
 
 function filterStories(){
 
-
     const search =
-    document.getElementById(
-        "storySearch"
-    ).value.toLowerCase();
-
-
+    (document.getElementById("storySearch")?.value || "").toLowerCase();
 
     const mood =
-    document.getElementById(
-        "moodFilter"
-    ).value;
+    document.getElementById("moodFilter")?.value || "all";
 
+    const usernameFilter =
+    (document.getElementById("storyUsernameFilter")?.value || "").toLowerCase();
 
+    const dateFilter =
+    document.getElementById("storyDateFilter")?.value || "";
 
     let filtered =
     publicStories.filter(
         story => {
 
+            const username =
+            story.username ||
+            story.user?.username ||
+            story.author ||
+            "Community Member";
 
             const text =
-            `${story.title}
-            ${story.entry}`
+            `${story.title || ""} ${story.entry || ""} ${username}`
             .toLowerCase();
-
-
 
             const matchesSearch =
             text.includes(search);
-
-
 
             const matchesMood =
             mood === "all" ||
             story.mood === mood;
 
+            const matchesUsername =
+            username
+            .toLowerCase()
+            .includes(usernameFilter);
 
+            let matchesDate = true;
+
+            if(dateFilter && story.created_at){
+
+                const storyDate =
+                new Date(
+                    story.created_at
+                )
+                .toISOString()
+                .split("T")[0];
+
+                matchesDate =
+                storyDate === dateFilter;
+
+            }
 
             return matchesSearch &&
-                   matchesMood;
+                   matchesMood &&
+                   matchesUsername &&
+                   matchesDate;
 
         }
     );
 
-
-
     const sort =
-    document.getElementById(
-        "storySort"
-    ).value;
-
-
+    document.getElementById("storySort")?.value;
 
     if(sort === "oldest"){
-
-        filtered.reverse();
-
+        filtered.sort((a, b) => new Date(a.created_at || 0) - new Date(b.created_at || 0));
+    } else {
+        filtered.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
     }
-
-
 
     displayStories(
         filtered
@@ -842,6 +891,5 @@ function makeModalDraggable(){
         dragging = false;
 
     };
-
 
 }
