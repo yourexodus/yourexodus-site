@@ -602,7 +602,17 @@ function initializeDiscoverStories(){
 
 
     }
+	const refreshButton =
+	document.getElementById(
+   	 "refreshStories"
+	);
 
+	if (refreshButton) {
+
+  	  refreshButton.addEventListener(
+    	    "click",
+      	  loadPublicStories
+   	 );
 
 
 }
