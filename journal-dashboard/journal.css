@@ -6,13 +6,10 @@
 /* RESET */
 
 *{
-
     margin:0;
     padding:0;
     box-sizing:border-box;
-
 }
-
 
 
 /* ==========================================
@@ -57,7 +54,6 @@ body{
 }
 
 
-
 .logo h2{
 
     color:white;
@@ -67,7 +63,6 @@ body{
     font-weight:normal;
 
 }
-
 
 
 .logo p{
@@ -83,7 +78,6 @@ body{
 }
 
 
-
 nav{
 
     display:flex;
@@ -95,7 +89,6 @@ nav{
     margin-top:40px;
 
 }
-
 
 
 nav a{
@@ -113,7 +106,6 @@ nav a{
 }
 
 
-
 nav a:hover,
 nav .active{
 
@@ -128,7 +120,7 @@ nav .active{
 
 
 /* ==========================================
-   MAIN AREA
+   MAIN
 ========================================== */
 
 
@@ -155,7 +147,6 @@ header h1{
 }
 
 
-
 header p{
 
     margin-top:10px;
@@ -169,8 +160,9 @@ header p{
 
 
 
+
 /* ==========================================
-   CARDS / SECTIONS
+   CARDS
 ========================================== */
 
 
@@ -192,7 +184,6 @@ header p{
 }
 
 
-
 .scripture{
 
     border-left:5px solid #b08b41;
@@ -210,7 +201,6 @@ h2{
     margin-bottom:20px;
 
 }
-
 
 
 h3{
@@ -328,10 +318,47 @@ button{
 }
 
 
-
 button:hover{
 
     background:#8f6d30;
+
+}
+
+
+
+
+
+/* ==========================================
+   CREATE ENTRY HEADER
+========================================== */
+
+
+.journal-title-row{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    gap:20px;
+
+}
+
+
+
+.discover-btn{
+
+    background:#2f7d32;
+
+    margin:0;
+
+}
+
+
+.discover-btn:hover{
+
+    background:#256428;
 
 }
 
@@ -414,74 +441,73 @@ button:hover{
 
 
 /* ==========================================
-   DISCOVER STORIES BUTTON
+   DISCOVER STORIES MODAL
 ========================================== */
 
 
-.discover-btn{
-
-    background:#2f7d32;
-
-    margin-bottom:20px;
-
-}
-
-
-
-.discover-btn:hover{
-
-    background:#256428;
-
-}
-
-
-
-
-
-/* ==========================================
-   DISCOVER STORIES DRAWER
-========================================== */
-
-
-.discover-drawer{
+.discover-overlay{
 
     position:fixed;
 
-    top:0;
+    inset:0;
 
-    right:-450px;
+    background:rgba(0,0,0,.75);
 
-    width:450px;
+    display:none;
 
-    height:100vh;
+    align-items:center;
+
+    justify-content:center;
+
+    z-index:2000;
+
+}
+
+
+
+.discover-overlay.open{
+
+    display:flex;
+
+}
+
+
+
+
+.discover-modal{
+
+    width:850px;
+
+    max-width:90%;
+
+    max-height:85vh;
 
     background:#17181c;
 
-    color:white;
+    border:1px solid #333;
 
-    box-shadow:-5px 0 15px rgba(0,0,0,.4);
+    border-radius:15px;
 
-    transition:right .3s ease;
+    box-shadow:0 20px 50px rgba(0,0,0,.7);
 
-    overflow-y:auto;
+    overflow:hidden;
 
-    z-index:1000;
-
-    padding:25px;
+    position:absolute;
 
 }
 
 
 
-.discover-drawer.open{
-
-    right:0;
-
-}
 
 
+/* HEADER DRAG AREA */
 
-.drawer-header{
+
+.modal-header{
+
+    background:#202126;
+
+    padding:20px 25px;
 
     display:flex;
 
@@ -489,26 +515,90 @@ button:hover{
 
     align-items:center;
 
-    border-bottom:1px solid #333;
+    cursor:move;
 
-    padding-bottom:15px;
+    border-bottom:1px solid #333;
 
 }
 
 
 
-.drawer-header button{
-
-    background:none;
+.modal-header h2{
 
     margin:0;
 
-    padding:5px;
+}
 
-    font-size:25px;
+
+
+.modal-header button{
+
+    background:none;
+
+    padding:5px 10px;
+
+    margin:0;
+
+    font-size:20px;
 
 }
 
+
+
+
+
+/* FILTER AREA */
+
+
+.story-controls{
+
+    display:flex;
+
+    gap:15px;
+
+    padding:20px;
+
+    background:#101114;
+
+}
+
+
+
+.story-controls input,
+.story-controls select{
+
+    margin:0;
+
+}
+
+
+
+
+
+/* STORY AREA */
+
+
+.story-grid{
+
+    padding:25px;
+
+    overflow-y:auto;
+
+    max-height:60vh;
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+
+    gap:20px;
+
+}
+
+
+
+
+
+/* STORY CARDS */
 
 
 .public-card{
@@ -517,11 +607,21 @@ button:hover{
 
     border:1px solid #333;
 
-    border-radius:10px;
+    border-radius:12px;
 
-    padding:15px;
+    padding:20px;
 
-    margin-top:15px;
+    transition:.3s;
+
+}
+
+
+
+.public-card:hover{
+
+    transform:translateY(-5px);
+
+    border-color:#b08b41;
 
 }
 
@@ -532,6 +632,15 @@ button:hover{
     color:white;
 
 }
+
+
+
+.public-card p{
+
+    line-height:1.6;
+
+}
+
 
 
 
@@ -574,11 +683,27 @@ body{
 
 
 
-.discover-drawer{
+.journal-title-row{
 
-    width:100%;
+    flex-direction:column;
 
-    right:-100%;
+    align-items:flex-start;
+
+}
+
+
+
+.discover-modal{
+
+    width:95%;
+
+}
+
+
+
+.story-controls{
+
+    flex-direction:column;
 
 }
 

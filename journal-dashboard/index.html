@@ -49,7 +49,6 @@
 
     </nav>
 
-
 </aside>
 
 
@@ -74,20 +73,15 @@ prayers, lessons, scripture reflections,
 and moments where God is working in your life.
 </p>
 
-
 </header>
 
 
 
 
 
-<!-- SCRIPTURE -->
-
 <section class="scripture">
 
-
 <h2>Daily Scripture Reflection</h2>
-
 
 <blockquote>
 
@@ -99,9 +93,7 @@ and moments where God is working in your life.
 Psalm 46:10
 </strong>
 
-
 </blockquote>
-
 
 </section>
 
@@ -109,41 +101,34 @@ Psalm 46:10
 
 
 
-
-
-<!-- CREATE JOURNAL ENTRY -->
-
-
 <section class="card">
 
+
+<div class="journal-title-row">
 
 <h2>Create a Journal Entry</h2>
 
 <button id="discoverStoriesBtn" class="discover-btn">
 🌎 Discover Stories
 </button>
-<form id="journalForm">
 
+</div>
+
+
+
+<form id="journalForm">
 
 
 <label>
 Entry Title
 </label>
 
-
 <input
-
 type="text"
-
 id="journalTitle"
-
 placeholder="Example: A New Beginning"
-
 required
-
 >
-
-
 
 
 
@@ -151,18 +136,11 @@ required
 Your Reflection
 </label>
 
-
 <textarea
-
 id="journalEntry"
-
 placeholder="Write your thoughts, prayers, and reflections..."
-
 required
-
 ></textarea>
-
-
 
 
 
@@ -170,16 +148,10 @@ required
 Scripture Reflection
 </label>
 
-
 <textarea
-
 id="journalScripture"
-
-placeholder="Example: Jeremiah 29:11 - For I know the plans I have for you..."
-
+placeholder="Example: Jeremiah 29:11..."
 ></textarea>
-
-
 
 
 
@@ -190,35 +162,13 @@ How are you feeling today?
 
 <select id="journalMood">
 
-
-<option value="Hopeful">
-Hopeful
-</option>
-
-
-<option value="Peaceful">
-Peaceful
-</option>
-
-
-<option value="Grateful">
-Grateful
-</option>
-
-
-<option value="Reflective">
-Reflective
-</option>
-
-
-<option value="Challenged">
-Challenged
-</option>
-
+<option value="Hopeful">Hopeful</option>
+<option value="Peaceful">Peaceful</option>
+<option value="Grateful">Grateful</option>
+<option value="Reflective">Reflective</option>
+<option value="Challenged">Challenged</option>
 
 </select>
-
-
 
 
 
@@ -229,29 +179,21 @@ Privacy Setting
 
 <select id="journalPrivacy">
 
-
 <option value="true">
 Private
 </option>
-
 
 <option value="false">
 Public
 </option>
 
-
 </select>
 
 
 
-
-
 <button type="submit">
-
 Save Journal Entry
-
 </button>
-
 
 
 </form>
@@ -265,10 +207,6 @@ Save Journal Entry
 
 
 
-
-<!-- JOURNAL HISTORY -->
-
-
 <section>
 
 
@@ -277,34 +215,23 @@ Recent Journal Entries
 </h2>
 
 
-
 <div id="journalList" class="journal-list">
 
 
-<!-- API JOURNAL DATA LOADS HERE -->
-
-
 <div class="journal-card">
-
 
 <h3>
 Welcome To Your Journal
 </h3>
 
-
 <p>
-
 Your saved reflections will appear here.
-
 </p>
 
-
 </div>
 
 
-
 </div>
-
 
 
 </section>
@@ -314,13 +241,7 @@ Your saved reflections will appear here.
 
 
 
-
-
-<!-- MEMORY SECTION -->
-
-
 <section class="memory">
-
 
 <h2>
 Preserve Your Story
@@ -342,36 +263,120 @@ moments that shape your testimony.
 
 
 
-
-</main>
-
-<!-- DISCOVER STORIES DRAWER -->
-
-<div id="discoverDrawer" class="discover-drawer">
-
-    <div class="drawer-header">
-
-        <h2>🌎 Discover Stories</h2>
-	<button id="searchBtn">Search</button>
-	<button id="refreshBtn">🔄 Refresh</button>
-
-        <button id="closeDrawer">
-            ✕
-        </button>
-
-    </div>
+<!-- ===============================
+     DISCOVER STORIES MODAL
+================================ -->
 
 
-    <div id="publicJournalList">
+<div id="discoverOverlay" class="discover-overlay">
 
-        <p>
-        Loading public stories...
-        </p>
 
-    </div>
+<div id="discoverModal" class="discover-modal">
+
+
+<div class="modal-header" id="modalDrag">
+
+
+<h2>
+🌎 Discover Stories
+</h2>
+
+
+<div>
+
+<button id="refreshStories">
+🔄
+</button>
+
+
+<button id="closeDrawer">
+✕
+</button>
+
+</div>
 
 
 </div>
+
+
+
+
+
+<div class="story-controls">
+
+
+<input
+id="storySearch"
+type="text"
+placeholder="Search stories..."
+>
+
+
+<select id="moodFilter">
+
+<option value="all">
+All Moods
+</option>
+
+<option value="Hopeful">
+Hopeful
+</option>
+
+<option value="Peaceful">
+Peaceful
+</option>
+
+<option value="Grateful">
+Grateful
+</option>
+
+<option value="Reflective">
+Reflective
+</option>
+
+<option value="Challenged">
+Challenged
+</option>
+
+</select>
+
+
+
+<select id="storySort">
+
+<option value="newest">
+Newest
+</option>
+
+<option value="oldest">
+Oldest
+</option>
+
+</select>
+
+
+</div>
+
+
+
+
+
+<div id="publicJournalList" class="story-grid">
+
+<p>
+Loading public stories...
+</p>
+
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
 
 
 
@@ -381,4 +386,3 @@ moments that shape your testimony.
 </body>
 
 </html>
-

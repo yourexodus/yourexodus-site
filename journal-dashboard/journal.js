@@ -2,7 +2,13 @@
 // Your Exodus Journal Dashboard JavaScript
 // =====================================
 
+
 const API_URL = "https://yourexodus-api.onrender.com";
+
+let publicStories = [];
+
+
+
 
 
 // =====================================
@@ -11,14 +17,17 @@ const API_URL = "https://yourexodus-api.onrender.com";
 
 document.addEventListener("DOMContentLoaded", function () {
 
+
     loadUserHeader();
 
     loadJournals();
 
 
-    const journalForm = document.getElementById("journalForm");
+    const journalForm =
+    document.getElementById("journalForm");
 
-    if (journalForm) {
+
+    if(journalForm){
 
         journalForm.addEventListener(
             "submit",
@@ -30,7 +39,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     initializeDiscoverStories();
 
+
 });
+
+
+
+
 
 
 
@@ -39,66 +53,90 @@ document.addEventListener("DOMContentLoaded", function () {
 // GET CURRENT USER
 // =====================================
 
-function getCurrentUser() {
 
-    const storedUser = localStorage.getItem("username");
+function getCurrentUser(){
 
 
-    if (!storedUser) {
+    const storedUser =
+    localStorage.getItem("username");
 
-        console.log("No logged-in user found.");
+
+
+    if(!storedUser){
+
+        console.log(
+            "No logged in user."
+        );
 
         return null;
 
     }
 
 
-    try {
 
-        const parsedUser = JSON.parse(storedUser);
+    try{
 
-        if (typeof parsedUser === "object") {
 
-            return parsedUser;
+        const user =
+        JSON.parse(storedUser);
+
+
+
+        if(typeof user === "object"){
+
+            return user;
 
         }
 
+
     }
 
-    catch(error) {
+    catch(error){
+
 
         console.log(
-            "Username stored as plain text."
+            "Using username string."
         );
 
+
     }
+
 
 
     return {
 
-        username: storedUser
+        username:storedUser
 
     };
+
 
 }
 
 
 
 
+
+
+
+
 // =====================================
-// DISPLAY USER NAME
+// USER HEADER
 // =====================================
 
-function loadUserHeader() {
+
+function loadUserHeader(){
 
 
-    const user = getCurrentUser();
+    const user =
+    getCurrentUser();
+
 
 
     const header =
     document.getElementById(
         "journalWelcome"
     );
+
 
 
     if(user && header){
@@ -110,28 +148,41 @@ function loadUserHeader() {
 
     }
 
+
 }
 
 
 
 
+
+
+
+
+
 // =====================================
-// CREATE JOURNAL ENTRY
+// CREATE JOURNAL
 // =====================================
 
+
 async function createJournalEntry(event){
+
 
     event.preventDefault();
 
 
-    const user = getCurrentUser();
+
+    const user =
+    getCurrentUser();
 
 
-    if(!user){
+
+    if(!user || !user.id){
+
 
         alert(
-            "Please login before creating a journal entry."
+            "Please login again."
         );
+
 
         return;
 
@@ -139,32 +190,48 @@ async function createJournalEntry(event){
 
 
 
+
+
     const journalData = {
 
+
         title:
-        document.getElementById("journalTitle").value,
+        document.getElementById(
+            "journalTitle"
+        ).value,
 
 
         entry:
-        document.getElementById("journalEntry").value,
+        document.getElementById(
+            "journalEntry"
+        ).value,
 
 
         scripture:
-        document.getElementById("journalScripture").value,
+        document.getElementById(
+            "journalScripture"
+        ).value,
 
 
         mood:
-        document.getElementById("journalMood").value,
+        document.getElementById(
+            "journalMood"
+        ).value,
 
 
         is_private:
-        document.getElementById("journalPrivacy").value === "true",
+        document.getElementById(
+            "journalPrivacy"
+        ).value === "true",
 
 
         user_id:
         user.id
 
+
     };
+
+
 
 
 
@@ -179,30 +246,34 @@ async function createJournalEntry(event){
                 method:"POST",
 
                 headers:{
+
                     "Content-Type":
                     "application/json"
+
                 },
+
 
                 body:
                 JSON.stringify(journalData)
 
+
             }
+
         );
+
 
 
 
         if(!response.ok){
 
-            const error =
-            await response.json();
-
-            console.error(error);
 
             throw new Error(
                 "Unable to save journal."
             );
 
+
         }
+
 
 
 
@@ -211,32 +282,44 @@ async function createJournalEntry(event){
         );
 
 
+
         document
-        .getElementById("journalForm")
+        .getElementById(
+            "journalForm"
+        )
         .reset();
+
 
 
         loadJournals();
 
 
+
     }
+
 
 
     catch(error){
 
+
         console.error(
-            "Journal save error:",
             error
         );
 
 
         alert(
-            "There was an error saving your journal."
+            "Error saving journal."
         );
+
 
     }
 
+
 }
+
+
+
+
 
 
 
@@ -246,7 +329,9 @@ async function createJournalEntry(event){
 // LOAD USER JOURNALS
 // =====================================
 
+
 async function loadJournals(){
+
 
 
     const user =
@@ -256,13 +341,10 @@ async function loadJournals(){
 
     if(!user || !user.id){
 
-        console.log(
-            "User ID unavailable."
-        );
-
         return;
 
     }
+
 
 
 
@@ -276,29 +358,20 @@ async function loadJournals(){
 
 
 
-        if(!response.ok){
-
-            throw new Error(
-                "Unable to load journals."
-            );
-
-        }
-
-
-
         const data =
         await response.json();
 
 
 
-        const journalList =
+
+        const list =
         document.getElementById(
             "journalList"
         );
 
 
 
-        if(!journalList){
+        if(!list){
 
             return;
 
@@ -306,30 +379,37 @@ async function loadJournals(){
 
 
 
-        journalList.innerHTML="";
+
+        list.innerHTML="";
 
 
 
-        if(!data.journals || data.journals.length === 0){
+
+        if(!data.journals ||
+           data.journals.length===0){
 
 
-            journalList.innerHTML = `
+            list.innerHTML = `
 
             <div class="journal-card">
 
-                <h3>No journal entries yet</h3>
+            <h3>
+            No journal entries yet
+            </h3>
 
-                <p>
-                Begin your journey by creating your first reflection.
-                </p>
+            <p>
+            Begin your journey by creating your first reflection.
+            </p>
 
             </div>
 
             `;
 
+
             return;
 
         }
+
 
 
 
@@ -338,16 +418,24 @@ async function loadJournals(){
 
 
             const card =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
+
 
 
             card.className =
             "journal-card";
 
 
+
             card.innerHTML = `
 
-            <h3>${journal.title}</h3>
+
+            <h3>
+            ${journal.title}
+            </h3>
+
 
             <p>
             ${journal.entry}
@@ -359,10 +447,13 @@ async function loadJournals(){
             ${journal.mood || "Not provided"}
             </p>
 
+
             `;
 
 
-            journalList.appendChild(card);
+
+            list.appendChild(card);
+
 
 
         });
@@ -374,10 +465,12 @@ async function loadJournals(){
 
     catch(error){
 
+
         console.error(
-            "Journal loading error:",
+            "Loading journals failed:",
             error
         );
+
 
     }
 
@@ -388,109 +481,202 @@ async function loadJournals(){
 
 
 
+
+
+
+
+
 // =====================================
 // DISCOVER STORIES
 // =====================================
 
+
 function initializeDiscoverStories(){
 
 
-    const discoverButton =
+
+    const button =
     document.getElementById(
         "discoverStoriesBtn"
     );
 
 
-    const drawer =
+
+    const overlay =
     document.getElementById(
-        "discoverDrawer"
+        "discoverOverlay"
     );
 
 
-    const closeButton =
+
+    const close =
     document.getElementById(
         "closeDrawer"
     );
 
 
 
-    if(discoverButton && drawer){
 
 
-        discoverButton.addEventListener(
+    if(button){
+
+
+        button.addEventListener(
             "click",
             ()=>{
 
-                drawer.classList.add(
+
+                overlay.classList.add(
                     "open"
                 );
+
 
                 loadPublicStories();
 
+
             }
+
         );
+
 
     }
 
 
 
-    if(closeButton && drawer){
 
 
-        closeButton.addEventListener(
+    if(close){
+
+
+        close.addEventListener(
             "click",
             ()=>{
 
-                drawer.classList.remove(
+
+                overlay.classList.remove(
                     "open"
                 );
 
+
             }
+
         );
+
 
     }
 
 
 
-    const refreshButton =
+
+
+    const refresh =
     document.getElementById(
         "refreshStories"
     );
 
 
-    if(refreshButton){
+    if(refresh){
 
-        refreshButton.addEventListener(
+
+        refresh.addEventListener(
             "click",
             loadPublicStories
         );
 
+
     }
 
 
-} // <-- THIS WAS THE MISSING BRACE
+
+
+
+    const search =
+    document.getElementById(
+        "storySearch"
+    );
+
+
+    if(search){
+
+
+        search.addEventListener(
+            "input",
+            filterStories
+        );
+
+
+    }
+
+
+
+
+    const mood =
+    document.getElementById(
+        "moodFilter"
+    );
+
+
+    if(mood){
+
+
+        mood.addEventListener(
+            "change",
+            filterStories
+        );
+
+
+    }
+
+
+
+
+
+    const sort =
+    document.getElementById(
+        "storySort"
+    );
+
+
+    if(sort){
+
+
+        sort.addEventListener(
+            "change",
+            filterStories
+        );
+
+
+    }
+
+
+
+
+    makeModalDraggable();
+
+
+}
+
+
+
+
+
 
 
 
 
 // =====================================
-// LOAD PUBLIC JOURNALS
+// LOAD PUBLIC STORIES
 // =====================================
+
 
 async function loadPublicStories(){
+
 
 
     const container =
     document.getElementById(
         "publicJournalList"
     );
-
-
-    if(!container){
-
-        return;
-
-    }
 
 
 
@@ -507,71 +693,342 @@ async function loadPublicStories(){
         if(!response.ok){
 
             throw new Error(
-                "Unable to load public stories."
+                "Unable to load stories."
             );
 
         }
 
 
 
-        const journals =
+
+
+        publicStories =
         await response.json();
 
 
 
-        container.innerHTML="";
 
-
-
-        journals.forEach(journal=>{
-
-
-            const card =
-            document.createElement("div");
-
-
-            card.className =
-            "public-card";
-
-
-            card.innerHTML = `
-
-            <h3>
-            ${journal.title}
-            </h3>
-
-            <p>
-            ${journal.entry.substring(0,150)}...
-            </p>
-
-            <p>
-            Mood:
-            ${journal.mood || "Not provided"}
-            </p>
-
-            `;
-
-
-            container.appendChild(card);
-
-
-        });
-
+        displayStories(
+            publicStories
+        );
 
 
     }
+
 
 
     catch(error){
 
 
         console.error(
-            "Public journal error:",
             error
         );
 
 
+        container.innerHTML = `
+
+        <div class="public-card">
+
+        <h3>
+        Error Loading Stories
+        </h3>
+
+        <p>
+        ${error.message}
+        </p>
+
+        </div>
+
+        `;
+
+
     }
+
+
+}
+
+
+
+
+
+
+
+
+
+// =====================================
+// DISPLAY STORIES
+// =====================================
+
+
+function displayStories(stories){
+
+
+    const container =
+    document.getElementById(
+        "publicJournalList"
+    );
+
+
+
+    container.innerHTML="";
+
+
+
+    if(stories.length===0){
+
+
+        container.innerHTML = `
+
+        <div class="public-card">
+
+        <h3>
+        No stories found
+        </h3>
+
+        </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+
+    stories.forEach(
+        story=>{
+
+
+        const card =
+        document.createElement(
+            "div"
+        );
+
+
+        card.className =
+        "public-card";
+
+
+
+        card.innerHTML = `
+
+
+        <h3>
+        ${story.title}
+        </h3>
+
+
+        <p>
+        ${story.entry.substring(0,160)}...
+        </p>
+
+
+        <p>
+        Mood:
+        ${story.mood || "Not provided"}
+        </p>
+
+
+        `;
+
+
+
+        container.appendChild(card);
+
+
+
+    });
+
+
+}
+
+
+
+
+
+
+
+
+
+// =====================================
+// SEARCH + FILTER
+// =====================================
+
+
+function filterStories(){
+
+
+    const search =
+    document
+    .getElementById(
+        "storySearch"
+    )
+    .value
+    .toLowerCase();
+
+
+
+    const mood =
+    document
+    .getElementById(
+        "moodFilter"
+    )
+    .value;
+
+
+
+
+    let filtered =
+    publicStories.filter(
+        story=>{
+
+
+        const matchesSearch =
+        story.title.toLowerCase()
+        .includes(search)
+        ||
+        story.entry.toLowerCase()
+        .includes(search);
+
+
+
+        const matchesMood =
+        mood==="all"
+        ||
+        story.mood===mood;
+
+
+
+        return matchesSearch && matchesMood;
+
+
+    });
+
+
+
+
+    const sort =
+    document.getElementById(
+        "storySort"
+    ).value;
+
+
+
+
+    if(sort==="oldest"){
+
+
+        filtered.reverse();
+
+
+    }
+
+
+
+    displayStories(
+        filtered
+    );
+
+
+}
+
+
+
+
+
+
+
+
+
+
+// =====================================
+// DRAG MODAL
+// =====================================
+
+
+function makeModalDraggable(){
+
+
+    const modal =
+    document.getElementById(
+        "discoverModal"
+    );
+
+
+    const header =
+    document.getElementById(
+        "modalDrag"
+    );
+
+
+
+    let offsetX=0;
+
+    let offsetY=0;
+
+    let dragging=false;
+
+
+
+
+    header.onmousedown =
+    function(e){
+
+
+        dragging=true;
+
+
+        offsetX =
+        e.clientX -
+        modal.offsetLeft;
+
+
+        offsetY =
+        e.clientY -
+        modal.offsetTop;
+
+
+    };
+
+
+
+
+
+    document.onmousemove =
+    function(e){
+
+
+        if(!dragging){
+
+            return;
+
+        }
+
+
+        modal.style.left =
+        (e.clientX-offsetX)+"px";
+
+
+        modal.style.top =
+        (e.clientY-offsetY)+"px";
+
+
+    };
+
+
+
+
+
+    document.onmouseup =
+    function(){
+
+
+        dragging=false;
+
+
+    };
 
 
 }
