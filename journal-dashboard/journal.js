@@ -2,13 +2,7 @@
 // Your Exodus Journal Dashboard JavaScript
 // =====================================
 
-
-// =====================================
-// API CONFIGURATION
-// =====================================
-
 const API_URL = "https://yourexodus-api.onrender.com";
-
 
 
 // =====================================
@@ -17,17 +11,12 @@ const API_URL = "https://yourexodus-api.onrender.com";
 
 document.addEventListener("DOMContentLoaded", function () {
 
-
     loadUserHeader();
 
     loadJournals();
 
 
-
-    const journalForm =
-        document.getElementById("journalForm");
-
-
+    const journalForm = document.getElementById("journalForm");
 
     if (journalForm) {
 
@@ -39,12 +28,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 
-
     initializeDiscoverStories();
 
-
 });
-
 
 
 
@@ -55,52 +41,46 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function getCurrentUser() {
 
-
-    const storedUser =
-        localStorage.getItem("username");
-
+    const storedUser = localStorage.getItem("username");
 
 
     if (!storedUser) {
 
-        console.log(
-            "No logged-in user found."
-        );
+        console.log("No logged-in user found.");
 
         return null;
 
     }
-
 
 
     try {
 
+        const parsedUser = JSON.parse(storedUser);
 
-        return JSON.parse(storedUser);
+        if (typeof parsedUser === "object") {
 
+            return parsedUser;
+
+        }
 
     }
-
 
     catch(error) {
 
-
-        console.error(
-            "Invalid user data:",
-            error
+        console.log(
+            "Username stored as plain text."
         );
-
-
-        return null;
-
 
     }
 
 
+    return {
+
+        username: storedUser
+
+    };
+
 }
-
-
-
 
 
 
@@ -112,16 +92,13 @@ function getCurrentUser() {
 function loadUserHeader() {
 
 
-    const user =
-        getCurrentUser();
-
+    const user = getCurrentUser();
 
 
     const header =
-        document.getElementById(
-            "journalWelcome"
-        );
-
+    document.getElementById(
+        "journalWelcome"
+    );
 
 
     if(user && header){
@@ -133,11 +110,7 @@ function loadUserHeader() {
 
     }
 
-
 }
-
-
-
 
 
 
@@ -148,77 +121,50 @@ function loadUserHeader() {
 
 async function createJournalEntry(event){
 
-
     event.preventDefault();
 
 
-
-    const user =
-        getCurrentUser();
-
+    const user = getCurrentUser();
 
 
     if(!user){
-
 
         alert(
             "Please login before creating a journal entry."
         );
 
-
         return;
-
 
     }
 
 
 
-
     const journalData = {
 
-
         title:
-        document.getElementById(
-            "journalTitle"
-        ).value,
-
+        document.getElementById("journalTitle").value,
 
 
         entry:
-        document.getElementById(
-            "journalEntry"
-        ).value,
-
+        document.getElementById("journalEntry").value,
 
 
         scripture:
-        document.getElementById(
-            "journalScripture"
-        ).value,
-
+        document.getElementById("journalScripture").value,
 
 
         mood:
-        document.getElementById(
-            "journalMood"
-        ).value,
-
+        document.getElementById("journalMood").value,
 
 
         is_private:
-        document.getElementById(
-            "journalPrivacy"
-        ).value === "true",
-
+        document.getElementById("journalPrivacy").value === "true",
 
 
         user_id:
         user.id
 
-
     };
-
-
 
 
 
@@ -233,12 +179,9 @@ async function createJournalEntry(event){
                 method:"POST",
 
                 headers:{
-
                     "Content-Type":
                     "application/json"
-
                 },
-
 
                 body:
                 JSON.stringify(journalData)
@@ -248,28 +191,18 @@ async function createJournalEntry(event){
 
 
 
-
-
         if(!response.ok){
-
 
             const error =
             await response.json();
 
-
-
-            console.error(
-                error
-            );
-
+            console.error(error);
 
             throw new Error(
                 "Unable to save journal."
             );
 
-
         }
-
 
 
 
@@ -278,24 +211,18 @@ async function createJournalEntry(event){
         );
 
 
-
         document
-        .getElementById(
-            "journalForm"
-        )
+        .getElementById("journalForm")
         .reset();
 
 
-
         loadJournals();
-
 
 
     }
 
 
     catch(error){
-
 
         console.error(
             "Journal save error:",
@@ -307,15 +234,9 @@ async function createJournalEntry(event){
             "There was an error saving your journal."
         );
 
-
     }
 
-
 }
-
-
-
-
 
 
 
@@ -328,13 +249,16 @@ async function createJournalEntry(event){
 async function loadJournals(){
 
 
-
     const user =
-        getCurrentUser();
+    getCurrentUser();
 
 
 
-    if(!user){
+    if(!user || !user.id){
+
+        console.log(
+            "User ID unavailable."
+        );
 
         return;
 
@@ -354,21 +278,16 @@ async function loadJournals(){
 
         if(!response.ok){
 
-
             throw new Error(
                 "Unable to load journals."
             );
-
 
         }
 
 
 
-
-
         const data =
         await response.json();
-
 
 
 
@@ -387,36 +306,26 @@ async function loadJournals(){
 
 
 
-
-        journalList.innerHTML = "";
-
+        journalList.innerHTML="";
 
 
 
-        if(
-            !data.journals ||
-            data.journals.length === 0
-        ){
+        if(!data.journals || data.journals.length === 0){
 
 
             journalList.innerHTML = `
 
             <div class="journal-card">
 
-                <h3>
-                No journal entries yet
-                </h3>
-
+                <h3>No journal entries yet</h3>
 
                 <p>
                 Begin your journey by creating your first reflection.
                 </p>
 
-
             </div>
 
             `;
-
 
             return;
 
@@ -425,78 +334,32 @@ async function loadJournals(){
 
 
 
-
-
-
         data.journals.forEach(journal=>{
 
 
             const card =
-            document.createElement(
-                "div"
-            );
-
+            document.createElement("div");
 
 
             card.className =
             "journal-card";
 
 
-
             card.innerHTML = `
 
+            <h3>${journal.title}</h3>
 
-                <h3>
-                ${journal.title}
-                </h3>
-
-
-                <p class="date">
-
-                ${
-                    journal.created_at
-                    ?
-                    new Date(
-                        journal.created_at
-                    ).toLocaleDateString()
-                    :
-                    ""
-                }
-
-                </p>
+            <p>
+            ${journal.entry}
+            </p>
 
 
-
-                <p>
-                ${journal.entry}
-                </p>
-
-
-
-                ${
-                    journal.scripture
-                    ?
-                    `
-                    <p>
-                    Scripture:
-                    ${journal.scripture}
-                    </p>
-                    `
-                    :
-                    ""
-                }
-
-
-
-                <p>
-                Mood:
-                ${journal.mood || "Not provided"}
-                </p>
-
-
+            <p>
+            Mood:
+            ${journal.mood || "Not provided"}
+            </p>
 
             `;
-
 
 
             journalList.appendChild(card);
@@ -511,19 +374,15 @@ async function loadJournals(){
 
     catch(error){
 
-
         console.error(
             "Journal loading error:",
             error
         );
 
-
     }
 
 
 }
-
-
 
 
 
@@ -542,19 +401,16 @@ function initializeDiscoverStories(){
     );
 
 
-
     const drawer =
     document.getElementById(
         "discoverDrawer"
     );
 
 
-
     const closeButton =
     document.getElementById(
         "closeDrawer"
     );
-
 
 
 
@@ -565,22 +421,16 @@ function initializeDiscoverStories(){
             "click",
             ()=>{
 
-
                 drawer.classList.add(
                     "open"
                 );
 
-
                 loadPublicStories();
-
 
             }
         );
 
-
     }
-
-
 
 
 
@@ -591,34 +441,34 @@ function initializeDiscoverStories(){
             "click",
             ()=>{
 
-
                 drawer.classList.remove(
                     "open"
                 );
 
-
             }
         );
 
+    }
+
+
+
+    const refreshButton =
+    document.getElementById(
+        "refreshStories"
+    );
+
+
+    if(refreshButton){
+
+        refreshButton.addEventListener(
+            "click",
+            loadPublicStories
+        );
 
     }
-	const refreshButton =
-	document.getElementById(
-   	 "refreshStories"
-	);
-
-	if (refreshButton) {
-
-  	  refreshButton.addEventListener(
-    	    "click",
-      	  loadPublicStories
-   	 );
 
 
-}
-
-
-
+} // <-- THIS WAS THE MISSING BRACE
 
 
 
@@ -630,12 +480,10 @@ function initializeDiscoverStories(){
 async function loadPublicStories(){
 
 
-
     const container =
     document.getElementById(
         "publicJournalList"
     );
-
 
 
     if(!container){
@@ -658,14 +506,11 @@ async function loadPublicStories(){
 
         if(!response.ok){
 
-
             throw new Error(
                 "Unable to load public stories."
             );
 
-
         }
-
 
 
 
@@ -674,42 +519,7 @@ async function loadPublicStories(){
 
 
 
-
-        container.innerHTML = "";
-
-
-
-
-        if(journals.length === 0){
-
-
-            container.innerHTML = `
-
-            <div class="public-card">
-
-                <h3>
-                No public stories yet
-                </h3>
-
-
-                <p>
-                Be the first to share your story.
-                </p>
-
-
-            </div>
-
-            `;
-
-
-            return;
-
-
-        }
-
-
-
-
+        container.innerHTML="";
 
 
 
@@ -717,44 +527,32 @@ async function loadPublicStories(){
 
 
             const card =
-            document.createElement(
-                "div"
-            );
-
+            document.createElement("div");
 
 
             card.className =
             "public-card";
 
 
-
-
             card.innerHTML = `
 
+            <h3>
+            ${journal.title}
+            </h3>
 
-                <h3>
-                ${journal.title}
-                </h3>
+            <p>
+            ${journal.entry.substring(0,150)}...
+            </p>
 
-
-                <p>
-                ${journal.entry.substring(0,150)}...
-                </p>
-
-
-                <p>
-                Mood:
-                ${journal.mood || "Not provided"}
-                </p>
-
-
+            <p>
+            Mood:
+            ${journal.mood || "Not provided"}
+            </p>
 
             `;
 
 
-
             container.appendChild(card);
-
 
 
         });
@@ -773,28 +571,7 @@ async function loadPublicStories(){
         );
 
 
-
-        container.innerHTML = `
-
-        <div class="public-card">
-
-            <h3>
-            Error loading stories
-            </h3>
-
-
-            <p>
-            ${error.message}
-            </p>
-
-
-        </div>
-
-        `;
-
-
     }
-
 
 
 }
