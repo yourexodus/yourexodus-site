@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
     const prayerForm =
-    document.getElementById("prayerForm");
+        document.getElementById("prayerForm");
 
 
     if (prayerForm) {
@@ -33,16 +33,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-
 // =====================================
 // GET CURRENT USER
 // =====================================
 
 function getCurrentUser() {
 
-
     const storedUser =
-    localStorage.getItem("username");
+        localStorage.getItem("username");
 
 
     if (!storedUser) {
@@ -52,12 +50,10 @@ function getCurrentUser() {
     }
 
 
-
     try {
 
-
         const user =
-        JSON.parse(storedUser);
+            JSON.parse(storedUser);
 
 
         if (
@@ -69,19 +65,15 @@ function getCurrentUser() {
 
         }
 
-
     }
 
     catch(error) {
-
 
         console.log(
             "Username stored as text."
         );
 
-
     }
-
 
 
     return {
@@ -90,9 +82,7 @@ function getCurrentUser() {
 
     };
 
-
 }
-
 
 
 
@@ -102,32 +92,24 @@ function getCurrentUser() {
 
 function loadUserHeader() {
 
-
     const user =
-    getCurrentUser();
-
+        getCurrentUser();
 
 
     const header =
-    document.getElementById(
-        "prayerWelcome"
-    );
+        document.getElementById(
+            "prayerWelcome"
+        );
 
 
-
-    if(user && header){
-
+    if (user && header) {
 
         header.innerHTML =
-        `🙏 ${user.username}'s Prayer Wall`;
-
+            `🙏 ${user.username}'s Prayer Wall`;
 
     }
 
-
 }
-
-
 
 
 
@@ -135,105 +117,97 @@ function loadUserHeader() {
 // CREATE PRAYER ENTRY
 // =====================================
 
-async function createPrayerEntry(event){
-
+async function createPrayerEntry(event) {
 
     event.preventDefault();
 
 
-
     const user =
-    getCurrentUser();
+        getCurrentUser();
 
 
-
-    if(!user || !user.id){
-
+    if (!user || !user.id) {
 
         alert(
             "Please login again to submit a prayer."
         );
-
 
         return;
 
     }
 
 
-
-
     const title =
-    document.getElementById("title")?.value || "";
-
+        document.getElementById("title")?.value || "";
 
 
     const request =
-    document.getElementById("prayerText")?.value || "";
+        document.getElementById("prayerText")?.value || "";
 
 
+    const category =
+        document.getElementById("prayerCategory")?.value || "Other";
 
+
+    const isPrivate =
+        document.getElementById("isPrivate")?.value === "true";
 
 
     const prayerData = {
 
-
         title: title,
-
 
         request: request,
 
+        category: category,
+
+        is_private: isPrivate,
 
         user_id: user.id
-
 
     };
 
 
-
-
-
     try {
 
-
-
         const response =
-        await fetch(
-            `${API_URL}/prayers`,
-            {
+            await fetch(
+                `${API_URL}/prayers`,
+                {
 
-                method:"POST",
+                    method: "POST",
 
-                headers:{
+                    headers: {
 
-                    "Content-Type":
-                    "application/json"
+                        "Content-Type":
+                            "application/json"
 
-                },
+                    },
 
+                    body:
+                        JSON.stringify(prayerData)
 
-                body:
-                JSON.stringify(prayerData)
-
-            }
-
-        );
+                }
+            );
 
 
-
-
-
-        if(!response.ok){
-
+        if (!response.ok) {
 
             throw new Error(
                 "Unable to save prayer request."
             );
 
-
         }
 
 
+        const savedPrayer =
+            await response.json();
 
+
+        console.log(
+            "Prayer saved:",
+            savedPrayer
+        );
 
 
         alert(
@@ -241,25 +215,17 @@ async function createPrayerEntry(event){
         );
 
 
-
-
         document
-        .getElementById("prayerForm")
-        ?.reset();
-
-
+            .getElementById("prayerForm")
+            ?.reset();
 
 
         loadPrayers();
 
-
-
     }
 
 
-
-    catch(error){
-
+    catch(error) {
 
         console.error(
             "Prayer creation error:",
@@ -271,15 +237,9 @@ async function createPrayerEntry(event){
             "Error submitting prayer request."
         );
 
-
     }
 
-
 }
-
-
-
-
 
 
 
@@ -287,83 +247,60 @@ async function createPrayerEntry(event){
 // LOAD PRAYERS
 // =====================================
 
-async function loadPrayers(){
-
-
+async function loadPrayers() {
 
     const container =
-    document.getElementById(
-        "prayerList"
-    );
+        document.getElementById(
+            "prayerList"
+        );
 
 
-
-    if(!container){
+    if (!container) {
 
         return;
 
     }
 
 
-
-
-
     try {
 
-
-
         const response =
-        await fetch(
-            `${API_URL}/prayers`
-        );
+            await fetch(
+                `${API_URL}/prayers`
+            );
 
 
-
-
-
-        if(!response.ok){
-
+        if (!response.ok) {
 
             throw new Error(
                 "Unable to load prayers."
             );
 
-
         }
 
 
-
-
-
         const prayers =
-        await response.json();
-
-
-
+            await response.json();
 
 
         container.innerHTML = "";
 
 
-
-
-
-        if(
+        if (
             !prayers ||
             prayers.length === 0
-        ){
-
+        ) {
 
             container.innerHTML = `
 
             <div class="prayer-card">
 
                 <h3>
-                No prayer requests yet
+                    No prayer requests yet
                 </h3>
 
                 <p>
-                Submit your first prayer request above.
+                    Submit your first prayer request above.
                 </p>
 
             </div>
@@ -373,79 +310,104 @@ async function loadPrayers(){
 
             return;
 
-
         }
-
-
-
 
 
 
         prayers.forEach(prayer => {
 
 
-
             const card =
-            document.createElement(
-                "div"
-            );
-
+                document.createElement(
+                    "div"
+                );
 
 
             card.className =
-            "prayer-card";
-
-
-
+                "prayer-card";
 
 
             const date =
-            prayer.created_at
-            ?
-            new Date(
                 prayer.created_at
-            ).toLocaleDateString()
-            :
-            "Recently";
-
-
-
+                    ?
+                    new Date(
+                        prayer.created_at
+                    ).toLocaleDateString()
+                    :
+                    "Recently";
 
 
             const status =
-            prayer.answered
-            ?
-            "✅ Answered Prayer"
-            :
-            "🙏 Being Prayed For";
-
-
-
-
+                prayer.answered
+                    ?
+                    "✅ Answered Prayer"
+                    :
+                    "🙏 Being Prayed For";
 
 
             card.innerHTML = `
 
-
             <h3>
-            ${prayer.title}
+                ${prayer.title}
             </h3>
 
 
             <p>
-            ${prayer.request}
+                ${prayer.request}
             </p>
 
 
             <p>
-            📅 ${date}
+                📂 Category:
+                ${prayer.category || "General"}
             </p>
 
 
             <p>
-            ${status}
+                ${
+                    prayer.is_private
+                    ?
+                    "🔒 Private Prayer"
+                    :
+                    "🌎 Public Prayer"
+                }
             </p>
 
+
+            ${
+                prayer.ai_response
+
+                ?
+
+                `
+                <div class="ai-prayer">
+
+                    <h4>
+                        📖 Prayer Response
+                    </h4>
+
+                    <p>
+                        ${prayer.ai_response}
+                    </p>
+
+                </div>
+                `
+
+                :
+
+                ""
+
+            }
+
+
+            <p>
+                📅 ${date}
+            </p>
+
+
+            <p>
+                ${status}
+            </p>
 
 
             ${
@@ -455,8 +417,8 @@ async function loadPrayers(){
 
                 `
                 <button
-                onclick="markPrayerAnswered(${prayer.id})">
-                Mark Answered
+                    onclick="markPrayerAnswered(${prayer.id})">
+                    Mark Answered
                 </button>
                 `
 
@@ -467,35 +429,25 @@ async function loadPrayers(){
             }
 
 
-
             <button
-            onclick="deletePrayer(${prayer.id})">
-            Delete
+                onclick="deletePrayer(${prayer.id})">
+                Delete
             </button>
-
 
 
             `;
 
 
-
-
             container.appendChild(card);
-
 
 
         });
 
 
-
-
-
     }
 
 
-
-    catch(error){
-
+    catch(error) {
 
         console.error(
             "Loading prayers failed:",
@@ -507,27 +459,21 @@ async function loadPrayers(){
 
         <div class="prayer-card">
 
-        <h3>
-        Error Loading Prayers
-        </h3>
+            <h3>
+                Error Loading Prayers
+            </h3>
 
-        <p>
-        Unable to connect to prayer service.
-        </p>
+            <p>
+                Unable to connect to prayer service.
+            </p>
 
         </div>
 
         `;
 
-
     }
 
-
-
 }
-
-
-
 
 
 
@@ -535,44 +481,37 @@ async function loadPrayers(){
 // MARK PRAYER ANSWERED
 // =====================================
 
-async function markPrayerAnswered(prayerId){
-
+async function markPrayerAnswered(prayerId) {
 
     try {
 
-
-
         const response =
-        await fetch(
-            `${API_URL}/prayers/${prayerId}`,
-            {
+            await fetch(
+                `${API_URL}/prayers/${prayerId}`,
+                {
 
-                method:"PUT",
+                    method: "PUT",
 
-                headers:{
+                    headers: {
 
-                    "Content-Type":
-                    "application/json"
+                        "Content-Type":
+                            "application/json"
 
-                },
-
-
-                body:
-                JSON.stringify({
-
-                    answered:true
-
-                })
+                    },
 
 
-            }
+                    body:
+                        JSON.stringify({
 
-        );
+                            answered: true
+
+                        })
+
+                }
+            );
 
 
-
-
-        if(!response.ok){
+        if (!response.ok) {
 
             throw new Error(
                 "Unable to update prayer."
@@ -581,19 +520,13 @@ async function markPrayerAnswered(prayerId){
         }
 
 
-
-
-
         loadPrayers();
-
 
 
     }
 
 
-
-    catch(error){
-
+    catch(error) {
 
         console.error(error);
 
@@ -602,15 +535,9 @@ async function markPrayerAnswered(prayerId){
             "Unable to update prayer."
         );
 
-
     }
 
-
-
 }
-
-
-
 
 
 
@@ -618,47 +545,35 @@ async function markPrayerAnswered(prayerId){
 // DELETE PRAYER
 // =====================================
 
-async function deletePrayer(prayerId){
-
-
+async function deletePrayer(prayerId) {
 
     const confirmDelete =
-    confirm(
-        "Delete this prayer request?"
-    );
+        confirm(
+            "Delete this prayer request?"
+        );
 
 
-
-    if(!confirmDelete){
+    if (!confirmDelete) {
 
         return;
 
     }
 
 
-
-
-
     try {
 
-
-
         const response =
-        await fetch(
-            `${API_URL}/prayers/${prayerId}`,
-            {
+            await fetch(
+                `${API_URL}/prayers/${prayerId}`,
+                {
 
-                method:"DELETE"
+                    method: "DELETE"
 
-            }
-
-        );
-
+                }
+            );
 
 
-
-
-        if(!response.ok){
+        if (!response.ok) {
 
             throw new Error(
                 "Unable to delete prayer."
@@ -667,19 +582,13 @@ async function deletePrayer(prayerId){
         }
 
 
-
-
-
         loadPrayers();
-
 
 
     }
 
 
-
-    catch(error){
-
+    catch(error) {
 
         console.error(error);
 
@@ -688,8 +597,6 @@ async function deletePrayer(prayerId){
             "Unable to delete prayer."
         );
 
-
     }
-
 
 }
