@@ -12,11 +12,11 @@
 
 </head>
 
-
 <body>
 
-
+<!-- ===================================== -->
 <!-- SIDEBAR -->
+<!-- ===================================== -->
 
 <aside class="sidebar">
 
@@ -27,7 +27,6 @@
         <p>Here your story does not have to end</p>
 
     </div>
-
 
     <nav>
 
@@ -51,14 +50,17 @@
 
 
 
+<!-- ===================================== -->
 <!-- MAIN CONTENT -->
+<!-- ===================================== -->
 
 <main class="main">
 
-
 <header>
 
-<h1>🙏 Prayer Center</h1>
+<h1 id="prayerWelcome">
+🙏 Prayer Center
+</h1>
 
 <p>
 A place to bring your prayers, seek encouragement,
@@ -69,11 +71,13 @@ and celebrate God's faithfulness.
 
 
 
-<!-- SCRIPTURE -->
+<!-- ===================================== -->
+<!-- SCRIPTURE OF THE DAY -->
+<!-- ===================================== -->
 
 <section class="scripture">
 
-<h2>Scripture of the Day</h2>
+<h2>📖 Scripture of the Day</h2>
 
 <blockquote>
 
@@ -89,94 +93,130 @@ and celebrate God's faithfulness.
 
 
 
-
+<!-- ===================================== -->
 <!-- SUBMIT PRAYER -->
+<!-- ===================================== -->
 
 <section class="card">
 
-<h2>Submit a Prayer Request</h2>
-
+<h2>🙏 Submit Prayer Request</h2>
 
 <form id="prayerForm">
 
+<label>Prayer Title</label>
 
-<label>
-Prayer Title
-</label>
-
-<input 
+<input
 type="text"
 id="title"
 placeholder="Example: Healing for my family"
 >
 
+<label>Prayer Category</label>
 
+<select id="prayerCategory">
 
-<label>
-Your Prayer
-</label>
+<option value="Healing">Healing</option>
 
+<option value="Family">Family</option>
 
-<textarea 
+<option value="Employment">Employment</option>
+
+<option value="Finances">Finances</option>
+
+<option value="Marriage">Marriage</option>
+
+<option value="Children">Children</option>
+
+<option value="Anxiety">Anxiety</option>
+
+<option value="Spiritual Growth">Spiritual Growth</option>
+
+<option value="Thanksgiving">Thanksgiving</option>
+
+<option value="Other">Other</option>
+
+</select>
+
+<label>Your Prayer Request</label>
+
+<textarea
 id="prayerText"
-placeholder="Write your prayer here..."
+placeholder="Write your prayer request here..."
 ></textarea>
 
+<label>Privacy</label>
 
+<select id="isPrivate">
+
+<option value="true">
+Private
+</option>
+
+<option value="false">
+Public
+</option>
+
+</select>
 
 <button type="submit">
-Submit Prayer
-</button>
 
+🙏 Submit Prayer
+
+</button>
 
 </form>
 
+</section>
+
+
+
+<!-- ===================================== -->
+<!-- AI RESPONSE -->
+<!-- ===================================== -->
+
+<section class="card">
+
+<h2>🤖 AI Prayer Response</h2>
+
+<div id="aiPrayer">
+
+<p>
+
+Submit a prayer request and receive
+a personalized Scripture-based prayer.
+
+</p>
+
+</div>
 
 </section>
 
 
 
-
+<!-- ===================================== -->
 <!-- MY PRAYERS -->
+<!-- ===================================== -->
 
-<section>
+<section class="card">
 
-<h2>My Prayer Requests</h2>
+<div class="section-header">
 
+<h2>📜 My Prayer Requests</h2>
 
-<div class="prayer-list">
+<button
+id="refreshPrayers"
+type="button"
+>
 
+Refresh
 
-<div class="prayer-card">
-
-<h3>Family</h3>
-
-<p>
-Praying for strength, guidance, and protection.
-</p>
-
-<span>
-Pending Prayer
-</span>
+</button>
 
 </div>
 
+<div id="prayerList">
 
-
-<div class="prayer-card">
-
-<h3>Health</h3>
-
-<p>
-Seeking healing and restoration.
-</p>
-
-<span>
-Answered Prayer
-</span>
-
-</div>
-
+<p>No prayer requests yet.</p>
 
 </div>
 
@@ -184,31 +224,194 @@ Answered Prayer
 
 
 
-
+<!-- ===================================== -->
 <!-- ANSWERED PRAYERS -->
+<!-- ===================================== -->
 
+<section class="card">
 
-<section class="answered">
+<h2>✅ Answered Prayers</h2>
 
-
-<h2>Answered Prayers</h2>
-
+<div id="answeredPrayerList">
 
 <p>
-Share the moments where you have seen God's faithfulness.
+
+When you mark a prayer as answered,
+it will appear here.
+
 </p>
 
+</div>
 
 </section>
+
+
+
+<!-- ===================================== -->
+<!-- DISCOVER PUBLIC PRAYERS -->
+<!-- ===================================== -->
+
+<section class="card">
+
+<div class="section-header">
+
+<h2>🌎 Community Prayer Wall</h2>
+
+<button
+id="discoverPrayersBtn"
+type="button"
+>
+
+Discover Public Prayers
+
+</button>
+
+</div>
+
+</section>
+
+
+
+<!-- ===================================== -->
+<!-- DISCOVER DRAWER -->
+<!-- ===================================== -->
+
+<div
+id="discoverOverlay"
+class="overlay"
+>
+
+<div
+id="discoverModal"
+class="discover-modal"
+>
+
+<div
+id="modalDrag"
+class="modal-header"
+>
+
+<h2>
+
+🙏 Public Prayer Requests
+
+</h2>
+
+<button
+id="closeDrawer"
+>
+
+✕
+
+</button>
+
+</div>
+
+
+
+<div class="modal-controls">
+
+<input
+type="text"
+id="prayerSearch"
+placeholder="Search prayers..."
+>
+
+<input
+type="text"
+id="prayerUsernameFilter"
+placeholder="Filter by username..."
+>
+
+<input
+type="date"
+id="prayerDateFilter"
+>
+
+<select id="prayerCategoryFilter">
+
+<option value="all">
+
+All Categories
+
+</option>
+
+<option value="Healing">Healing</option>
+
+<option value="Family">Family</option>
+
+<option value="Employment">Employment</option>
+
+<option value="Finances">Finances</option>
+
+<option value="Marriage">Marriage</option>
+
+<option value="Children">Children</option>
+
+<option value="Anxiety">Anxiety</option>
+
+<option value="Spiritual Growth">
+
+Spiritual Growth
+
+</option>
+
+<option value="Thanksgiving">
+
+Thanksgiving
+
+</option>
+
+<option value="Other">
+
+Other
+
+</option>
+
+</select>
+
+<select id="prayerSort">
+
+<option value="newest">
+
+Newest First
+
+</option>
+
+<option value="oldest">
+
+Oldest First
+
+</option>
+
+</select>
+
+<button
+id="refreshPublicPrayers"
+type="button"
+>
+
+Refresh
+
+</button>
+
+</div>
+
+
+
+<div id="publicPrayerList">
+
+</div>
+
+</div>
+
+</div>
 
 
 
 </main>
 
-
-
 <script src="prayer.js"></script>
-
 
 </body>
 
