@@ -50,7 +50,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const categorySelect = document.getElementById("prayerCategory");
     const textInput = document.getElementById("prayerText");
     const privacySelect = document.getElementById("isPrivate");
-    const newPrayerBtn = document.getElementById("newPrayerBtn");
 
     const currentPrayerDiv = document.getElementById("currentPrayer");
     const aiPrayerDiv = document.getElementById("aiPrayer");
@@ -82,14 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // =====================================
     // 4. EVENT LISTENERS
     // =====================================
-
-    // Reset Form Button
-    if (newPrayerBtn) {
-        newPrayerBtn.addEventListener("click", () => {
-            prayerForm.reset();
-            titleInput.focus();
-        });
-    }
 
     // Form Submission
     if (prayerForm) {
