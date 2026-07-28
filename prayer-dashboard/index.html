@@ -33,15 +33,10 @@
         <a href="../dashboard/index.html">🏠 Dashboard</a>
 
         <a class="active" href="#">🙏 Prayer Center</a>
-
         <a href="../journal-dashboard/index.html">📝 Journal</a>
-
         <a href="../bible-dashboard/index.html">📖 Bible Study</a>
-
         <a href="../testimonies/index.html">💬 Testimonies</a>
-
         <a href="../resources/index.html">📚 Resources</a>
-
         <a href="../index.html">⬅ Return Home</a>
 
     </nav>
@@ -59,12 +54,17 @@
 <header>
 
 <h1 id="prayerWelcome">
+
 🙏 Prayer Center
+
 </h1>
 
 <p>
-A place to bring your prayers, seek encouragement,
+
+A place to bring your prayers,
+seek encouragement,
 and celebrate God's faithfulness.
+
 </p>
 
 </header>
@@ -94,12 +94,29 @@ and celebrate God's faithfulness.
 
 
 <!-- ===================================== -->
-<!-- SUBMIT PRAYER -->
+<!-- NEW / CURRENT PRAYER -->
 <!-- ===================================== -->
 
 <section class="card">
 
-<h2>🙏 Submit Prayer Request</h2>
+<div class="section-header">
+
+<h2 id="prayerFormTitle">
+
+🆕 New Prayer Request
+
+</h2>
+
+<button
+id="newPrayerBtn"
+type="button"
+>
+
+New Prayer
+
+</button>
+
+</div>
 
 <form id="prayerForm">
 
@@ -109,6 +126,7 @@ and celebrate God's faithfulness.
 type="text"
 id="title"
 placeholder="Example: Healing for my family"
+required
 >
 
 <label>Prayer Category</label>
@@ -116,23 +134,14 @@ placeholder="Example: Healing for my family"
 <select id="prayerCategory">
 
 <option value="Healing">Healing</option>
-
 <option value="Family">Family</option>
-
 <option value="Employment">Employment</option>
-
 <option value="Finances">Finances</option>
-
 <option value="Marriage">Marriage</option>
-
 <option value="Children">Children</option>
-
 <option value="Anxiety">Anxiety</option>
-
 <option value="Spiritual Growth">Spiritual Growth</option>
-
 <option value="Thanksgiving">Thanksgiving</option>
-
 <option value="Other">Other</option>
 
 </select>
@@ -142,6 +151,7 @@ placeholder="Example: Healing for my family"
 <textarea
 id="prayerText"
 placeholder="Write your prayer request here..."
+required
 ></textarea>
 
 <label>Privacy</label>
@@ -149,16 +159,23 @@ placeholder="Write your prayer request here..."
 <select id="isPrivate">
 
 <option value="true">
+
 Private
+
 </option>
 
 <option value="false">
+
 Public
+
 </option>
 
 </select>
 
-<button type="submit">
+<button
+id="submitPrayerBtn"
+type="submit"
+>
 
 🙏 Submit Prayer
 
@@ -171,19 +188,49 @@ Public
 
 
 <!-- ===================================== -->
+<!-- CURRENT PRAYER -->
+<!-- ===================================== -->
+
+<section class="card">
+
+<h2>
+
+🙏 Current Prayer
+
+</h2>
+
+<div id="currentPrayer">
+
+<p>
+
+Submit your prayer request to begin.
+
+</p>
+
+</div>
+
+</section>
+
+
+
+<!-- ===================================== -->
 <!-- AI RESPONSE -->
 <!-- ===================================== -->
 
 <section class="card">
 
-<h2>🤖 AI Prayer Response</h2>
+<h2>
+
+🤖 AI Prayer Response
+
+</h2>
 
 <div id="aiPrayer">
 
 <p>
 
-Submit a prayer request and receive
-a personalized Scripture-based prayer.
+Your personalized Scripture-based prayer
+will appear here after submission.
 
 </p>
 
@@ -201,7 +248,11 @@ a personalized Scripture-based prayer.
 
 <div class="section-header">
 
-<h2>📜 My Prayer Requests</h2>
+<h2>
+
+📜 My Prayer Requests
+
+</h2>
 
 <button
 id="refreshPrayers"
@@ -216,7 +267,11 @@ Refresh
 
 <div id="prayerList">
 
-<p>No prayer requests yet.</p>
+<p>
+
+No prayer requests yet.
+
+</p>
 
 </div>
 
@@ -230,7 +285,11 @@ Refresh
 
 <section class="card">
 
-<h2>✅ Answered Prayers</h2>
+<h2>
+
+✅ Answered Prayers
+
+</h2>
 
 <div id="answeredPrayerList">
 
@@ -248,14 +307,18 @@ it will appear here.
 
 
 <!-- ===================================== -->
-<!-- DISCOVER PUBLIC PRAYERS -->
+<!-- COMMUNITY PRAYER WALL -->
 <!-- ===================================== -->
 
 <section class="card">
 
 <div class="section-header">
 
-<h2>🌎 Community Prayer Wall</h2>
+<h2>
+
+🌎 Community Prayer Wall
+
+</h2>
 
 <button
 id="discoverPrayersBtn"
@@ -299,6 +362,7 @@ class="modal-header"
 
 <button
 id="closeDrawer"
+type="button"
 >
 
 ✕
@@ -337,19 +401,12 @@ All Categories
 </option>
 
 <option value="Healing">Healing</option>
-
 <option value="Family">Family</option>
-
 <option value="Employment">Employment</option>
-
 <option value="Finances">Finances</option>
-
 <option value="Marriage">Marriage</option>
-
 <option value="Children">Children</option>
-
 <option value="Anxiety">Anxiety</option>
-
 <option value="Spiritual Growth">
 
 Spiritual Growth
