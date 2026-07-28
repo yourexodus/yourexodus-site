@@ -1,314 +1,332 @@
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
+/* =====================================
+   GLOBAL SETUP & LAYOUT
+===================================== */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
-
-body{
-
-font-family:Georgia,"Times New Roman",serif;
-
-background:#0e0f12;
-
-color:#e5e7eb;
-
-display:flex;
-
-min-height:100vh;
-
+body {
+    font-family: "Georgia", "Times New Roman", Garamond, serif;
+    background-color: #0e0f12;
+    color: #e5e7eb;
+    line-height: 1.6;
+    display: flex;
+    min-height: 100vh;
 }
 
-
-
-/* SIDEBAR */
-
-.sidebar{
-
-width:280px;
-
-background:#17181c;
-
-border-right:1px solid #2a2a30;
-
-position:fixed;
-
-height:100vh;
-
-padding:35px 25px;
-
+/* =====================================
+   SIDEBAR
+===================================== */
+.sidebar {
+    width: 260px;
+    background: #121316;
+    border-right: 1px solid #2a2a30;
+    padding: 30px 20px;
+    position: fixed;
+    height: 100vh;
+    overflow-y: auto;
 }
 
-
-.logo h2{
-
-color:white;
-
-letter-spacing:2px;
-
-font-weight:normal;
-
+.sidebar .logo h2 {
+    color: #ffffff;
+    font-size: 20px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
 }
 
-
-.logo p{
-
-color:#9ca3af;
-
-font-size:14px;
-
-font-style:italic;
-
-margin-top:8px;
-
+.sidebar .logo p {
+    font-size: 12px;
+    color: #9ca3af;
+    font-style: italic;
+    margin-bottom: 30px;
 }
 
-
-nav{
-
-display:flex;
-
-flex-direction:column;
-
-gap:12px;
-
-margin-top:40px;
-
+.sidebar nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
-
-nav a{
-
-color:#cbd5e1;
-
-text-decoration:none;
-
-padding:14px;
-
-border-radius:6px;
-
+.sidebar nav a {
+    color: #9ca3af;
+    text-decoration: none;
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.2s ease;
 }
 
-
-nav a:hover,
-nav .active{
-
-background:#b08b41;
-
-color:white;
-
+.sidebar nav a:hover,
+.sidebar nav a.active {
+    background: rgba(176, 139, 65, 0.15);
+    color: #ffffff;
+    border-left: 3px solid #b08b41;
 }
 
-
-
-/* MAIN */
-
-
-.main{
-
-margin-left:280px;
-
-padding:45px;
-
-width:calc(100% - 280px);
-
+/* =====================================
+   MAIN CONTENT AREA
+===================================== */
+.main {
+    margin-left: 260px;
+    flex: 1;
+    padding: 40px;
+    max-width: 960px;
 }
 
-
-header h1{
-
-font-size:42px;
-
-font-weight:normal;
-
-color:white;
-
+header {
+    margin-bottom: 30px;
 }
 
-
-header p{
-
-margin-top:10px;
-
-color:#cbd5e1;
-
-font-size:18px;
-
+header h1 {
+    font-size: 32px;
+    color: #ffffff;
+    font-weight: normal;
 }
 
-
-
-
-/* CARDS */
-
-
-.scripture,
-.card,
-.prayer-card,
-.answered{
-
-
-background:rgba(26,26,30,.85);
-
-border:1px solid #2a2a30;
-
-border-radius:10px;
-
-padding:30px;
-
-margin:30px 0;
-
+header p {
+    color: #cbd5e1;
+    font-style: italic;
 }
 
-
-
-.scripture{
-
-border-left:5px solid #b08b41;
-
+/* =====================================
+   CARDS & SECTIONS
+===================================== */
+.card {
+    background: rgba(26, 26, 30, 0.85);
+    border: 1px solid #2a2a30;
+    border-radius: 8px;
+    padding: 28px;
+    margin-bottom: 30px;
 }
 
-
-
-blockquote{
-
-font-size:22px;
-
-font-style:italic;
-
-line-height:1.8;
-
+.ai-card {
+    border-left: 4px solid #b08b41;
+    background: rgba(176, 139, 65, 0.05);
 }
 
-
-
-
-h2{
-
-color:white;
-
-font-weight:normal;
-
-margin-bottom:20px;
-
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-
-
-
-/* FORM */
-
-
-label{
-
-display:block;
-
-margin-top:15px;
-
-color:#cbd5e1;
-
+h2 {
+    font-size: 22px;
+    color: #ffffff;
+    font-weight: normal;
+    margin-bottom: 15px;
 }
 
-
-
-input,
-textarea{
-
-width:100%;
-
-padding:15px;
-
-margin-top:8px;
-
-background:#0e0f12;
-
-border:1px solid #2a2a30;
-
-color:white;
-
-border-radius:5px;
-
+.section-header h2 {
+    margin-bottom: 0;
 }
 
-
-
-textarea{
-
-height:150px;
-
+blockquote {
+    border-left: 3px solid #b08b41;
+    padding-left: 16px;
+    color: #cbd5e1;
+    font-style: italic;
+    font-size: 18px;
 }
 
-
-
-button{
-
-margin-top:20px;
-
-padding:14px 30px;
-
-background:#b08b41;
-
-border:none;
-
-color:white;
-
-cursor:pointer;
-
-border-radius:5px;
-
+/* =====================================
+   FORMS & INPUTS
+===================================== */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
 }
 
-
-
-
-.prayer-list{
-
-display:grid;
-
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-
-gap:20px;
-
+label {
+    font-size: 14px;
+    color: #cbd5e1;
 }
 
-
-
-.prayer-card span{
-
-color:#b08b41;
-
+input[type="text"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px;
+    background: #121316;
+    border: 1px solid #3a3a42;
+    border-radius: 6px;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
 }
 
-
-
-@media(max-width:900px){
-
-
-.sidebar{
-
-position:relative;
-
-width:100%;
-
-height:auto;
-
+textarea {
+    height: 120px;
+    resize: vertical;
 }
 
-
-.main{
-
-margin-left:0;
-
-width:100%;
-
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: #b08b41;
 }
 
-
-body{
-
-display:block;
-
+/* =====================================
+   BUTTONS
+===================================== */
+button {
+    background: #b08b41;
+    color: #ffffff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 14px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: background 0.2s ease;
 }
 
+button:hover {
+    background: #c29b4c;
+}
 
+#newPrayerBtn,
+#refreshPrayers,
+#refreshPublicPrayers,
+#discoverPrayersBtn {
+    background: transparent;
+    border: 1px solid #3a3a42;
+    color: #cbd5e1;
+    padding: 8px 16px;
+}
+
+#newPrayerBtn:hover,
+#refreshPrayers:hover,
+#refreshPublicPrayers:hover,
+#discoverPrayersBtn:hover {
+    background: #2a2a30;
+    color: #ffffff;
+}
+
+/* =====================================
+   DYNAMIC PRAYER CARDS
+===================================== */
+.prayer-item {
+    background: rgba(18, 18, 20, 0.7);
+    border: 1px solid #2a2a30;
+    border-radius: 6px;
+    padding: 18px;
+    margin-bottom: 14px;
+}
+
+.prayer-item h3 {
+    color: #ffffff;
+    font-size: 18px;
+    margin-bottom: 6px;
+}
+
+.prayer-meta {
+    font-size: 12px;
+    color: #b08b41;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 12px;
+}
+
+.prayer-body {
+    color: #cbd5e1;
+    font-size: 14px;
+    white-space: pre-wrap;
+}
+
+.prayer-actions {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-small {
+    padding: 6px 12px;
+    font-size: 12px;
+    background: #2a2a30;
+}
+
+.btn-small:hover {
+    background: #3a3a42;
+}
+
+.btn-danger {
+    background: #8b2626;
+}
+
+.btn-danger:hover {
+    background: #a83232;
+}
+
+.placeholder-text {
+    color: #6b7280;
+    font-style: italic;
+}
+
+/* =====================================
+   DISCOVER DRAWER / MODAL
+===================================== */
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+}
+
+.discover-modal {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 480px;
+    max-width: 90vw;
+    height: 100vh;
+    background: #121316;
+    border-left: 1px solid #2a2a30;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #2a2a30;
+    padding-bottom: 14px;
+}
+
+.modal-header h2 {
+    margin-bottom: 0;
+}
+
+#closeDrawer {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    color: #9ca3af;
+    padding: 4px 8px;
+}
+
+#closeDrawer:hover {
+    color: #ffffff;
+}
+
+.modal-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
 }

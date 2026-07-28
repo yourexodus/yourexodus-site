@@ -1,475 +1,178 @@
 <!DOCTYPE html>
 <html lang="en-US">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Your Exodus | Prayer Center</title>
-
-<link rel="stylesheet" href="prayer.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Exodus | Prayer Center</title>
+    <link rel="stylesheet" href="prayer.css">
 </head>
-
 <body>
 
-<!-- ===================================== -->
-<!-- SIDEBAR -->
-<!-- ===================================== -->
+    <!-- ===================================== -->
+    <!-- SIDEBAR -->
+    <!-- ===================================== -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>Your Exodus</h2>
+            <p>Here your story does not have to end</p>
+        </div>
+        <nav>
+            <a href="../dashboard/index.html">🏠 Dashboard</a>
+            <a class="active" href="#">🙏 Prayer Center</a>
+            <a href="../journal-dashboard/index.html">📝 Journal</a>
+            <a href="../bible-dashboard/index.html">📖 Bible Study</a>
+            <a href="../testimonies/index.html">💬 Testimonies</a>
+            <a href="../resources/index.html">📚 Resources</a>
+            <a href="../index.html">⬅ Return Home</a>
+        </nav>
+    </aside>
 
-<aside class="sidebar">
+    <!-- ===================================== -->
+    <!-- MAIN CONTENT -->
+    <!-- ===================================== -->
+    <main class="main">
 
-    <div class="logo">
+        <header>
+            <h1 id="prayerWelcome">🙏 Prayer Center</h1>
+            <p>A place to bring your prayers, seek encouragement, and celebrate God's faithfulness.</p>
+        </header>
 
-        <h2>Your Exodus</h2>
+        <!-- SCRIPTURE OF THE DAY -->
+        <section class="scripture">
+            <h2>📖 Scripture of the Day</h2>
+            <blockquote>
+                "Cast all your anxiety on Him because He cares for you."
+                <br><br>
+                <strong>1 Peter 5:7</strong>
+            </blockquote>
+        </section>
 
-        <p>Here your story does not have to end</p>
+        <!-- NEW PRAYER FORM -->
+        <section class="card">
+            <div class="section-header">
+                <h2 id="prayerFormTitle">🆕 New Prayer Request</h2>
+                <button id="newPrayerBtn" type="button">New Prayer</button>
+            </div>
 
+            <form id="prayerForm">
+                <label for="title">Prayer Title</label>
+                <input type="text" id="title" placeholder="Example: Healing for my family" required>
+
+                <label for="prayerCategory">Prayer Category</label>
+                <select id="prayerCategory">
+                    <option value="Healing">Healing</option>
+                    <option value="Family">Family</option>
+                    <option value="Employment">Employment</option>
+                    <option value="Finances">Finances</option>
+                    <option value="Marriage">Marriage</option>
+                    <option value="Children">Children</option>
+                    <option value="Anxiety">Anxiety</option>
+                    <option value="Spiritual Growth">Spiritual Growth</option>
+                    <option value="Thanksgiving">Thanksgiving</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <label for="prayerText">Your Prayer Request</label>
+                <textarea id="prayerText" placeholder="Write your prayer request here..." required></textarea>
+
+                <label for="isPrivate">Privacy</label>
+                <select id="isPrivate">
+                    <option value="true">Private</option>
+                    <option value="false">Public</option>
+                </select>
+
+                <button id="submitPrayerBtn" type="submit">🙏 Submit Prayer</button>
+            </form>
+        </section>
+
+        <!-- CURRENT PRAYER -->
+        <section class="card">
+            <h2>🙏 Current Prayer</h2>
+            <div id="currentPrayer">
+                <p class="placeholder-text">Submit your prayer request to begin.</p>
+            </div>
+        </section>
+
+        <!-- AI RESPONSE -->
+        <section class="card ai-card">
+            <h2>🤖 AI Prayer Response</h2>
+            <div id="aiPrayer">
+                <p class="placeholder-text">Your personalized Scripture-based prayer will appear here after submission.</p>
+            </div>
+        </section>
+
+        <!-- MY PRAYERS -->
+        <section class="card">
+            <div class="section-header">
+                <h2>📜 My Prayer Requests</h2>
+                <button id="refreshPrayers" type="button">Refresh</button>
+            </div>
+            <div id="prayerList">
+                <p class="placeholder-text">No prayer requests yet.</p>
+            </div>
+        </section>
+
+        <!-- ANSWERED PRAYERS -->
+        <section class="card">
+            <h2>✅ Answered Prayers</h2>
+            <div id="answeredPrayerList">
+                <p class="placeholder-text">When you mark a prayer as answered, it will appear here.</p>
+            </div>
+        </section>
+
+        <!-- COMMUNITY PRAYER WALL -->
+        <section class="card">
+            <div class="section-header">
+                <h2>🌎 Community Prayer Wall</h2>
+                <button id="discoverPrayersBtn" type="button">Discover Public Prayers</button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ===================================== -->
+    <!-- DISCOVER DRAWER / MODAL -->
+    <!-- ===================================== -->
+    <div id="discoverOverlay" class="overlay">
+        <div id="discoverModal" class="discover-modal">
+            <div id="modalDrag" class="modal-header">
+                <h2>🙏 Public Prayer Requests</h2>
+                <button id="closeDrawer" type="button">✕</button>
+            </div>
+
+            <div class="modal-controls">
+                <input type="text" id="prayerSearch" placeholder="Search prayers...">
+                <input type="text" id="prayerUsernameFilter" placeholder="Filter by username...">
+                <input type="date" id="prayerDateFilter">
+                
+                <select id="prayerCategoryFilter">
+                    <option value="all">All Categories</option>
+                    <option value="Healing">Healing</option>
+                    <option value="Family">Family</option>
+                    <option value="Employment">Employment</option>
+                    <option value="Finances">Finances</option>
+                    <option value="Marriage">Marriage</option>
+                    <option value="Children">Children</option>
+                    <option value="Anxiety">Anxiety</option>
+                    <option value="Spiritual Growth">Spiritual Growth</option>
+                    <option value="Thanksgiving">Thanksgiving</option>
+                    <option value="Other">Other</option>
+                </select>
+
+                <select id="prayerSort">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                </select>
+
+                <button id="refreshPublicPrayers" type="button">Refresh</button>
+            </div>
+
+            <div id="publicPrayerList">
+                <p class="placeholder-text">Click Refresh to load public prayers.</p>
+            </div>
+        </div>
     </div>
 
-    <nav>
-
-        <a href="../dashboard/index.html">🏠 Dashboard</a>
-
-        <a class="active" href="#">🙏 Prayer Center</a>
-        <a href="../journal-dashboard/index.html">📝 Journal</a>
-        <a href="../bible-dashboard/index.html">📖 Bible Study</a>
-        <a href="../testimonies/index.html">💬 Testimonies</a>
-        <a href="../resources/index.html">📚 Resources</a>
-        <a href="../index.html">⬅ Return Home</a>
-
-    </nav>
-
-</aside>
-
-
-
-<!-- ===================================== -->
-<!-- MAIN CONTENT -->
-<!-- ===================================== -->
-
-<main class="main">
-
-<header>
-
-<h1 id="prayerWelcome">
-
-🙏 Prayer Center
-
-</h1>
-
-<p>
-
-A place to bring your prayers,
-seek encouragement,
-and celebrate God's faithfulness.
-
-</p>
-
-</header>
-
-
-
-<!-- ===================================== -->
-<!-- SCRIPTURE OF THE DAY -->
-<!-- ===================================== -->
-
-<section class="scripture">
-
-<h2>📖 Scripture of the Day</h2>
-
-<blockquote>
-
-"Cast all your anxiety on Him because He cares for you."
-
-<br><br>
-
-<strong>1 Peter 5:7</strong>
-
-</blockquote>
-
-</section>
-
-
-
-<!-- ===================================== -->
-<!-- NEW / CURRENT PRAYER -->
-<!-- ===================================== -->
-
-<section class="card">
-
-<div class="section-header">
-
-<h2 id="prayerFormTitle">
-
-🆕 New Prayer Request
-
-</h2>
-
-<button
-id="newPrayerBtn"
-type="button"
->
-
-New Prayer
-
-</button>
-
-</div>
-
-<form id="prayerForm">
-
-<label>Prayer Title</label>
-
-<input
-type="text"
-id="title"
-placeholder="Example: Healing for my family"
-required
->
-
-<label>Prayer Category</label>
-
-<select id="prayerCategory">
-
-<option value="Healing">Healing</option>
-<option value="Family">Family</option>
-<option value="Employment">Employment</option>
-<option value="Finances">Finances</option>
-<option value="Marriage">Marriage</option>
-<option value="Children">Children</option>
-<option value="Anxiety">Anxiety</option>
-<option value="Spiritual Growth">Spiritual Growth</option>
-<option value="Thanksgiving">Thanksgiving</option>
-<option value="Other">Other</option>
-
-</select>
-
-<label>Your Prayer Request</label>
-
-<textarea
-id="prayerText"
-placeholder="Write your prayer request here..."
-required
-></textarea>
-
-<label>Privacy</label>
-
-<select id="isPrivate">
-
-<option value="true">
-
-Private
-
-</option>
-
-<option value="false">
-
-Public
-
-</option>
-
-</select>
-
-<button
-id="submitPrayerBtn"
-type="submit"
->
-
-🙏 Submit Prayer
-
-</button>
-
-</form>
-
-</section>
-
-
-
-<!-- ===================================== -->
-<!-- CURRENT PRAYER -->
-<!-- ===================================== -->
-
-<section class="card">
-
-<h2>
-
-🙏 Current Prayer
-
-</h2>
-
-<div id="currentPrayer">
-
-<p>
-
-Submit your prayer request to begin.
-
-</p>
-
-</div>
-
-</section>
-
-
-
-<!-- ===================================== -->
-<!-- AI RESPONSE -->
-<!-- ===================================== -->
-
-<section class="card">
-
-<h2>
-
-🤖 AI Prayer Response
-
-</h2>
-
-<div id="aiPrayer">
-
-<p>
-
-Your personalized Scripture-based prayer
-will appear here after submission.
-
-</p>
-
-</div>
-
-</section>
-
-
-
-<!-- ===================================== -->
-<!-- MY PRAYERS -->
-<!-- ===================================== -->
-
-<section class="card">
-
-<div class="section-header">
-
-<h2>
-
-📜 My Prayer Requests
-
-</h2>
-
-<button
-id="refreshPrayers"
-type="button"
->
-
-Refresh
-
-</button>
-
-</div>
-
-<div id="prayerList">
-
-<p>
-
-No prayer requests yet.
-
-</p>
-
-</div>
-
-</section>
-
-
-
-<!-- ===================================== -->
-<!-- ANSWERED PRAYERS -->
-<!-- ===================================== -->
-
-<section class="card">
-
-<h2>
-
-✅ Answered Prayers
-
-</h2>
-
-<div id="answeredPrayerList">
-
-<p>
-
-When you mark a prayer as answered,
-it will appear here.
-
-</p>
-
-</div>
-
-</section>
-
-
-
-<!-- ===================================== -->
-<!-- COMMUNITY PRAYER WALL -->
-<!-- ===================================== -->
-
-<section class="card">
-
-<div class="section-header">
-
-<h2>
-
-🌎 Community Prayer Wall
-
-</h2>
-
-<button
-id="discoverPrayersBtn"
-type="button"
->
-
-Discover Public Prayers
-
-</button>
-
-</div>
-
-</section>
-
-
-
-<!-- ===================================== -->
-<!-- DISCOVER DRAWER -->
-<!-- ===================================== -->
-
-<div
-id="discoverOverlay"
-class="overlay"
->
-
-<div
-id="discoverModal"
-class="discover-modal"
->
-
-<div
-id="modalDrag"
-class="modal-header"
->
-
-<h2>
-
-🙏 Public Prayer Requests
-
-</h2>
-
-<button
-id="closeDrawer"
-type="button"
->
-
-✕
-
-</button>
-
-</div>
-
-
-
-<div class="modal-controls">
-
-<input
-type="text"
-id="prayerSearch"
-placeholder="Search prayers..."
->
-
-<input
-type="text"
-id="prayerUsernameFilter"
-placeholder="Filter by username..."
->
-
-<input
-type="date"
-id="prayerDateFilter"
->
-
-<select id="prayerCategoryFilter">
-
-<option value="all">
-
-All Categories
-
-</option>
-
-<option value="Healing">Healing</option>
-<option value="Family">Family</option>
-<option value="Employment">Employment</option>
-<option value="Finances">Finances</option>
-<option value="Marriage">Marriage</option>
-<option value="Children">Children</option>
-<option value="Anxiety">Anxiety</option>
-<option value="Spiritual Growth">
-
-Spiritual Growth
-
-</option>
-
-<option value="Thanksgiving">
-
-Thanksgiving
-
-</option>
-
-<option value="Other">
-
-Other
-
-</option>
-
-</select>
-
-<select id="prayerSort">
-
-<option value="newest">
-
-Newest First
-
-</option>
-
-<option value="oldest">
-
-Oldest First
-
-</option>
-
-</select>
-
-<button
-id="refreshPublicPrayers"
-type="button"
->
-
-Refresh
-
-</button>
-
-</div>
-
-
-
-<div id="publicPrayerList">
-
-</div>
-
-</div>
-
-</div>
-
-
-
-</main>
-
-<script src="prayer.js"></script>
-
+    <script src="prayer.js"></script>
 </body>
-
 </html>
