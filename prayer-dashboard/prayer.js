@@ -8,7 +8,7 @@ let currentPrayer = null;
 
 
 // =====================================
-// PAGE INITIALIZATION
+// PAGE LOAD
 // =====================================
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -17,8 +17,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadPrayers();
 
+
     const prayerForm =
         document.getElementById("prayerForm");
+
 
     if (prayerForm) {
 
@@ -29,26 +31,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    const refreshButton =
-        document.getElementById("refreshPrayers");
 
-    if (refreshButton) {
+    const newPrayerBtn =
+        document.getElementById("newPrayerBtn");
 
-        refreshButton.addEventListener(
+
+    if (newPrayerBtn) {
+
+        newPrayerBtn.addEventListener(
             "click",
-            loadPrayers
+            startNewPrayer
         );
 
     }
 
-    const newPrayerButton =
-        document.getElementById("newPrayerBtn");
 
-    if (newPrayerButton) {
+    const refreshBtn =
+        document.getElementById("refreshPrayers");
 
-        newPrayerButton.addEventListener(
+
+    if (refreshBtn) {
+
+        refreshBtn.addEventListener(
             "click",
-            startNewPrayer
+            loadPrayers
         );
 
     }
@@ -58,7 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 // =====================================
-// GET CURRENT USER
+// CURRENT USER
 // =====================================
 
 function getCurrentUser() {
@@ -66,11 +72,13 @@ function getCurrentUser() {
     const storedUser =
         localStorage.getItem("username");
 
+
     if (!storedUser) {
 
         return null;
 
     }
+
 
     try {
 
@@ -81,9 +89,7 @@ function getCurrentUser() {
     catch {
 
         return {
-
             username: storedUser
-
         };
 
     }
@@ -93,7 +99,7 @@ function getCurrentUser() {
 
 
 // =====================================
-// LOAD USER HEADER
+// USER HEADER
 // =====================================
 
 function loadUserHeader() {
@@ -101,14 +107,16 @@ function loadUserHeader() {
     const user =
         getCurrentUser();
 
+
     const header =
         document.getElementById(
             "prayerWelcome"
         );
 
+
     if (user && header) {
 
-        header.innerHTML =
+        header.textContent =
             `🙏 ${user.username}'s Prayer Center`;
 
     }
@@ -123,37 +131,38 @@ function loadUserHeader() {
 
 function startNewPrayer() {
 
+
     currentPrayer = null;
+
 
     document
         .getElementById("prayerForm")
         .reset();
+
 
     document
         .getElementById("prayerFormTitle")
         .textContent =
         "🆕 New Prayer Request";
 
+
     document
         .getElementById("currentPrayer")
         .innerHTML =
         `
         <p>
-
-        Start a new prayer request.
-
+        Submit a new prayer request.
         </p>
         `;
+
 
     document
         .getElementById("aiPrayer")
         .innerHTML =
         `
         <p>
-
         Your personalized Scripture-based prayer
-        will appear here.
-
+        will appear here after submission.
         </p>
         `;
 
@@ -169,95 +178,120 @@ async function createPrayerEntry(event) {
 
     event.preventDefault();
 
+
     const user =
         getCurrentUser();
+
 
     if (!user || !user.id) {
 
         alert(
-            "Please log in again."
+            "Please login again."
         );
 
         return;
 
     }
 
+
+
     const prayerData = {
 
         title:
             document.getElementById("title").value,
 
+
         request:
             document.getElementById("prayerText").value,
+
 
         category:
             document.getElementById("prayerCategory").value,
 
+
         is_private:
             document.getElementById("isPrivate").value === "true",
+
 
         user_id:
             user.id
 
     };
 
+
+
     try {
+
 
         const response =
             await fetch(
                 `${API_URL}/prayers`,
                 {
 
-                    method: "POST",
+                    method:"POST",
 
-                    headers: {
-
+                    headers:{
                         "Content-Type":
-                            "application/json"
-
+                        "application/json"
                     },
 
                     body:
-                        JSON.stringify(prayerData)
+                    JSON.stringify(prayerData)
 
                 }
             );
 
+
+
         if (!response.ok) {
 
-            throw new Error();
+            throw new Error(
+                "Prayer submission failed."
+            );
 
         }
+
+
 
         const savedPrayer =
             await response.json();
 
+
+
         currentPrayer =
             savedPrayer;
+
+
 
         displayCurrentPrayer(
             savedPrayer
         );
 
+
         displayAIPrayer(
             savedPrayer
         );
+
 
         document
             .getElementById("prayerFormTitle")
             .textContent =
             "🙏 Current Prayer";
 
-        displayAIPrayer(savedPrayer);
 
 
-	loadPrayers();
+        loadPrayers();
+
+
 
     }
 
-    catch (error) {
+
+    catch(error) {
+
 
         console.error(error);
+
 
         alert(
             "Unable to submit prayer."
@@ -269,16 +303,19 @@ async function createPrayerEntry(event) {
 
 
 
+
 // =====================================
 // DISPLAY CURRENT PRAYER
 // =====================================
 
 function displayCurrentPrayer(prayer) {
 
+
     const container =
         document.getElementById(
             "currentPrayer"
         );
+
 
     if (!container) {
 
@@ -286,48 +323,72 @@ function displayCurrentPrayer(prayer) {
 
     }
 
-    const createdDate =
-        prayer.created_at
-            ?
-            new Date(
-                prayer.created_at
-            ).toLocaleString()
-            :
-            "Just Now";
+
 
     container.innerHTML =
-
     `
+
     <h3>
-
-        ${prayer.title}
-
+    ${prayer.title}
     </h3>
 
+
     <p>
-
-        <strong>Category:</strong>
-        ${prayer.category}
-
+    <strong>Category:</strong>
+    ${prayer.category}
     </p>
 
+
     <p>
-
-        ${prayer.request}
-
+    ${prayer.request}
     </p>
 
+
     <p>
-
-        <strong>Status:</strong>
-        ${prayer.status}
-
+    <strong>Status:</strong>
+    ${prayer.status}
     </p>
 
+
+    `;
+
+}
+
+
+
+
+// =====================================
+// DISPLAY AI PRAYER
+// =====================================
+
+function displayAIPrayer(prayer) {
+
+
+    const container =
+        document.getElementById(
+            "aiPrayer"
+        );
+
+
+    if (!container) {
+
+        return;
+
+    }
+
+
+
+    container.innerHTML =
+    `
+
+    <h3>
+    🙏 Personalized Scripture-Based Prayer
+    </h3>
+
+
     <p>
-
-        📅 ${createdDate}
-
+    ${prayer.ai_response
+        || "Your prayer response is being prepared."}
     </p>
 
     `;
@@ -337,263 +398,92 @@ function displayCurrentPrayer(prayer) {
 
 
 // =====================================
-// DISPLAY AI RESPONSE
-// =====================================
-
-// =====================================
-// DISPLAY AI RESPONSE
-// =====================================
-
-function displayAIPrayer(prayer) {
-
-    const container =
-        document.getElementById("aiPrayer");
-
-
-    if (!container) {
-
-        return;
-
-    }
-
-
-    if (prayer.ai_response) {
-
-        container.innerHTML =
-
-        `
-        <h3>
-            🙏 Personalized Scripture-Based Prayer
-        </h3>
-
-        <p>
-            ${prayer.ai_response}
-        </p>
-        `;
-
-    }
-
-    else {
-
-        container.innerHTML =
-
-        `
-        <h3>
-            🙏 Personalized Scripture-Based Prayer
-        </h3>
-
-        <p>
-            Your prayer has been received.
-            Your Scripture-based prayer is being prepared.
-        </p>
-        `;
-
-    }
-
-}
-
-}
-// =====================================
 // LOAD PRAYERS
 // =====================================
 
 async function loadPrayers() {
+
 
     const container =
         document.getElementById(
             "prayerList"
         );
 
+
     if (!container) {
 
         return;
 
     }
 
-    try {
 
-        const response =
-            await fetch(
-                `${API_URL}/prayers`
+
+    const response =
+        await fetch(
+            `${API_URL}/prayers`
+        );
+
+
+    const prayers =
+        await response.json();
+
+
+
+    prayers.sort(
+        (a,b) =>
+        new Date(b.created_at)
+        -
+        new Date(a.created_at)
+    );
+
+
+
+    container.innerHTML = "";
+
+
+
+    prayers.forEach(prayer => {
+
+
+        const card =
+            document.createElement(
+                "div"
             );
 
-        if (!response.ok) {
 
-            throw new Error();
+        card.className =
+            "prayer-card";
 
-        }
 
-        let prayers =
-            await response.json();
 
-        // ---------------------------------
-        // Newest First
-        // ---------------------------------
+        card.innerHTML =
+        `
 
-        prayers.sort((a, b) => {
+        <h3>
+        ${prayer.title}
+        </h3>
 
-            return new Date(b.created_at) -
-                   new Date(a.created_at);
 
-        });
+        <p>
+        ${prayer.request}
+        </p>
 
-        container.innerHTML = "";
 
-        if (prayers.length === 0) {
+        <p>
+        📅 ${new Date(
+            prayer.created_at
+        ).toLocaleString()}
+        </p>
 
-            container.innerHTML = `
-
-                <p>
-
-                    No prayer requests yet.
-
-                </p>
-
-            `;
-
-            return;
-
-        }
-
-        prayers.forEach(prayer => {
-
-            const card =
-                document.createElement("div");
-
-            card.className =
-                "prayer-card";
-
-            const createdDate =
-                prayer.created_at
-                ?
-                new Date(
-                    prayer.created_at
-                ).toLocaleString()
-                :
-                "Recently";
-
-            card.innerHTML = `
-
-                <h3>
-
-                    ${prayer.title}
-
-                </h3>
-
-                <p>
-
-                    ${prayer.request}
-
-                </p>
-
-                <p>
-
-                    <strong>Category:</strong>
-                    ${prayer.category}
-
-                </p>
-
-                <p>
-
-                    ${prayer.is_private
-                        ?
-                        "🔒 Private"
-                        :
-                        "🌎 Public"}
-
-                </p>
-
-                <p>
-
-                    <strong>Status:</strong>
-
-                    ${prayer.answered
-                        ?
-                        "✅ Answered"
-                        :
-                        "🙏 Being Prayed For"}
-
-                </p>
-
-                <p>
-
-                    📅 ${createdDate}
-
-                </p>
-
-            `;
-
-            // --------------------------
-            // Mark Answered Button
-            // --------------------------
-
-            if (!prayer.answered) {
-
-                const answerButton =
-                    document.createElement(
-                        "button"
-                    );
-
-                answerButton.textContent =
-                    "Mark Answered";
-
-                answerButton.onclick =
-                    () =>
-                    markPrayerAnswered(
-                        prayer.id
-                    );
-
-                card.appendChild(
-                    answerButton
-                );
-
-            }
-
-            // --------------------------
-            // Delete Button
-            // --------------------------
-
-            const deleteButton =
-                document.createElement(
-                    "button"
-                );
-
-            deleteButton.textContent =
-                "Delete";
-
-            deleteButton.onclick =
-                () =>
-                deletePrayer(
-                    prayer.id
-                );
-
-            card.appendChild(
-                deleteButton
-            );
-
-            container.appendChild(
-                card
-            );
-
-        });
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        container.innerHTML = `
-
-            <p>
-
-                Unable to load prayers.
-
-            </p>
 
         `;
 
-    }
+
+        container.appendChild(card);
+
+
+    });
+
 
 }
 
@@ -605,53 +495,28 @@ async function loadPrayers() {
 
 async function markPrayerAnswered(id) {
 
-    try {
 
-        const response =
-            await fetch(
+    await fetch(
+        `${API_URL}/prayers/${id}`,
+        {
 
-                `${API_URL}/prayers/${id}`,
+            method:"PUT",
 
-                {
+            headers:{
+                "Content-Type":
+                "application/json"
+            },
 
-                    method: "PUT",
-
-                    headers: {
-
-                        "Content-Type":
-                        "application/json"
-
-                    },
-
-                    body: JSON.stringify({
-
-                        answered: true
-
-                    })
-
-                }
-
-            );
-
-        if (!response.ok) {
-
-            throw new Error();
+            body:
+            JSON.stringify({
+                answered:true
+            })
 
         }
+    );
 
-        loadPrayers();
 
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        alert(
-            "Unable to update prayer."
-        );
-
-    }
+    loadPrayers();
 
 }
 
@@ -663,105 +528,24 @@ async function markPrayerAnswered(id) {
 
 async function deletePrayer(id) {
 
-    if (
 
-        !confirm(
-            "Delete this prayer request?"
-        )
-
-    ) {
+    if (!confirm(
+        "Delete this prayer request?"
+    )) {
 
         return;
 
     }
 
-    try {
 
-        const response =
-            await fetch(
-
-                `${API_URL}/prayers/${id}`,
-
-                {
-
-                    method: "DELETE"
-
-                }
-
-            );
-
-        if (!response.ok) {
-
-            throw new Error();
-
+    await fetch(
+        `${API_URL}/prayers/${id}`,
+        {
+            method:"DELETE"
         }
-
-        // --------------------------
-        // Clear Current Prayer
-        // --------------------------
-
-        if (
-
-            currentPrayer &&
-            currentPrayer.id === id
-
-        ) {
-
-            startNewPrayer();
-
-        }
-
-        loadPrayers();
-
-    }
-
-    catch (error) {
-
-        console.error(error);
-
-        alert(
-            "Unable to delete prayer."
-        );
-
-    }
-
-}
-
-
-
-// =====================================
-// REFRESH BUTTON
-// =====================================
-
-const refreshButton =
-    document.getElementById(
-        "refreshPrayers"
     );
 
-if (refreshButton) {
 
-    refreshButton.addEventListener(
-
-        "click",
-
-        loadPrayers
-
-    );
+    loadPrayers();
 
 }
-
-
-
-// =====================================
-// DISCOVER PUBLIC PRAYERS
-// (Placeholder for your existing code)
-// =====================================
-
-// Keep your existing Discover Drawer,
-// filtering,
-// searching,
-// username filter,
-// date filter,
-// category filter,
-// sorting,
-// and modal code below this point.
