@@ -71,7 +71,8 @@ loginForm.addEventListener("submit", async function (event) {
 
             id: data.id,
             username: data.username || username,
-            email: data.email || ""
+            email: data.email || "",
+    	    is_admin: data.is_admin || false
 
         };
 

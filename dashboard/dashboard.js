@@ -94,4 +94,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 
-});
+}
+
+    // ==========================================
+    // SHOW ADMIN DASHBOARD FOR ADMINS ONLY
+    // ==========================================
+
+    const adminSection =
+        document.getElementById("adminSection");
+
+
+    if (user && user.is_admin === true) {
+
+        adminSection.style.display = "block";
+
+        console.log(
+            "Admin access granted."
+        );
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+);
