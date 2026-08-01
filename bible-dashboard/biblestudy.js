@@ -285,63 +285,49 @@ function loadActiveStudyProgress() {
 // =========================================================
 
 function renderPublicLibrary() {
-    const grid = document.getElementById("publicStudyGrid");
+    const grid = document.getElementById("publicStudiesGrid");
     if (!grid) return;
 
-    grid.innerHTML = "";
+    // Filter to show studies that are published (is_published is true or undefined)
+    const publicStudies = allStudies.filter(study => study.is_published !== false);
 
-    const category = document.getElementById("categoryFilter")?.value || "all";
-    const searchQuery = (document.getElementById("searchBox")?.value || "").toLowerCase().trim();
-
-    // Regular users only see published studies
-    const publicList = allStudies.filter(s => {
-        const isPublished = s.is_published !== false;
-        const matchesCategory = category === "all" || s.category === category;
-        const matchesSearch = (s.title || "").toLowerCase().includes(searchQuery) ||
-                              (s.scripture || "").toLowerCase().includes(searchQuery) ||
-                              (s.content || "").toLowerCase().includes(searchQuery);
-
-        return isPublished && matchesCategory && matchesSearch;
-    });
-
-    if (publicList.length === 0) {
-        grid.innerHTML = `
-            <div class="journal-card">
-                <h3>No Bible studies available</h3>
-                <p>Try adjusting your search query or category filter.</p>
-            </div>
-        `;
+    if (publicStudies.length === 0) {
+        grid.innerHTML = `<p class="no-data">No Bible studies available right now. Check back soon!</p>`;
         return;
     }
 
-    publicList.forEach(study => {
-        const card = document.createElement("div");
-        card.className = "journal-card";
-
-        card.innerHTML = `
-            <div>
-                <h3>${escapeHtml(study.title || "Untitled")}</h3>
-                <p class="scripture-reference">📖 ${escapeHtml(study.scripture || "")}</p>
-                <p>${escapeHtml(snippetText(study.content || study.summary || "", 150))}</p>
-                <p class="date">Category: ${escapeHtml(study.category || "General")}</p>
+    grid.innerHTML = publicStudies.map(study => `
+        <div class="study-card" data-id="${escapeHtml(study.id)}">
+            <img src="${escapeHtml(study.coverImage || 'placeholder.jpg')}" alt="${escapeHtml(study.title)}" class="study-card-img" />
+            <div class="study-card-body">
+                <span class="badge">${escapeHtml(study.category || 'General')}</span>
+                <h3>${escapeHtml(study.title)}</h3>
+                <p>${escapeHtml(snippetText(study.content || study.summary || '', 120))}</p>
+                <div class="card-actions">
+                    <button class="btn btn-primary view-study-btn" data-id="${escapeHtml(study.id)}">
+                        Start Study
+                    </button>
+                    <button class="btn btn-outline save-study-btn" data-id="${escapeHtml(study.id)}">
+                        Save for Later
+                    </button>
+                </div>
             </div>
-            <div class="card-actions-row">
-                <button class="btn-primary btn-begin-study" data-id="${study.id}">Begin Study →</button>
-            </div>
-        `;
+        </div>
+    `).join('');
 
-        grid.appendChild(card);
-    });
-
-    document.querySelectorAll(".btn-begin-study").forEach(btn => {
-        btn.addEventListener("click", (e) => {
-            const id = e.target.getAttribute("data-id");
-            const study = allStudies.find(s => s.id == id);
-            if (study) openStudyViewer(study);
+    // Safely attach click events to the public grid buttons
+    if (typeof bindPublicGridEvents === "function") {
+        bindPublicGridEvents();
+    } else {
+        document.querySelectorAll(".view-study-btn").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                const id = e.target.getAttribute("data-id");
+                const study = allStudies.find(s => s.id == id);
+                if (study) openStudyViewer(study);
+            });
         });
-    });
+    }
 }
-
 // =========================================================
 // 5. STUDY VIEWER & MODALS MODULE
 // =========================================================
@@ -445,9 +431,9 @@ async function handleStudyFormSubmit(event, forceDraft = false) {
         await loadInitialData();
 
     } catch (err) {
-        console.error("Save Error:", err);
+        console.warn("Save Error (Using local fallback):", err);
         
-        // Local Fallback simulation for client testing
+        // Local Fallback simulation for testing
         if (id) {
             const index = allStudies.findIndex(s => s.id == id);
             if (index !== -1) allStudies[index] = { ...allStudies[index], ...payload };
@@ -456,13 +442,21 @@ async function handleStudyFormSubmit(event, forceDraft = false) {
             allStudies.unshift(payload);
         }
 
+        // Save local state so switching role in browser keeps the study visible
+        localStorage.setItem("your_exodus_studies", JSON.stringify(allStudies));
+
         alert(forceDraft ? "Draft saved (Local mode)!" : "Study published (Local mode)!");
         closeAdminModal();
-        renderAdminDashboard();
+        
+        // Refresh appropriate views
+        if (isAdmin()) {
+            renderAdminDashboard();
+        } else {
+            renderLearnerDashboard();
+        }
         renderPublicLibrary();
     }
 }
-
 async function togglePublishStatus(id) {
     const study = allStudies.find(s => s.id == id);
     if (!study) return;
