@@ -1,37 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Exodus | Bible Study Library</title>
-  <link rel="stylesheet" href="biblestudy.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Exodus | Bible Study Library</title>
+    <link rel="stylesheet" href="biblestudy.css">
 </head>
 <body>
-  <div class="bible-study-container">
-    
-    <header class="bible-study-header">
-      <h1>📖 Bible Study Library</h1>
-      <p>Browse administrator-created Bible studies and continue your walk with Christ.</p>
-    </header>
 
-    <section class="scripture-card">
-      <h2>Today's Scripture</h2>
-      <p class="scripture-text">"Your word is a lamp to my feet and a light to my path."</p>
-      <p class="scripture-reference">— Psalm 119:105</p>
-    </section>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+        <div class="logo">
+            <h2>Your Exodus</h2>
+            <p>Here your story does not have to end</p>
+        </div>
 
-    <section class="study-search">
-      <input id="searchBox" type="text" placeholder="Search by title or scripture...">
-    </section>
+        <nav>
+            <a href="../dashboard/index.html">🏠 Dashboard</a>
+            <a href="../prayer-dashboard/index.html">🙏 Prayer Center</a>
+            <a href="../journal-dashboard/index.html">📝 Journal</a>
+            <a class="active" href="#">📖 Bible Study</a>
+            <a href="../testimonies/index.html">💬 Testimonies</a>
+            <a href="../resources/index.html">📚 Resources</a>
+            <a href="../index.html">⬅ Return Home</a>
+        </nav>
+    </aside>
 
-    <main id="bibleStudyList">
-      <div class="empty-study">
-        <p>Loading Bible studies...</p>
-      </div>
+    <!-- MAIN CONTENT -->
+    <main class="main">
+        <header>
+            <h1>📖 Bible Study Library</h1>
+            <p>Browse administrator-created Bible studies and continue your walk with Christ.</p>
+        </header>
+
+        <!-- SCRIPTURE SECTION -->
+        <section class="scripture">
+            <h2>Today's Scripture</h2>
+            <blockquote>
+                "Your word is a lamp to my feet and a light to my path."
+                <br><br>
+                <strong>Psalm 119:105</strong>
+            </blockquote>
+        </section>
+
+        <!-- SEARCH SECTION -->
+        <section class="card">
+            <h2>Search Studies</h2>
+            <input id="searchBox" type="text" placeholder="Search by title or scripture...">
+        </section>
+
+        <!-- BIBLE STUDIES LIST -->
+        <section>
+            <h2>Available Bible Studies</h2>
+            <div id="bibleStudyList" class="journal-list">
+                <div class="journal-card">
+                    <h3>Loading Bible Studies...</h3>
+                    <p>Please wait while we fetch the latest lessons.</p>
+                </div>
+            </div>
+        </section>
     </main>
 
-  </div>
-
-  <script src="biblestudy.js"></script>
+    <script src="biblestudy.js"></script>
 </body>
 </html>

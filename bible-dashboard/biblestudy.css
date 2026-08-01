@@ -1,120 +1,219 @@
-/* =========================================
-   YourExodus Bible Study Dashboard Styles
-   ========================================= */
+/* ==========================================
+   YOUR EXODUS - BIBLE STUDY DASHBOARD CSS
+========================================== */
 
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ==========================================
+   BODY
+========================================== */
 body {
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: #f7f5ef;
-  color: #333;
-  margin: 0;
-  padding: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    background: #0e0f12;
+    color: #e5e7eb;
+    display: flex;
+    min-height: 100vh;
 }
 
-.bible-study-container {
-  max-width: 1100px;
-  margin: 40px auto;
-  padding: 20px;
+/* ==========================================
+   SIDEBAR
+========================================== */
+.sidebar {
+    width: 280px;
+    background: #17181c;
+    border-right: 1px solid #2a2a30;
+    position: fixed;
+    height: 100vh;
+    padding: 35px 25px;
 }
 
-.bible-study-header {
-  text-align: center;
-  margin-bottom: 30px;
+.logo h2 {
+    color: white;
+    letter-spacing: 2px;
+    font-weight: normal;
 }
 
-.bible-study-header h1 {
-  color: #5b3a1a;
-  font-size: 2.4rem;
+.logo p {
+    color: #9ca3af;
+    font-size: 14px;
+    font-style: italic;
+    margin-top: 8px;
 }
 
-.bible-study-header p {
-  color: #666;
-  font-size: 1.1rem;
+nav {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 40px;
 }
 
-/* Scripture Card */
-.scripture-card {
-  background: #fff;
-  border-left: 6px solid #c79a3b;
-  border-radius: 12px;
-  padding: 25px;
-  margin-bottom: 25px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+nav a {
+    color: #cbd5e1;
+    text-decoration: none;
+    padding: 14px;
+    border-radius: 6px;
+    transition: .3s;
 }
 
-.scripture-card h2 {
-  color: #5b3a1a;
-  margin-top: 0;
+nav a:hover,
+nav .active {
+    background: #b08b41;
+    color: white;
+}
+
+/* ==========================================
+   MAIN
+========================================== */
+.main {
+    margin-left: 280px;
+    padding: 45px;
+    width: calc(100% - 280px);
+}
+
+header h1 {
+    font-size: 42px;
+    font-weight: normal;
+    color: white;
+}
+
+header p {
+    margin-top: 10px;
+    color: #cbd5e1;
+    font-size: 18px;
+}
+
+/* ==========================================
+   CARDS & SECTIONS
+========================================== */
+.scripture,
+.card,
+.study-card,
+.journal-card {
+    background: rgba(26, 26, 30, .85);
+    border: 1px solid #2a2a30;
+    border-radius: 10px;
+    padding: 30px;
+    margin: 30px 0;
+}
+
+.scripture {
+    border-left: 5px solid #b08b41;
+}
+
+h2 {
+    color: white;
+    font-weight: normal;
+    margin-bottom: 20px;
+}
+
+h3 {
+    color: white;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #d1d5db;
+}
+
+/* ==========================================
+   SCRIPTURE & BLOCKQUOTE
+========================================== */
+blockquote {
+    font-size: 22px;
+    font-style: italic;
+    line-height: 1.8;
+    color: #f1f1f1;
+}
+
+/* ==========================================
+   FORM & SEARCH INPUTS
+========================================== */
+label {
+    display: block;
+    margin-top: 15px;
+    color: #cbd5e1;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+    padding: 15px;
+    margin-top: 8px;
+    background: #0e0f12;
+    border: 1px solid #2a2a30;
+    color: white;
+    border-radius: 5px;
+    font-family: inherit;
+}
+
+button {
+    margin-top: 20px;
+    padding: 14px 30px;
+    background: #b08b41;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+button:hover {
+    background: #8f6d30;
+}
+
+/* ==========================================
+   BIBLE STUDY LIST GRID
+========================================== */
+.journal-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.journal-card {
+    transition: .3s;
+}
+
+.journal-card:hover {
+    transform: translateY(-5px);
+    border-color: #b08b41;
 }
 
 .scripture-reference {
-  font-weight: bold;
-  color: #8a5a20;
+    font-weight: bold;
+    color: #b08b41;
+    margin-bottom: 10px;
 }
 
-.scripture-text {
-  font-style: italic;
-  line-height: 1.7;
-  font-size: 1.1rem;
+.date {
+    color: #b08b41;
+    font-size: 14px;
+    margin-top: 15px;
 }
 
-/* Study Cards */
-.study-card {
-  background: white;
-  border-radius: 15px;
-  padding: 25px;
-  margin-bottom: 25px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-}
+/* ==========================================
+   MOBILE RESPONSIVENESS
+========================================== */
+@media(max-width: 900px) {
+    .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+    }
 
-.study-card h3 {
-  color: #4b2e13;
-  margin-top: 0;
-}
+    .main {
+        margin-left: 0;
+        width: 100%;
+    }
 
-.study-card p {
-  line-height: 1.6;
-}
-
-.study-meta {
-  display: flex;
-  gap: 20px;
-  font-size: 0.9rem;
-  color: #777;
-  margin-top: 15px;
-}
-
-/* Search Bar */
-.study-search {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 25px;
-}
-
-.study-search input {
-  flex: 1;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-}
-
-/* States */
-.empty-study {
-  text-align: center;
-  padding: 40px;
-  color: #777;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .bible-study-container {
-    padding: 15px;
-  }
-  .bible-study-header h1 {
-    font-size: 1.8rem;
-  }
-  .study-meta {
-    flex-direction: column;
-    gap: 5px;
-  }
+    body {
+        display: block;
+    }
 }
