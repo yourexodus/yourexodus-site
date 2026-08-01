@@ -167,43 +167,49 @@
 
 
     <!-- =========================================================
-         MODAL: CREATE / EDIT STUDY (ADMIN ONLY)
+         MODAL: CREATE / EDIT STUDY (ADMIN ONLY - FIXED LAYOUT)
          ========================================================= -->
     <div id="studyFormOverlay" class="discover-overlay">
-        <div id="studyFormModal" class="discover-modal">
+        <div id="studyFormModal" class="discover-modal" style="display: flex; flex-direction: column; max-height: 85vh;">
             
             <div class="modal-header" id="modalDrag">
                 <h2 id="modalTitle">✏ Create New Bible Study</h2>
-                <button id="closeFormModal" class="close-btn">✕</button>
+                <button id="closeFormModal" type="button" class="close-btn">✕</button>
             </div>
 
-            <form id="studyAdminForm" style="padding: 25px;">
-                <input type="hidden" id="editStudyId" value="">
+            <form id="studyAdminForm" style="display: flex; flex-direction: column; flex: 1; overflow: hidden; margin: 0;">
+                
+                <!-- SCROLLABLE CONTENT BODY -->
+                <div class="modal-body-content" style="padding: 25px; flex: 1; overflow-y: auto;">
+                    <input type="hidden" id="editStudyId" value="">
 
-                <label for="studyTitleInput">Study Title</label>
-                <input type="text" id="studyTitleInput" placeholder="e.g. The Fig Tree" required>
+                    <label for="studyTitleInput" style="display: block; margin-top: 5px; font-weight: bold;">Study Title</label>
+                    <input type="text" id="studyTitleInput" placeholder="e.g. Words vs. Fruit" required style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px;">
 
-                <label for="studyScriptureInput">Scripture Reference</label>
-                <input type="text" id="studyScriptureInput" placeholder="e.g. Matthew 21:18-22" required>
+                    <label for="studyScriptureInput" style="display: block; font-weight: bold;">Scripture Reference</label>
+                    <input type="text" id="studyScriptureInput" placeholder="e.g. Matthew 21:28-30" required style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px;">
 
-                <label for="studyCategorySelect">Category</label>
-                <select id="studyCategorySelect">
-                    <option value="Discipleship">Discipleship</option>
-                    <option value="New Testament">New Testament</option>
-                    <option value="Old Testament">Old Testament</option>
-                    <option value="Prayer & Worship">Prayer & Worship</option>
-                </select>
+                    <label for="studyCategorySelect" style="display: block; font-weight: bold;">Category</label>
+                    <select id="studyCategorySelect" style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px;">
+                        <option value="Discipleship">Discipleship</option>
+                        <option value="New Testament">New Testament</option>
+                        <option value="Old Testament">Old Testament</option>
+                        <option value="Prayer & Worship">Prayer & Worship</option>
+                    </select>
 
-                <label for="studyVideoInput">YouTube Lesson Embed URL (Optional)</label>
-                <input type="url" id="studyVideoInput" placeholder="e.g. https://www.youtube.com/embed/...">
+                    <label for="studyVideoInput" style="display: block; font-weight: bold;">YouTube Lesson Embed URL (Optional)</label>
+                    <input type="url" id="studyVideoInput" placeholder="e.g. https://www.youtube.com/embed/xPV8cR5jRfw" style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px;">
 
-                <label for="studyContentInput">Lesson Content / Notes</label>
-                <textarea id="studyContentInput" placeholder="Write full study text and outline..." required></textarea>
-
-                <div class="modal-actions-row">
-                    <button type="button" id="saveDraftBtn" class="btn-secondary">Save Draft</button>
-                    <button type="submit" id="publishBtn" class="btn-primary">Publish Study</button>
+                    <label for="studyContentInput" style="display: block; font-weight: bold;">Lesson Content / Notes</label>
+                    <textarea id="studyContentInput" placeholder="Write full study text..." required style="width: 100%; min-height: 180px; padding: 10px; margin-top: 5px; font-family: inherit;"></textarea>
                 </div>
+
+                <!-- FIXED FOOTER BUTTON BAR -->
+                <div class="modal-footer" style="padding: 15px 25px; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: flex-end; gap: 12px; position: sticky; bottom: 0;">
+                    <button type="button" id="saveDraftBtn" class="btn-secondary">💾 Save Draft</button>
+                    <button type="submit" id="publishBtn" class="btn-primary">📢 Publish Study</button>
+                </div>
+
             </form>
 
         </div>
