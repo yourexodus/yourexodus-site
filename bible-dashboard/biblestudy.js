@@ -4,212 +4,96 @@
 
 const API_URL = "https://yourexodus-api.onrender.com";
 
+let allStudies = [];
+
 document.addEventListener("DOMContentLoaded", () => {
-    loadBibleStudies();
+  loadBibleStudies();
 
-    const form = document.getElementById("bibleStudyForm");
-
-    if (form) {
-        form.addEventListener("submit", createBibleStudy);
-    }
+  const searchBox = document.getElementById("searchBox");
+  if (searchBox) {
+    searchBox.addEventListener("input", handleSearch);
+  }
 });
 
-
-// =========================================
-// Load Bible Studies
-// =========================================
-
 async function loadBibleStudies() {
+  const container = document.getElementById("bibleStudyList");
 
-    try {
+  try {
+    const response = await fetch(`${API_URL}/bible-studies`);
 
-        const response = await fetch(`${API_URL}/bible-studies`);
-
-        if (!response.ok) {
-            throw new Error("Unable to load Bible studies");
-        }
-
-        const studies = await response.json();
-
-        displayBibleStudies(studies);
-
-    } catch (error) {
-
-        console.error("Bible Study Load Error:", error);
-
-        const container = document.getElementById("bibleStudyList");
-
-        if (container) {
-            container.innerHTML =
-                "<p>Unable to load Bible studies right now.</p>";
-        }
+    if (!response.ok) {
+      throw new Error("Unable to load Bible studies");
     }
+
+    allStudies = await response.json();
+    displayBibleStudies(allStudies);
+  } catch (error) {
+    console.error("Bible Study Load Error:", error);
+    if (container) {
+      container.innerHTML = `
+        <div class="empty-study">
+          <p>Unable to load Bible studies right now.</p>
+        </div>
+      `;
+    }
+  }
 }
-
-
-// =========================================
-// Display Bible Studies
-// =========================================
 
 function displayBibleStudies(studies) {
+  const container = document.getElementById("bibleStudyList");
+  if (!container) return;
 
-    const container = document.getElementById("bibleStudyList");
+  container.innerHTML = "";
 
-    if (!container) return;
+  if (!studies || studies.length === 0) {
+    container.innerHTML = `
+      <div class="empty-study">
+        <p>No Bible studies available yet.</p>
+      </div>
+    `;
+    return;
+  }
 
+  studies.forEach((study) => {
+    const card = document.createElement("div");
+    card.className = "study-card";
 
-    container.innerHTML = "";
+    const formattedDate = study.created_at
+      ? new Date(study.created_at).toLocaleDateString()
+      : "";
 
+    card.innerHTML = `
+      <h3>${escapeHtml(study.title || "Untitled")}</h3>
+      <p class="scripture-reference">${escapeHtml(study.scripture || "")}</p>
+      <p>${escapeHtml(study.content || study.lesson || study.summary || "")}</p>
+      <div class="study-meta">
+        <span>Created: ${formattedDate}</span>
+      </div>
+    `;
 
-    if (!studies || studies.length === 0) {
-
-        container.innerHTML = `
-            <div class="empty-study">
-                <p>No Bible studies available yet.</p>
-            </div>
-        `;
-
-        return;
-    }
-
-
-    studies.forEach(study => {
-
-
-        const card = document.createElement("div");
-
-        card.className = "study-card";
-
-
-        card.innerHTML = `
-
-            <h3>${study.title}</h3>
-
-            <p class="scripture-reference">
-                ${study.scripture || ""}
-            </p>
-
-
-            <p>
-                ${study.content || study.lesson || ""}
-            </p>
-
-
-            <div class="study-meta">
-
-                <span>
-                    Created:
-                    ${study.created_at || ""}
-                </span>
-
-            </div>
-
-        `;
-
-
-        container.appendChild(card);
-
-    });
-
+    container.appendChild(card);
+  });
 }
 
+function handleSearch(event) {
+  const query = event.target.value.toLowerCase().trim();
+  const filtered = allStudies.filter((s) => {
+    const title = (s.title || "").toLowerCase();
+    const scripture = (s.scripture || "").toLowerCase();
+    return title.includes(query) || scripture.includes(query);
+  });
+  displayBibleStudies(filtered);
+}
 
-
-// =========================================
-// Create Bible Study (Admin)
-// =========================================
-
-async function createBibleStudy(event) {
-
-    event.preventDefault();
-
-
-    const username = localStorage.getItem("username");
-
-
-    const title =
-        document.getElementById("studyTitle").value;
-
-
-    const scripture =
-        document.getElementById("scripture").value;
-
-
-    const content =
-        document.getElementById("studyContent").value;
-
-
-
-    const studyData = {
-
-        title: title,
-
-        scripture: scripture,
-
-        content: content,
-
-        username: username
-
+function escapeHtml(str) {
+  return str.replace(/[&<>"']/g, (match) => {
+    const escapeMap = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;"
     };
-
-
-
-    try {
-
-
-        const response = await fetch(
-            `${API_URL}/bible-studies`,
-            {
-
-                method: "POST",
-
-                headers: {
-
-                    "Content-Type": "application/json"
-
-                },
-
-                body: JSON.stringify(studyData)
-
-            }
-        );
-
-
-
-        if (!response.ok) {
-
-            throw new Error(
-                "Failed to create Bible study"
-            );
-
-        }
-
-
-
-        alert(
-            "Bible Study Created Successfully!"
-        );
-
-
-        event.target.reset();
-
-
-        loadBibleStudies();
-
-
-
-    } catch(error) {
-
-        console.error(
-            "Create Bible Study Error:",
-            error
-        );
-
-
-        alert(
-            "Unable to save Bible Study."
-        );
-
-    }
-
+    return escapeMap[match];
+  });
 }

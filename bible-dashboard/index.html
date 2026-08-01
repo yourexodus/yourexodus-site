@@ -1,142 +1,37 @@
-from pathlib import Path
-from textwrap import dedent
-
-html = dedent("""\
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Your Exodus | Bible Study Library</title>
-<link rel="stylesheet" href="biblestudy.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Exodus | Bible Study Library</title>
+  <link rel="stylesheet" href="biblestudy.css">
 </head>
 <body>
-<aside class="sidebar">
-  <div class="logo">
-    <h2>Your Exodus</h2>
-    <p>Here your story does not have to end</p>
+  <div class="bible-study-container">
+    
+    <header class="bible-study-header">
+      <h1>📖 Bible Study Library</h1>
+      <p>Browse administrator-created Bible studies and continue your walk with Christ.</p>
+    </header>
+
+    <section class="scripture-card">
+      <h2>Today's Scripture</h2>
+      <p class="scripture-text">"Your word is a lamp to my feet and a light to my path."</p>
+      <p class="scripture-reference">— Psalm 119:105</p>
+    </section>
+
+    <section class="study-search">
+      <input id="searchBox" type="text" placeholder="Search by title or scripture...">
+    </section>
+
+    <main id="bibleStudyList">
+      <div class="empty-study">
+        <p>Loading Bible studies...</p>
+      </div>
+    </main>
+
   </div>
-  <nav>
-    <a href="../dashboard/index.html">🏠 Dashboard</a>
-    <a href="../prayer-dashboard/index.html">🙏 Prayer Center</a>
-    <a href="../journal-dashboard/index.html">📝 Journal</a>
-    <a class="active" href="#">📖 Bible Study Library</a>
-    <a href="../testimonies/index.html">💬 Testimonies</a>
-    <a href="../resources/index.html">📚 Resources</a>
-    <a href="../index.html">⬅ Return Home</a>
-  </nav>
-</aside>
 
-<main class="main">
-<header>
-<h1>📖 Bible Study Library</h1>
-<p>Browse administrator-created Bible studies and continue your walk with Christ.</p>
-</header>
-
-<section class="card scripture-card">
-<h2>Today's Scripture</h2>
-<blockquote>
-"Your word is a lamp to my feet and a light to my path."
-<footer><strong>Psalm 119:105</strong></footer>
-</blockquote>
-</section>
-
-<section class="card">
-<h2>Search Studies</h2>
-<input id="searchBox" type="text" placeholder="Search by title or scripture...">
-</section>
-
-<section class="card">
-<div class="section-header">
-<h2>Available Bible Studies</h2>
-<span id="studyCount">0 Studies</span>
-</div>
-
-<div id="loadingMessage">Loading Bible studies...</div>
-<div id="errorMessage" style="display:none;"></div>
-<div id="emptyMessage" style="display:none;">
-No Bible studies have been published yet.
-</div>
-
-<div id="studyGrid" class="study-grid"></div>
-</section>
-</main>
-
-<template id="studyCardTemplate">
-<div class="study-card">
-<h3 class="study-title"></h3>
-<p class="study-scripture"></p>
-<p class="study-summary"></p>
-<p class="study-date"></p>
-<button class="begin-study">Begin Study</button>
-</div>
-</template>
-
-<script src="biblestudy.js"></script>
+  <script src="biblestudy.js"></script>
 </body>
 </html>
-""")
-
-css = dedent("""\
-body{margin:0;font-family:Georgia,serif;background:#0e0f12;color:#eee;display:flex}
-.sidebar{width:260px;background:#17181c;min-height:100vh;padding:24px;position:fixed}
-.sidebar a{display:block;color:#ddd;padding:10px;text-decoration:none}
-.sidebar .active{background:#b08b41;color:#fff;border-radius:6px}
-.main{margin-left:260px;padding:32px;width:calc(100% - 260px)}
-.card{background:#1a1a1e;border:1px solid #333;border-radius:10px;padding:24px;margin:24px 0}
-#searchBox{width:100%;padding:12px}
-.study-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
-.study-card{background:#121317;border:1px solid #333;border-radius:10px;padding:18px}
-.study-date{color:#caa35a;font-size:.9rem}
-.begin-study{padding:10px 16px;background:#b08b41;color:#fff;border:none;border-radius:6px;cursor:pointer}
-""")
-
-js = dedent("""\
-const API_URL="https://yourexodus-api.onrender.com/biblestudies";
-const grid=document.getElementById("studyGrid");
-const loading=document.getElementById("loadingMessage");
-const empty=document.getElementById("emptyMessage");
-const error=document.getElementById("errorMessage");
-const count=document.getElementById("studyCount");
-const search=document.getElementById("searchBox");
-let studies=[];
-
-async function loadStudies(){
- try{
-  const r=await fetch(API_URL);
-  if(!r.ok) throw new Error("Unable to load studies");
-  studies=await r.json();
-  render(studies);
- }catch(e){
-  error.style.display="block";
-  error.textContent=e.message;
- }finally{loading.style.display="none";}
-}
-function render(items){
- grid.innerHTML="";
- count.textContent=`${items.length} Studies`;
- if(!items.length){empty.style.display="block";return;}
- empty.style.display="none";
- const t=document.getElementById("studyCardTemplate");
- items.forEach(s=>{
-   const c=t.content.cloneNode(true);
-   c.querySelector(".study-title").textContent=s.title;
-   c.querySelector(".study-scripture").textContent=s.scripture;
-   c.querySelector(".study-summary").textContent=s.summary||"";
-   c.querySelector(".study-date").textContent="Added: "+new Date(s.created_at).toLocaleDateString();
-   c.querySelector(".begin-study").onclick=()=>location.href=`study.html?id=${s.id}`;
-   grid.appendChild(c);
- });
-}
-search.addEventListener("input",()=>{
- const q=search.value.toLowerCase();
- render(studies.filter(s=>(s.title||"").toLowerCase().includes(q)||(s.scripture||"").toLowerCase().includes(q)));
-});
-loadStudies();
-""")
-
-base=Path("/mnt/data")
-(base/"index.html").write_text(html,encoding="utf-8")
-(base/"biblestudy.css").write_text(css,encoding="utf-8")
-(base/"biblestudy.js").write_text(js,encoding="utf-8")
-print("done")
