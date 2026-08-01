@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Exodus | Bible Study Library</title>
     <link rel="stylesheet" href="biblestudy.css">
 </head>
+
 <body>
 
     <!-- SIDEBAR -->
@@ -26,14 +28,18 @@
         </nav>
     </aside>
 
-    <!-- MAIN CONTENT -->
+    <!-- MAIN CONTENT AREA -->
     <main class="main">
+
+        <!-- HEADER -->
         <header>
-            <h1>📖 Bible Study Library</h1>
-            <p>Browse administrator-created Bible studies and continue your walk with Christ.</p>
+            <h1 id="welcomeHeading">📖 Bible Study Library</h1>
+            <p id="welcomeSubheading">
+                Browse administrator-created Bible studies and continue your walk with Christ.
+            </p>
         </header>
 
-        <!-- SCRIPTURE SECTION -->
+        <!-- SCRIPTURE OF THE DAY -->
         <section class="scripture">
             <h2>Today's Scripture</h2>
             <blockquote>
@@ -43,24 +49,206 @@
             </blockquote>
         </section>
 
-        <!-- SEARCH SECTION -->
-        <section class="card">
-            <h2>Search Studies</h2>
-            <input id="searchBox" type="text" placeholder="Search by title or scripture...">
-        </section>
 
-        <!-- BIBLE STUDIES LIST -->
-        <section>
-            <h2>Available Bible Studies</h2>
-            <div id="bibleStudyList" class="journal-list">
-                <div class="journal-card">
-                    <h3>Loading Bible Studies...</h3>
-                    <p>Please wait while we fetch the latest lessons.</p>
+        <!-- =========================================================
+             1. ADMINISTRATOR AUTHOR DASHBOARD (HIDDEN BY DEFAULT)
+             ========================================================= -->
+        <section id="adminDashboardSection" class="admin-dashboard-container" style="display: none;">
+            
+            <div class="journal-title-row">
+                <h2>👑 Bible Study Administration</h2>
+                <div class="admin-actions">
+                    <button id="openCreateStudyBtn" class="btn-primary">+ Create New Study</button>
                 </div>
             </div>
+
+            <!-- ANALYTICS METRICS OVERVIEW -->
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <span class="metric-number" id="statPublishedCount">0</span>
+                    <span class="metric-label">Published Studies</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number" id="statDraftCount">0</span>
+                    <span class="metric-label">Drafts</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number" id="statSeriesCount">0</span>
+                    <span class="metric-label">Series</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number" id="statTotalLearners">0</span>
+                    <span class="metric-label">Total Learners</span>
+                </div>
+                <div class="metric-card">
+                    <span class="metric-number" id="statCompletions">0</span>
+                    <span class="metric-label">Completed Studies</span>
+                </div>
+            </div>
+
+            <!-- ADMIN WORKFLOW TABS: DRAFTS VS PUBLISHED -->
+            <div class="admin-tab-bar">
+                <button id="tabPublished" class="tab-btn active">Published Studies</button>
+                <button id="tabDrafts" class="tab-btn">Drafts (<span id="draftBadge">0</span>)</button>
+            </div>
+
+            <!-- ADMIN MANAGEMENT GRID -->
+            <div id="adminStudyGrid" class="journal-list">
+                <!-- Managed study cards with administrative controls will render here -->
+            </div>
+
         </section>
+
+
+        <!-- =========================================================
+             2. LEARNER PERSONALIZED DASHBOARD (HIDDEN BY DEFAULT)
+             ========================================================= -->
+        <section id="learnerDashboardSection" class="learner-dashboard-container" style="display: none;">
+            
+            <!-- CONTINUE STUDYING CAROUSEL/CARD -->
+            <div id="continueStudyingCard" class="card scripture" style="display: none;">
+                <div class="journal-title-row">
+                    <h2>Continue Studying</h2>
+                    <span id="activeProgressBadge" class="badge-gold">Lesson 1</span>
+                </div>
+                <h3 id="activeStudyTitle" style="margin-top: 15px;">Study Title</h3>
+                <p id="activeStudyScripture" class="scripture-reference">Scripture Reference</p>
+                <p id="activeStudySummary">Summary of where you left off...</p>
+                <button id="continueStudyBtn" class="btn-primary">Continue →</button>
+            </div>
+
+            <!-- MY STUDIES / COMPLETED SECTION -->
+            <section class="card">
+                <h2>My Progress & Saved Studies</h2>
+                <div id="myStudiesList" class="journal-list">
+                    <div class="journal-card">
+                        <p>You have not started or completed any studies yet.</p>
+                    </div>
+                </div>
+            </section>
+
+        </section>
+
+
+        <!-- =========================================================
+             3. BIBLE STUDY LIBRARY (VISIBLE TO ALL ROLES)
+             ========================================================= -->
+        <section class="card">
+            
+            <div class="journal-title-row">
+                <h2>Available Bible Studies</h2>
+                <div class="filter-controls">
+                    <select id="categoryFilter" class="small-select">
+                        <option value="all">All Categories</option>
+                        <option value="Old Testament">Old Testament</option>
+                        <option value="New Testament">New Testament</option>
+                        <option value="Discipleship">Discipleship</option>
+                        <option value="Prayer & Worship">Prayer & Worship</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- SEARCH BAR -->
+            <div class="study-search" style="margin-top: 15px;">
+                <input id="searchBox" type="text" placeholder="Search studies by title, category, or scripture...">
+            </div>
+
+            <!-- PUBLIC / LEARNER LIBRARY GRID -->
+            <div id="publicStudyGrid" class="journal-list">
+                <div class="journal-card">
+                    <h3>Loading Bible Studies...</h3>
+                    <p>Fetching the latest discipleship content.</p>
+                </div>
+            </div>
+
+        </section>
+
     </main>
+
+
+    <!-- =========================================================
+         MODAL: CREATE / EDIT STUDY (ADMIN ONLY)
+         ========================================================= -->
+    <div id="studyFormOverlay" class="discover-overlay">
+        <div id="studyFormModal" class="discover-modal">
+            
+            <div class="modal-header" id="modalDrag">
+                <h2 id="modalTitle">✏ Create New Bible Study</h2>
+                <button id="closeFormModal" class="close-btn">✕</button>
+            </div>
+
+            <form id="studyAdminForm" style="padding: 25px;">
+                <input type="hidden" id="editStudyId" value="">
+
+                <label for="studyTitleInput">Study Title</label>
+                <input type="text" id="studyTitleInput" placeholder="e.g. The Fig Tree" required>
+
+                <label for="studyScriptureInput">Scripture Reference</label>
+                <input type="text" id="studyScriptureInput" placeholder="e.g. Matthew 21:18-22" required>
+
+                <label for="studyCategorySelect">Category</label>
+                <select id="studyCategorySelect">
+                    <option value="Discipleship">Discipleship</option>
+                    <option value="New Testament">New Testament</option>
+                    <option value="Old Testament">Old Testament</option>
+                    <option value="Prayer & Worship">Prayer & Worship</option>
+                </select>
+
+                <label for="studyVideoInput">YouTube Lesson Embed URL (Optional)</label>
+                <input type="url" id="studyVideoInput" placeholder="e.g. https://www.youtube.com/embed/...">
+
+                <label for="studyContentInput">Lesson Content / Notes</label>
+                <textarea id="studyContentInput" placeholder="Write full study text and outline..." required></textarea>
+
+                <div class="modal-actions-row">
+                    <button type="button" id="saveDraftBtn" class="btn-secondary">Save Draft</button>
+                    <button type="submit" id="publishBtn" class="btn-primary">Publish Study</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    <!-- =========================================================
+         MODAL: STUDY VIEWER & DISCIPLESHIP PLAYER (LEARNERS / PREVIEW)
+         ========================================================= -->
+    <div id="studyViewerOverlay" class="discover-overlay">
+        <div id="studyViewerModal" class="discover-modal">
+            
+            <div class="modal-header">
+                <h2 id="viewerStudyTitle">Bible Study Title</h2>
+                <button id="closeViewerModal" class="close-btn">✕</button>
+            </div>
+
+            <div class="modal-body-content" style="padding: 25px; max-height: 70vh; overflow-y: auto;">
+                <p id="viewerScripture" class="scripture-reference"></p>
+                
+                <!-- YOUTUBE PLAYER CONTAINER -->
+                <div id="videoContainer" style="display: none; margin-bottom: 20px;">
+                    <iframe id="videoPlayer" width="100%" height="315" frameborder="0" allowfullscreen></iframe>
+                </div>
+
+                <!-- LESSON CONTENT -->
+                <div id="viewerContent" class="study-text-body"></div>
+
+                <!-- PERSONAL PRIVATE NOTES -->
+                <div class="card" style="margin-top: 25px;">
+                    <h3>My Private Notes</h3>
+                    <textarea id="learnerNotesInput" placeholder="Write down what God is revealing to you..."></textarea>
+                    <button id="saveNotesBtn" class="btn-secondary" style="margin-top: 10px;">Save Notes</button>
+                </div>
+
+                <!-- COMPLETION ACTION -->
+                <div class="modal-actions-row" style="margin-top: 20px;">
+                    <button id="markCompleteBtn" class="btn-primary">✓ Mark Study Complete</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
     <script src="biblestudy.js"></script>
 </body>
+
 </html>
