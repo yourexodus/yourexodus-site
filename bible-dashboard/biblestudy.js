@@ -288,11 +288,31 @@ function renderPublicLibrary() {
     const grid = document.getElementById("publicStudiesGrid");
     if (!grid) return;
 
-    // Filter to show studies that are published (is_published is true or undefined)
-    const publicStudies = allStudies.filter(study => study.is_published !== false);
+    const searchTerm = (document.getElementById("searchBox")?.value || "").toLowerCase().trim();
+    const selectedCategory = document.getElementById("categoryFilter")?.value || "";
+
+    // 1. Filter out draft items
+    let publicStudies = allStudies.filter(study => study.is_published !== false);
+
+    // 2. Filter by Search Query (Title, Scripture, Content)
+    if (searchTerm) {
+        publicStudies = publicStudies.filter(study => {
+            const title = (study.title || "").toLowerCase();
+            const scripture = (study.scripture || "").toLowerCase();
+            const content = (study.content || study.summary || "").toLowerCase();
+            return title.includes(searchTerm) || scripture.includes(searchTerm) || content.includes(searchTerm);
+        });
+    }
+
+    // 3. Filter by Category Dropdown
+    if (selectedCategory && selectedCategory !== "All") {
+        publicStudies = publicStudies.filter(study => 
+            (study.category || "").toLowerCase() === selectedCategory.toLowerCase()
+        );
+    }
 
     if (publicStudies.length === 0) {
-        grid.innerHTML = `<p class="no-data">No Bible studies available right now. Check back soon!</p>`;
+        grid.innerHTML = `<p class="no-data">No Bible studies match your criteria. Check back soon!</p>`;
         return;
     }
 
@@ -315,18 +335,14 @@ function renderPublicLibrary() {
         </div>
     `).join('');
 
-    // Safely attach click events to the public grid buttons
-    if (typeof bindPublicGridEvents === "function") {
-        bindPublicGridEvents();
-    } else {
-        document.querySelectorAll(".view-study-btn").forEach(btn => {
-            btn.addEventListener("click", (e) => {
-                const id = e.target.getAttribute("data-id");
-                const study = allStudies.find(s => s.id == id);
-                if (study) openStudyViewer(study);
-            });
+    // Rebind view buttons
+    document.querySelectorAll(".view-study-btn").forEach(btn => {
+        btn.addEventListener("click", (e) => {
+            const id = e.target.getAttribute("data-id");
+            const study = allStudies.find(s => s.id == id);
+            if (study) openStudyViewer(study);
         });
-    }
+    });
 }
 // =========================================================
 // 5. STUDY VIEWER & MODALS MODULE
@@ -388,8 +404,22 @@ async function fetchAllStudies() {
         const response = await fetch(`${API_URL}/bible-studies`);
         if (!response.ok) throw new Error("Failed to load studies");
         allStudies = await response.json();
+        
+        // Cache API response locally for fallback safety
+        localStorage.setItem("your_exodus_studies", JSON.stringify(allStudies));
     } catch (error) {
         console.error("API Fetch Error:", error);
+        
+        // Check if we have locally saved studies first before resorting to 2 hardcoded items
+        const savedLocal = localStorage.getItem("your_exodus_studies");
+        if (savedLocal) {
+            try {
+                allStudies = JSON.parse(savedLocal);
+                return;
+            } catch (e) {
+                console.error("Local storage parse error", e);
+            }
+        }
         allStudies = getFallbackMockData();
     }
 }
