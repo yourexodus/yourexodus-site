@@ -137,14 +137,20 @@
             
             <div class="journal-title-row">
                 <h2>Available Bible Studies</h2>
-                <div class="filter-controls">
-                    <select id="categoryFilter" class="small-select">
-                        <option value="all">All Categories</option>
-                        <option value="Old Testament">Old Testament</option>
-                        <option value="New Testament">New Testament</option>
-                        <option value="Discipleship">Discipleship</option>
-                        <option value="Prayer & Worship">Prayer & Worship</option>
-                    </select>
+                <div class="filter-controls">                   	
+		    <select id="categoryFilter" class="small-select">
+    			<option value="all">All Categories</option>
+    			<option value="Faith">Faith</option>
+    			<option value="Prayer">Prayer</option>
+    			<option value="God's Word">God's Word</option>
+    			<option value="Trusting God">Trusting God</option>
+    			<option value="Purpose & Calling">Purpose & Calling</option>
+    			<option value="Overcoming">Overcoming</option>
+    			<option value="Relationships">Relationships</option>
+    			<option value="Wisdom & Decisions">Wisdom & Decisions</option>
+    			<option value="Healing & Restoration">Healing & Restoration</option>
+   		        <option value="Character & Growth">Character & Growth</option>
+		 </select>
                 </div>
             </div>
 
@@ -189,13 +195,28 @@
                     <label for="studyScriptureInput" style="display: block; font-weight: bold;">Scripture Reference</label>
                     <input type="text" id="studyScriptureInput" placeholder="e.g. Matthew 21:28-30" required style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px;">
 
-                    <label for="studyCategorySelect" style="display: block; font-weight: bold;">Category</label>
-                    <select id="studyCategorySelect" style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px;">
-                        <option value="Discipleship">Discipleship</option>
-                        <option value="New Testament">New Testament</option>
-                        <option value="Old Testament">Old Testament</option>
-                        <option value="Prayer & Worship">Prayer & Worship</option>
-                    </select>
+                    
+		    <label for="studyCategorySelect" style="display: block; font-weight: bold;">
+    			Category
+		    </label>
+
+		    <select
+    			id="studyCategorySelect"
+    			required
+    			style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px;"
+	            >
+    			<option value="">Select a category...</option>
+    			<option value="1">Faith</option>
+    			<option value="2">Prayer</option>
+    			<option value="3">God's Word</option>
+    			<option value="4">Trusting God</option>
+    			<option value="5">Purpose & Calling</option>
+    			<option value="6">Overcoming</option>
+    			<option value="7">Relationships</option>
+    			<option value="8">Wisdom & Decisions</option>
+    			<option value="9">Healing & Restoration</option>
+    			<option value="10">Character & Growth</option>
+		    </select>
 
                     <label for="studyVideoInput" style="display: block; font-weight: bold;">YouTube Lesson Embed URL (Optional)</label>
                     <input type="url" id="studyVideoInput" placeholder="e.g. https://www.youtube.com/embed/xPV8cR5jRfw" style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 15px;">
