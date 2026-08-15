@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Your Exodus | Bible Study Center</title>
-    <!-- Pointing directly to the dedicated Bible Study CSS -->
+
     <link rel="stylesheet" href="biblestudy.css">
 </head>
 
@@ -14,202 +15,722 @@
     <!-- ==========================================
          SIDEBAR NAVIGATION
     =========================================== -->
+
     <aside class="sidebar">
+
         <div class="logo">
+
             <h2>Your Exodus</h2>
+
             <p>Bible Study Center</p>
+
         </div>
 
+
         <nav>
-            <a href="../index.html">🏠 Main Dashboard</a>
-            <a href="../journal-dashboard/index.html">📝 Journal</a>
-            <a href="../prayer-dashboard/index.html">🙏 Prayer Center</a>
-            <a class="active" href="#">📖 Bible Study</a>
-            <a href="../testimonies/index.html">💬 Testimonies</a>
-            <a href="../resources/index.html">📚 Resources</a>
-            <a href="../profile/index.html">👤 My Profile</a>
-            <a href="../index.html">⬅ Return Home</a>
-            
-            <div id="adminSection" style="display:none;">
-                <a href="../admin/index.html">🔐 Admin Area</a>
+
+            <a href="../index.html">
+                🏠 Main Dashboard
+            </a>
+
+            <a href="../journal-dashboard/index.html">
+                📝 Journal
+            </a>
+
+            <a href="../prayer-dashboard/index.html">
+                🙏 Prayer Center
+            </a>
+
+            <a class="active" href="#">
+                📖 Bible Study
+            </a>
+
+            <a href="../testimonies/index.html">
+                💬 Testimonies
+            </a>
+
+            <a href="../resources/index.html">
+                📚 Resources
+            </a>
+
+            <a href="../profile/index.html">
+                👤 My Profile
+            </a>
+
+            <a href="../index.html">
+                ⬅ Return Home
+            </a>
+
+
+            <div
+                id="adminSection"
+                style="display:none;">
+
+                <a href="../admin/index.html">
+                    🔐 Admin Area
+                </a>
+
             </div>
+
         </nav>
+
     </aside>
+
 
     <!-- ==========================================
          MAIN CONTENT AREA
     =========================================== -->
+
     <div class="main">
 
-        <!-- HEADER / WELCOME -->
+
+        <!-- ==========================================
+             HEADER / WELCOME
+        =========================================== -->
+
         <header>
+
             <div>
-                <h1 id="welcomeHeading">📖 Bible Study Center</h1>
-                <p id="welcomeSubheading">Grow deeper in the Word with guided studies and discipleship lessons.</p>
+
+                <h1 id="welcomeHeading">
+                    📖 Bible Study Center
+                </h1>
+
+                <p id="welcomeSubheading">
+                    Grow deeper in the Word with guided
+                    studies and discipleship lessons.
+                </p>
+
             </div>
+
+
             <div>
-                <button id="createStudyBtn" class="btn btn-primary">+ Create Bible Study</button>
+
+                <button
+                    id="openCreateStudyBtn"
+                    class="btn btn-primary">
+
+                    + Create Bible Study
+
+                </button>
+
             </div>
+
         </header>
 
-        <!-- API ERROR CONTAINER -->
-        <div id="apiErrorContainer" class="alert-error" style="display: none;"></div>
 
         <!-- ==========================================
-             ADMIN DASHBOARD SECTION
+             API ERROR CONTAINER
         =========================================== -->
-        <section id="adminDashboardSection" style="display: none;">
-            <h2>Management Overview</h2>
-            
+
+        <div
+            id="apiErrorContainer"
+            class="alert-error"
+            style="display: none;">
+        </div>
+
+
+        <!-- ==========================================
+             ADMIN DASHBOARD
+        =========================================== -->
+
+        <section
+            id="adminDashboardSection"
+            style="display: none;">
+
+            <h2>
+                Management Overview
+            </h2>
+
+
             <!-- ADMIN METRICS -->
+
             <div class="stats">
+
+
                 <div class="stat">
-                    <h3 id="statPublishedCount">0</h3>
-                    <p>Published Studies</p>
+
+                    <h3 id="statPublishedCount">
+                        0
+                    </h3>
+
+                    <p>
+                        Published Studies
+                    </p>
+
                 </div>
+
+
                 <div class="stat">
-                    <h3 id="statDraftCount">0</h3>
-                    <p>Drafts (<span id="draftBadge">0</span>)</p>
+
+                    <h3 id="statDraftCount">
+                        0
+                    </h3>
+
+                    <p>
+                        Drafts
+                        (<span id="draftBadge">0</span>)
+                    </p>
+
                 </div>
+
+
                 <div class="stat">
-                    <h3 id="statSeriesCount">0</h3>
-                    <p>Categories Active</p>
+
+                    <h3 id="statSeriesCount">
+                        0
+                    </h3>
+
+                    <p>
+                        Categories Active
+                    </p>
+
                 </div>
+
+
                 <div class="stat">
-                    <h3 id="statTotalLearners">0</h3>
-                    <p>Active Learners</p>
+
+                    <h3 id="statTotalLearners">
+                        0
+                    </h3>
+
+                    <p>
+                        Active Learners
+                    </p>
+
                 </div>
+
+
                 <div class="stat">
-                    <h3 id="statCompletions">0</h3>
-                    <p>Total Completions</p>
+
+                    <h3 id="statCompletions">
+                        0
+                    </h3>
+
+                    <p>
+                        Total Completions
+                    </p>
+
                 </div>
+
             </div>
+
 
             <!-- TAB CONTROLS -->
+
             <div class="tab-container">
-                <button id="tabPublished" class="tab-btn active">Published Lessons</button>
-                <button id="tabDrafts" class="tab-btn">Drafts</button>
+
+                <button
+                    id="tabPublished"
+                    class="tab-btn active">
+
+                    Published Lessons
+
+                </button>
+
+
+                <button
+                    id="tabDrafts"
+                    class="tab-btn">
+
+                    Drafts
+
+                </button>
+
             </div>
 
-            <!-- ADMIN GRID -->
-            <div id="adminStudyGrid" class="cards-grid"></div>
+
+            <!-- ADMIN STUDY GRID -->
+
+            <div
+                id="adminStudyGrid"
+                class="cards-grid">
+            </div>
+
         </section>
+
 
         <!-- ==========================================
-             LEARNER DASHBOARD SECTION
+             LEARNER DASHBOARD
         =========================================== -->
-        <section id="learnerDashboardSection" style="display: none;">
-            <!-- CONTINUE STUDYING CARD -->
-            <div id="continueStudyingCard" class="card-featured" style="display: none;">
+
+        <section
+            id="learnerDashboardSection"
+            style="display: none;">
+
+
+            <!-- CONTINUE STUDYING -->
+
+            <div
+                id="continueStudyingCard"
+                class="card-featured"
+                style="display: none;">
+
                 <div class="featured-header">
-                    <span class="badge-gold">Currently Studying</span>
-                    <span id="activeProgressBadge" class="badge-outline">In Progress</span>
+
+                    <span class="badge-gold">
+                        Currently Studying
+                    </span>
+
+                    <span
+                        id="activeProgressBadge"
+                        class="badge-outline">
+
+                        In Progress
+
+                    </span>
+
                 </div>
-                <h2 id="activeStudyTitle">Lesson Title</h2>
-                <p id="activeStudyScripture" class="scripture-reference">📖 Scripture Reference</p>
-                <p id="activeStudySummary">Summary snippet text...</p>
-                <button id="continueStudyBtn" class="btn btn-primary">Resume Lesson →</button>
+
+
+                <h2 id="activeStudyTitle">
+                    Lesson Title
+                </h2>
+
+
+                <p
+                    id="activeStudyScripture"
+                    class="scripture-reference">
+
+                    📖 Scripture Reference
+
+                </p>
+
+
+                <p id="activeStudySummary">
+                    Summary snippet text...
+                </p>
+
+
+                <button
+                    id="continueStudyBtn"
+                    class="btn btn-primary">
+
+                    Resume Lesson →
+
+                </button>
+
             </div>
 
-            <!-- MY COMPLETED / SAVED STUDIES -->
-            <h2>My Progress</h2>
-            <div id="myStudiesList" class="cards-grid"></div>
+
+            <!-- MY PROGRESS -->
+
+            <h2>
+                My Progress
+            </h2>
+
+
+            <div
+                id="myStudiesList"
+                class="cards-grid">
+            </div>
+
         </section>
+
 
         <hr class="section-divider">
 
-        <!-- ==========================================
-             PUBLIC STUDY LIBRARY (ALL USERS)
-        =========================================== -->
-        <section class="public-library-section">
-            <h2>Explore Study Library</h2>
 
-            <!-- FILTER & SEARCH CONTROLS -->
+        <!-- ==========================================
+             PUBLIC STUDY LIBRARY
+        =========================================== -->
+
+        <section class="public-library-section">
+
+
+            <h2>
+                Explore Study Library
+            </h2>
+
+
+            <!-- SEARCH / FILTER -->
+
             <div class="filter-bar">
-                <input type="text" id="searchBox" placeholder="Search by topic, keyword, or scripture..." />
+
+
+                <input
+                    type="text"
+                    id="searchBox"
+                    placeholder="Search by topic, keyword, or scripture..."
+                />
+
+
                 <select id="categoryFilter">
-                    <option value="all">All Categories</option>
+
+                    <option value="all">
+                        All Categories
+                    </option>
+
                 </select>
+
             </div>
 
-            <!-- PUBLIC CARDS GRID -->
-            <div id="publicStudyGrid" class="cards-grid"></div>
+
+            <!-- PUBLIC STUDY GRID -->
+
+            <div
+                id="publicStudyGrid"
+                class="cards-grid">
+            </div>
+
         </section>
 
     </div>
 
+
+
     <!-- ==========================================
-         CREATE / EDIT STUDY MODAL POPUP
+         CREATE / EDIT BIBLE STUDY MODAL
     =========================================== -->
-    <div id="studyModal" class="modal" style="display: none;">
+
+    <div
+        id="studyFormOverlay"
+        class="modal-overlay">
+
+
         <div class="modal-content">
+
+
+            <!-- MODAL HEADER -->
+
             <div class="modal-header">
-                <h2>Manage Bible Study</h2>
-                <span class="modal-close">&times;</span>
+
+
+                <h2 id="modalTitle">
+                    ✏ Create New Bible Study
+                </h2>
+
+
+                <button
+                    type="button"
+                    id="closeFormModal"
+                    class="modal-close">
+
+                    &times;
+
+                </button>
+
             </div>
 
-            <form id="studyForm">
-                <input type="hidden" id="studyIdInput" />
+
+            <!-- STUDY FORM -->
+
+            <form id="studyAdminForm">
+
+
+                <!-- Hidden ID for editing -->
+
+                <input
+                    type="hidden"
+                    id="editStudyId"
+                    value=""
+                />
+
+
+                <!-- TITLE -->
 
                 <div class="form-group">
-                    <label for="studyTitleInput">Study Title</label>
-                    <input type="text" id="studyTitleInput" placeholder="e.g., Walking in Faith" required />
-                </div>
 
-                <div class="form-group">
-                    <label for="studyScriptureInput">Scripture Reference</label>
-                    <input type="text" id="studyScriptureInput" placeholder="e.g., Hebrews 11:1-6" required />
-                </div>
-
-                <div class="form-group">
-                    <label for="studyCategorySelect">Category</label>
-                    <select id="studyCategorySelect" required>
-                        <option value="">Select Category</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="studyContentInput">Lesson Content</label>
-                    <textarea id="studyContentInput" rows="8" placeholder="Write your Bible study lesson here..." required></textarea>
-                </div>
-
-                <div class="form-group checkbox-group">
-                    <label>
-                        <input type="checkbox" id="studyPublishedCheckbox" checked />
-                        Publish immediately (Uncheck to save as Draft)
+                    <label for="studyTitleInput">
+                        Study Title
                     </label>
+
+
+                    <input
+                        type="text"
+                        id="studyTitleInput"
+                        placeholder="e.g., Walking in Faith"
+                        required
+                    />
+
                 </div>
+
+
+                <!-- SCRIPTURE -->
+
+                <div class="form-group">
+
+                    <label for="studyScriptureInput">
+                        Scripture Reference
+                    </label>
+
+
+                    <input
+                        type="text"
+                        id="studyScriptureInput"
+                        placeholder="e.g., Hebrews 11:1-6"
+                        required
+                    />
+
+                </div>
+
+
+                <!-- CATEGORY -->
+
+                <div class="form-group">
+
+                    <label for="studyCategorySelect">
+                        Category
+                    </label>
+
+
+                    <select
+                        id="studyCategorySelect"
+                        required>
+
+                        <option value="">
+                            Select Category
+                        </option>
+
+                        <option value="1">
+                            Faith
+                        </option>
+
+                        <option value="2">
+                            Prayer
+                        </option>
+
+                        <option value="3">
+                            God's Word
+                        </option>
+
+                        <option value="4">
+                            Trusting God
+                        </option>
+
+                        <option value="5">
+                            Purpose &amp; Calling
+                        </option>
+
+                        <option value="6">
+                            Overcoming
+                        </option>
+
+                        <option value="7">
+                            Relationships
+                        </option>
+
+                        <option value="8">
+                            Wisdom &amp; Decisions
+                        </option>
+
+                        <option value="9">
+                            Healing &amp; Restoration
+                        </option>
+
+                        <option value="10">
+                            Character &amp; Growth
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- VIDEO -->
+
+                <div class="form-group">
+
+                    <label for="studyVideoInput">
+                        YouTube Video URL
+                    </label>
+
+
+                    <input
+                        type="url"
+                        id="studyVideoInput"
+                        placeholder="https://www.youtube.com/watch?v=..."
+                    />
+
+                </div>
+
+
+                <!-- CONTENT -->
+
+                <div class="form-group">
+
+                    <label for="studyContentInput">
+                        Lesson Content
+                    </label>
+
+
+                    <textarea
+                        id="studyContentInput"
+                        rows="10"
+                        placeholder="Write your Bible study lesson here..."
+                        required></textarea>
+
+                </div>
+
+
+                <!-- MODAL ACTIONS -->
 
                 <div class="modal-actions">
-                    <button type="button" class="btn btn-secondary btn-close-modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Save Bible Study</button>
+
+
+                    <button
+                        type="button"
+                        id="saveDraftBtn"
+                        class="btn btn-secondary">
+
+                        💾 Save Draft
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary">
+
+                        📢 Publish Study
+
+                    </button>
+
                 </div>
+
             </form>
+
         </div>
+
     </div>
+
+
 
     <!-- ==========================================
          STUDY VIEWER MODAL
     =========================================== -->
-    <div id="studyViewerModal" class="modal" style="display: none;">
+
+    <div
+        id="studyViewerOverlay"
+        class="modal-overlay">
+
+
         <div class="modal-content modal-large">
+
+
+            <!-- VIEWER HEADER -->
+
             <div class="modal-header">
+
+
                 <div>
-                    <h2 id="viewerTitle">Study Title</h2>
-                    <p id="viewerScripture" class="scripture-reference">📖 Scripture</p>
+
+                    <h2 id="viewerStudyTitle">
+                        Study Title
+                    </h2>
+
+
+                    <p
+                        id="viewerScripture"
+                        class="scripture-reference">
+
+                        📖 Scripture
+
+                    </p>
+
                 </div>
-                <span class="modal-close">&times;</span>
+
+
+                <button
+                    type="button"
+                    id="closeViewerModal"
+                    class="modal-close">
+
+                    &times;
+
+                </button>
+
             </div>
+
+
+            <!-- VIEWER BODY -->
+
             <div class="modal-body">
-                <div id="viewerContent" class="study-text-container"></div>
+
+
+                <!-- VIDEO -->
+
+                <div
+                    id="videoContainer"
+                    style="display: none;">
+
+                    <iframe
+                        id="videoPlayer"
+                        width="100%"
+                        height="400"
+                        frameborder="0"
+                        allowfullscreen>
+                    </iframe>
+
+                </div>
+
+
+                <!-- STUDY CONTENT -->
+
+                <div
+                    id="viewerContent"
+                    class="study-text-container">
+                </div>
+
+
+                <!-- NOTES -->
+
+                <div class="form-group">
+
+                    <label for="learnerNotesInput">
+
+                        📝 My Notes
+
+                    </label>
+
+
+                    <textarea
+                        id="learnerNotesInput"
+                        rows="6"
+                        placeholder="Write your notes here...">
+                    </textarea>
+
+                </div>
+
             </div>
+
+
+            <!-- VIEWER ACTIONS -->
+
             <div class="modal-actions">
-                <button type="button" class="btn btn-secondary btn-close-modal">Close</button>
+
+
+                <button
+                    type="button"
+                    id="saveNotesBtn"
+                    class="btn btn-secondary">
+
+                    💾 Save Notes
+
+                </button>
+
+
+                <button
+                    type="button"
+                    id="markCompleteBtn"
+                    class="btn btn-primary">
+
+                    ✓ Mark Complete
+
+                </button>
+
             </div>
+
         </div>
+
     </div>
 
-    <!-- Pointing directly to the Bible Study JS -->
+
+
+    <!-- ==========================================
+         JAVASCRIPT
+    =========================================== -->
+
     <script src="biblestudy.js"></script>
 
 </body>

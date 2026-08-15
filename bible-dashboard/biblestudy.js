@@ -2644,64 +2644,39 @@ function setupEventListeners() {
 
 function openCreateModal() {
 
-    const form =
-        document.getElementById(
-            "studyAdminForm"
-        );
-
+    const form = document.getElementById("studyAdminForm");
 
     if (form) {
-
         form.reset();
     }
 
-
-    const editId =
-        document.getElementById(
-            "editStudyId"
-        );
-
+    const editId = document.getElementById("editStudyId");
 
     if (editId) {
-
-        editId.value =
-            "";
+        editId.value = "";
     }
 
+    const categorySelect =
+        document.getElementById("studyCategorySelect");
 
-    const category =
-        document.getElementById(
-            "studyCategorySelect"
-        );
-
-
-    if (category) {
-
-        category.value =
-            "";
+    if (categorySelect) {
+        categorySelect.value = "";
     }
-
 
     const modalTitle =
-        document.getElementById(
-            "modalTitle"
-        );
-
+        document.getElementById("modalTitle");
 
     if (modalTitle) {
-
         modalTitle.textContent =
             "✏ Create New Bible Study";
     }
 
+    const overlay =
+        document.getElementById("studyFormOverlay");
 
-    document
-        .getElementById(
-            "studyFormOverlay"
-        )
-        ?.classList.add(
-            "open"
-        );
+    if (overlay) {
+        overlay.classList.add("open");
+    }
 }
 
 
