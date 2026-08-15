@@ -587,51 +587,90 @@ function setupEventListeners() {
 // =========================================================
 // 10. CRUD OPERATIONS (API CALLS)
 // =========================================================
+// Function to handle saving/creating a study without triggering 422 Unprocessable Entity
+// ==========================================
+// HANDLE STUDY FORM SUBMISSION (FIXED FOR 422)
+// ==========================================
 
 async function handleStudyFormSubmit(event) {
     event.preventDefault();
 
-    const studyId = document.getElementById("studyIdInput")?.value;
-    const title = document.getElementById("studyTitleInput")?.value;
-    const scripture = document.getElementById("studyScriptureInput")?.value;
-    const categoryId = document.getElementById("studyCategorySelect")?.value;
-    const content = document.getElementById("studyContentInput")?.value;
-    const isPublished = document.getElementById("studyPublishedCheckbox")?.checked;
+    // 1. Capture inputs safely
+    const rawId = document.getElementById("studyIdInput")?.value;
+    const title = document.getElementById("studyTitleInput")?.value.trim();
+    const scripture = document.getElementById("studyScriptureInput")?.value.trim();
+    const category = document.getElementById("studyCategorySelect")?.value.trim();
+    const content = document.getElementById("studyContentInput")?.value.trim();
+    const isPublished = document.getElementById("studyPublishedCheckbox")?.checked ?? true;
 
+    // 2. Client-side sanity check
+    if (!title || !scripture || !category || !content) {
+        alert("Please complete all required fields.");
+        return;
+    }
+
+    // 3. Build payload matching standard Marshmallow BibleStudySchema
+    // (Note: Adjust key names if your BibleStudySchema uses 'scripture_reference' instead of 'scripture')
     const payload = {
         title: title,
-        scripture: scripture,
-        category_id: categoryId ? Number(categoryId) : null,
+        scripture: scripture, 
+        category: category,
         content: content,
-        published: Boolean(isPublished)
+        is_published: isPublished
     };
 
-    const isEdit = Boolean(studyId);
-    const url = isEdit
-        ? `${API_URL}/bible-studies/${studyId}`
-        : `${API_URL}/bible-studies`;
-    const method = isEdit ? "PUT" : "POST";
+    // 4. Determine Endpoint URL and Method matching your Flask Blueprint
+    // Your blueprint routes: /biblestudies or /biblestudies/<int:biblestudy_id>
+    let url = "https://your-render-api-url.onrender.com/biblestudies"; // Replace domain with your Render API base URL
+    let method = "POST";
+
+    if (rawId && rawId.trim() !== "") {
+        const numericId = parseInt(rawId, 10);
+        if (!isNaN(numericId)) {
+            url = `https://your-render-api-url.onrender.com/biblestudies/${numericId}`;
+            method = "PUT";
+        }
+    }
 
     try {
         const response = await fetch(url, {
             method: method,
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
             body: JSON.stringify(payload)
         });
 
-        if (!response.ok) {
-            throw new Error(`Failed to save study (${response.status})`);
+        // 5. Catch 422 details directly from smorest / Marshmallow error response
+        if (response.status === 422) {
+            const errorDetails = await response.json();
+            console.error("Smolrest/Marshmallow 422 Validation Error:", errorDetails);
+            alert(`Validation Error (422): ${JSON.stringify(errorDetails.json || errorDetails)}`);
+            return;
         }
 
-        closeAllModals();
-        await loadInitialData();
+        if (!response.ok) {
+            throw new Error(`Server returned HTTP status ${response.status}`);
+        }
+
+        const savedStudy = await response.json();
+        console.log("Successfully saved study:", savedStudy);
+
+        // Close modal and refresh UI
+        const modal = document.getElementById("studyModal");
+        if (modal) modal.style.display = "none";
+        
+        // Reload your dashboard studies list
+        if (typeof loadStudies === "function") {
+            loadStudies();
+        }
 
     } catch (error) {
-        console.error("Save Study Error:", error);
-        alert("Failed to save the Bible study. Please try again.");
+        console.error("Error submitting study:", error);
+        alert("Failed to submit study. Check browser console for details.");
     }
 }
-
 async function togglePublishStatus(id) {
     const study = allStudies.find(item => item.id == id);
     if (!study) return;
