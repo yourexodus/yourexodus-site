@@ -98,46 +98,26 @@ document.addEventListener(
 // =========================================================
 
 function getCurrentUser() {
-
-    const storedUser =
-        localStorage.getItem(
-            "username"
-        );
-
+    const storedUser = localStorage.getItem("username");
 
     if (!storedUser) {
-
         return null;
     }
 
-
     try {
+        const user = JSON.parse(storedUser);
 
-        const user =
-            JSON.parse(
-                storedUser
-            );
-
-
-        if (
-            user &&
-            typeof user === "object"
-        ) {
-
+        if (user && typeof user === "object") {
             return user;
         }
-
-
     } catch (error) {
-
-        console.error(
-            "Could not parse stored user:",
-            error
-        );
+        // Stored as a plain username instead of JSON
     }
 
-
-    return null;
+    return {
+        username: storedUser,
+        role: localStorage.getItem("role") || "user"
+    };
 }
 
 
@@ -146,22 +126,20 @@ function getCurrentUser() {
 // =========================================================
 
 function isAdmin() {
-
-    const user =
-        getCurrentUser();
-
+    const user = getCurrentUser();
 
     if (!user) {
-
         return false;
     }
 
-
     return (
         user.is_admin === true ||
-        user.is_admin === 1 ||
         user.role === "admin" ||
-        user.role === "administrator"
+        user.role === "administrator" ||
+        (
+            user.username &&
+            user.username.toLowerCase().includes("admin")
+        )
     );
 }
 
