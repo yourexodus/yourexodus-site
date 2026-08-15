@@ -1,83 +1,150 @@
 // =========================================================
 // YOUR EXODUS - BIBLE STUDY DASHBOARD JAVASCRIPT
+// DATABASE-DRIVEN VERSION
+// =========================================================
+//
+// IMPORTANT:
+// PostgreSQL / Flask API is the source of truth.
+// No Bible studies are hard-coded in this file.
+// No categories are hard-coded in this file.
+// No fake fallback data is used.
 // =========================================================
 
 const API_URL = "https://yourexodus-api.onrender.com";
+
 
 // =========================================================
 // CENTRAL STATE
 // =========================================================
 
 let allStudies = [];
+let allCategories = [];
+
 let currentAdminTab = "published";
 let activeStudyForViewer = null;
 
 
 // =========================================================
-// 1. INITIALIZATION & ROLE DETECTION
+// 1. INITIALIZATION
 // =========================================================
 
 document.addEventListener("DOMContentLoaded", async () => {
+
     setupRoleView();
     setupEventListeners();
+
     await loadInitialData();
+
 });
 
 
 // =========================================================
-// USER / ROLE
+// 2. USER / ROLE
 // =========================================================
 
 function getCurrentUser() {
-    const storedUser = localStorage.getItem("username");
 
-    if (!storedUser) return null;
+    const storedUser =
+        localStorage.getItem("username");
 
-    try {
-        const user = JSON.parse(storedUser);
-
-        if (typeof user === "object" && user !== null) {
-            return user;
-        }
-    } catch (e) {
-        // Stored as plain string
+    if (!storedUser) {
+        return null;
     }
 
-    const role = localStorage.getItem("role") || "user";
+
+    // Some versions of the login system store
+    // the complete user object in "username".
+    try {
+
+        const parsed =
+            JSON.parse(storedUser);
+
+        if (
+            typeof parsed === "object" &&
+            parsed !== null
+        ) {
+
+            return parsed;
+        }
+
+    } catch (error) {
+
+        // Stored as plain username.
+    }
+
+
+    const role =
+        localStorage.getItem("role") || "user";
+
+    const userId =
+        localStorage.getItem("user_id");
+
 
     return {
+
+        id: userId
+            ? Number(userId)
+            : null,
+
         username: storedUser,
-        role: role
+
+        role: role,
+
+        is_admin:
+            localStorage.getItem("is_admin") === "true"
     };
 }
 
 
-function isAdmin() {
-    const user = getCurrentUser();
+// =========================================================
+// ADMIN DETECTION
+// =========================================================
 
-    if (!user) return false;
+function isAdmin() {
+
+    const user =
+        getCurrentUser();
+
+    if (!user) {
+        return false;
+    }
+
 
     return (
+        user.is_admin === true ||
+        user.is_admin === 1 ||
         user.role === "admin" ||
-        user.role === "administrator" ||
-        (user.username &&
-            user.username.toLowerCase().includes("admin"))
+        user.role === "administrator"
     );
 }
 
 
+// =========================================================
+// ROLE VIEW
+// =========================================================
+
 function setupRoleView() {
+
     const adminSection =
-        document.getElementById("adminDashboardSection");
+        document.getElementById(
+            "adminDashboardSection"
+        );
 
     const learnerSection =
-        document.getElementById("learnerDashboardSection");
+        document.getElementById(
+            "learnerDashboardSection"
+        );
 
     const welcomeHeading =
-        document.getElementById("welcomeHeading");
+        document.getElementById(
+            "welcomeHeading"
+        );
 
     const welcomeSubheading =
-        document.getElementById("welcomeSubheading");
+        document.getElementById(
+            "welcomeSubheading"
+        );
+
 
     if (isAdmin()) {
 
@@ -90,11 +157,13 @@ function setupRoleView() {
         }
 
         if (welcomeHeading) {
+
             welcomeHeading.textContent =
                 "👑 Bible Study Administration";
         }
 
         if (welcomeSubheading) {
+
             welcomeSubheading.textContent =
                 "Create, manage, draft, and analyze discipleship content for Your Exodus.";
         }
@@ -109,17 +178,21 @@ function setupRoleView() {
             learnerSection.style.display = "block";
         }
 
-        const user = getCurrentUser();
+        const user =
+            getCurrentUser();
 
         const displayName =
-            user ? user.username : "Learner";
+            user?.username || "Learner";
+
 
         if (welcomeHeading) {
+
             welcomeHeading.textContent =
-                `📖 Welcome Back, ${escapeHtml(displayName)}`;
+                `📖 Welcome Back, ${displayName}`;
         }
 
         if (welcomeSubheading) {
+
             welcomeSubheading.textContent =
                 "Continue your discipleship journey and grow in the Word.";
         }
@@ -128,30 +201,282 @@ function setupRoleView() {
 
 
 // =========================================================
-// INITIAL DATA LOAD
+// 3. INITIAL DATA
 // =========================================================
 
 async function loadInitialData() {
 
-    await fetchAllStudies();
+    try {
 
-    if (isAdmin()) {
-        renderAdminDashboard();
-    } else {
-        renderLearnerDashboard();
+        await Promise.all([
+            fetchAllCategories(),
+            fetchAllStudies()
+        ]);
+
+
+        if (isAdmin()) {
+
+            renderAdminDashboard();
+
+        } else {
+
+            renderLearnerDashboard();
+        }
+
+
+        renderPublicLibrary();
+
+
+    } catch (error) {
+
+        console.error(
+            "Initial Bible Study load failed:",
+            error
+        );
+
+        showApiError(
+            "Bible studies could not be loaded from the server. Please refresh the page and try again."
+        );
     }
-
-    renderPublicLibrary();
 }
 
 
 // =========================================================
-// 2. ADMIN DASHBOARD
+// 4. CATEGORIES
+// =========================================================
+
+async function fetchAllCategories() {
+
+    try {
+
+        const response =
+            await fetch(
+                `${API_URL}/categories`
+            );
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                `Category request failed (${response.status})`
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        /*
+         * Supports either:
+         *
+         * [
+         *   {id: 1, name: "Faith"}
+         * ]
+         *
+         * OR:
+         *
+         * {
+         *   categories: [...]
+         * }
+         */
+
+        if (Array.isArray(data)) {
+
+            allCategories = data;
+
+        } else if (
+            Array.isArray(data.categories)
+        ) {
+
+            allCategories =
+                data.categories;
+
+        } else {
+
+            allCategories = [];
+        }
+
+
+        populateCategoryControls();
+
+
+    } catch (error) {
+
+        console.error(
+            "Category API Error:",
+            error
+        );
+
+        /*
+         * Do NOT create fake categories.
+         *
+         * The database remains the source of truth.
+         */
+
+        allCategories = [];
+
+        populateCategoryControls();
+    }
+}
+
+
+// =========================================================
+// POPULATE CATEGORY DROPDOWNS
+// =========================================================
+
+function populateCategoryControls() {
+
+    const filter =
+        document.getElementById(
+            "categoryFilter"
+        );
+
+    const select =
+        document.getElementById(
+            "studyCategorySelect"
+        );
+
+
+    if (filter) {
+
+        filter.innerHTML = `
+            <option value="all">
+                All Categories
+            </option>
+        `;
+
+
+        allCategories.forEach(category => {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                category.id;
+
+            option.textContent =
+                category.name;
+
+            filter.appendChild(option);
+        });
+    }
+
+
+    if (select) {
+
+        select.innerHTML = `
+            <option value="">
+                Select Category
+            </option>
+        `;
+
+
+        allCategories.forEach(category => {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                category.id;
+
+            option.textContent =
+                category.name;
+
+            select.appendChild(option);
+        });
+    }
+}
+
+
+// =========================================================
+// CATEGORY NAME
+// =========================================================
+
+function getCategoryName(categoryId) {
+
+    const category =
+        allCategories.find(
+            item =>
+                Number(item.id) ===
+                Number(categoryId)
+        );
+
+
+    return category
+        ? category.name
+        : "Uncategorized";
+}
+
+
+// =========================================================
+// 5. FETCH BIBLE STUDIES
+// =========================================================
+
+async function fetchAllStudies() {
+
+    const response =
+        await fetch(
+            `${API_URL}/bible-studies`
+        );
+
+
+    if (!response.ok) {
+
+        throw new Error(
+            `Bible Study API failed (${response.status})`
+        );
+    }
+
+
+    const data =
+        await response.json();
+
+
+    /*
+     * Supports:
+     *
+     * [...]
+     *
+     * OR:
+     *
+     * {
+     *   bible_studies: [...]
+     * }
+     */
+
+    if (Array.isArray(data)) {
+
+        allStudies = data;
+
+    } else if (
+        Array.isArray(data.bible_studies)
+    ) {
+
+        allStudies =
+            data.bible_studies;
+
+    } else {
+
+        allStudies = [];
+    }
+
+
+    console.log(
+        "Bible studies loaded from API:",
+        allStudies
+    );
+}
+
+
+// =========================================================
+// 6. ADMIN DASHBOARD
 // =========================================================
 
 function renderAdminDashboard() {
 
     calculateAndRenderMetrics();
+
     renderAdminGrid();
 }
 
@@ -164,116 +489,169 @@ function calculateAndRenderMetrics() {
 
     const published =
         allStudies.filter(
-            study => study.published !== false
+            study =>
+                study.published !== false
         );
+
 
     const drafts =
         allStudies.filter(
-            study => study.published === false
+            study =>
+                study.published === false
         );
+
 
     const seriesSet =
         new Set(
             allStudies
-                .map(study => study.category_id)
+                .map(
+                    study =>
+                        study.category_id
+                )
                 .filter(Boolean)
         );
 
+
     const totalLearners =
         allStudies.reduce(
-            (acc, study) =>
-                acc + (study.learner_count || 0),
+            (total, study) =>
+                total +
+                Number(
+                    study.learner_count || 0
+                ),
             0
         );
 
-    const completedStudies =
+
+    const completions =
         allStudies.reduce(
-            (acc, study) =>
-                acc + (study.completion_count || 0),
+            (total, study) =>
+                total +
+                Number(
+                    study.completion_count || 0
+                ),
             0
         );
 
-    const elPublished =
-        document.getElementById("statPublishedCount");
 
-    const elDrafts =
-        document.getElementById("statDraftCount");
+    const publishedEl =
+        document.getElementById(
+            "statPublishedCount"
+        );
 
-    const elSeries =
-        document.getElementById("statSeriesCount");
+    const draftEl =
+        document.getElementById(
+            "statDraftCount"
+        );
 
-    const elLearners =
-        document.getElementById("statTotalLearners");
+    const seriesEl =
+        document.getElementById(
+            "statSeriesCount"
+        );
 
-    const elCompletions =
-        document.getElementById("statCompletions");
+    const learnersEl =
+        document.getElementById(
+            "statTotalLearners"
+        );
 
-    const elDraftBadge =
-        document.getElementById("draftBadge");
+    const completionsEl =
+        document.getElementById(
+            "statCompletions"
+        );
 
-    if (elPublished) {
-        elPublished.textContent = published.length;
+    const draftBadge =
+        document.getElementById(
+            "draftBadge"
+        );
+
+
+    if (publishedEl) {
+        publishedEl.textContent =
+            published.length;
     }
 
-    if (elDrafts) {
-        elDrafts.textContent = drafts.length;
+    if (draftEl) {
+        draftEl.textContent =
+            drafts.length;
     }
 
-    if (elDraftBadge) {
-        elDraftBadge.textContent = drafts.length;
+    if (draftBadge) {
+        draftBadge.textContent =
+            drafts.length;
     }
 
-    if (elSeries) {
-        elSeries.textContent = seriesSet.size;
+    if (seriesEl) {
+        seriesEl.textContent =
+            seriesSet.size;
     }
 
-    if (elLearners) {
-        elLearners.textContent = totalLearners;
+    if (learnersEl) {
+        learnersEl.textContent =
+            totalLearners;
     }
 
-    if (elCompletions) {
-        elCompletions.textContent = completedStudies;
+    if (completionsEl) {
+        completionsEl.textContent =
+            completions;
     }
 }
 
 
 // =========================================================
-// ADMIN STUDY GRID
+// ADMIN GRID
 // =========================================================
 
 function renderAdminGrid() {
 
     const grid =
-        document.getElementById("adminStudyGrid");
+        document.getElementById(
+            "adminStudyGrid"
+        );
 
-    if (!grid) return;
 
-    grid.innerHTML = "";
+    if (!grid) {
+        return;
+    }
+
 
     const filteredStudies =
         allStudies.filter(study => {
 
-            if (currentAdminTab === "drafts") {
+            if (
+                currentAdminTab ===
+                "drafts"
+            ) {
 
-                return study.published === false;
-
-            } else {
-
-                return study.published !== false;
+                return (
+                    study.published === false
+                );
             }
+
+
+            return (
+                study.published !== false
+            );
         });
 
 
-    if (filteredStudies.length === 0) {
+    if (
+        filteredStudies.length === 0
+    ) {
 
         grid.innerHTML = `
             <div class="journal-card">
-                <h3>No ${currentAdminTab} studies</h3>
+
+                <h3>
+                    No ${escapeHtml(
+                        currentAdminTab
+                    )} studies
+                </h3>
 
                 <p>
-                    Use the "+ Create New Study"
-                    button above to start writing content.
+                    Create a new Bible study
+                    to begin adding content.
                 </p>
+
             </div>
         `;
 
@@ -281,27 +659,38 @@ function renderAdminGrid() {
     }
 
 
+    grid.innerHTML = "";
+
+
     filteredStudies.forEach(study => {
 
         const card =
             document.createElement("div");
 
-        card.className = "journal-card";
+        card.className =
+            "journal-card";
+
 
         const isDraft =
             study.published === false;
 
+
         const formattedDate =
             study.created_at
-                ? new Date(study.created_at)
-                    .toLocaleDateString()
-                : "Date set on publish";
+                ? new Date(
+                    study.created_at
+                ).toLocaleDateString()
+                : "Date unavailable";
+
 
         const categoryName =
-            getCategoryName(study.category_id);
+            getCategoryName(
+                study.category_id
+            );
 
 
         card.innerHTML = `
+
             <div>
 
                 <div class="journal-title-row">
@@ -315,18 +704,28 @@ function renderAdminGrid() {
 
                     ${
                         isDraft
-                            ? '<span class="badge-draft">Draft</span>'
-                            : '<span class="badge-gold">Published</span>'
+                            ? `
+                                <span class="badge-draft">
+                                    Draft
+                                </span>
+                            `
+                            : `
+                                <span class="badge-gold">
+                                    Published
+                                </span>
+                            `
                     }
 
                 </div>
 
+
                 <p class="scripture-reference">
                     📖 ${escapeHtml(
                         study.scripture ||
-                        "No Reference"
+                        "No Scripture Reference"
                     )}
                 </p>
+
 
                 <p>
                     ${escapeHtml(
@@ -339,15 +738,21 @@ function renderAdminGrid() {
                     )}
                 </p>
 
+
                 <p class="date">
+
                     Category:
                     ${escapeHtml(categoryName)}
+
                     |
+
                     Added:
-                    ${formattedDate}
+                    ${escapeHtml(formattedDate)}
+
                 </p>
 
             </div>
+
 
             <div class="card-actions-row">
 
@@ -357,21 +762,26 @@ function renderAdminGrid() {
                     👁 Preview
                 </button>
 
+
                 <button
                     class="btn-secondary btn-edit-admin"
                     data-id="${study.id}">
                     ✏ Edit
                 </button>
 
+
                 <button
                     class="btn-secondary btn-toggle-publish"
                     data-id="${study.id}">
+
                     ${
                         isDraft
                             ? "📢 Publish"
                             : "📦 Unpublish"
                     }
+
                 </button>
+
 
                 <button
                     class="btn-danger btn-delete-admin"
@@ -382,7 +792,9 @@ function renderAdminGrid() {
             </div>
         `;
 
+
         grid.appendChild(card);
+
     });
 
 
@@ -397,75 +809,98 @@ function renderAdminGrid() {
 function bindAdminGridButtons() {
 
     document
-        .querySelectorAll(".btn-preview-admin")
-        .forEach(btn => {
+        .querySelectorAll(
+            ".btn-preview-admin"
+        )
+        .forEach(button => {
 
-            btn.addEventListener("click", event => {
+            button.addEventListener(
+                "click",
+                event => {
 
-                const id =
-                    event.currentTarget
-                        .getAttribute("data-id");
+                    const id =
+                        event.currentTarget
+                            .dataset.id;
 
-                const study =
-                    allStudies.find(
-                        s => s.id == id
-                    );
 
-                if (study) {
-                    openStudyViewer(study);
+                    const study =
+                        allStudies.find(
+                            item =>
+                                item.id == id
+                        );
+
+
+                    if (study) {
+
+                        openStudyViewer(
+                            study
+                        );
+                    }
                 }
-            });
+            );
         });
 
 
     document
-        .querySelectorAll(".btn-edit-admin")
-        .forEach(btn => {
+        .querySelectorAll(
+            ".btn-edit-admin"
+        )
+        .forEach(button => {
 
-            btn.addEventListener("click", event => {
+            button.addEventListener(
+                "click",
+                event => {
 
-                const id =
-                    event.currentTarget
-                        .getAttribute("data-id");
-
-                openEditModal(id);
-            });
+                    openEditModal(
+                        event.currentTarget
+                            .dataset.id
+                    );
+                }
+            );
         });
 
 
     document
-        .querySelectorAll(".btn-toggle-publish")
-        .forEach(btn => {
+        .querySelectorAll(
+            ".btn-toggle-publish"
+        )
+        .forEach(button => {
 
-            btn.addEventListener("click", event => {
+            button.addEventListener(
+                "click",
+                event => {
 
-                const id =
-                    event.currentTarget
-                        .getAttribute("data-id");
-
-                togglePublishStatus(id);
-            });
+                    togglePublishStatus(
+                        event.currentTarget
+                            .dataset.id
+                    );
+                }
+            );
         });
 
 
     document
-        .querySelectorAll(".btn-delete-admin")
-        .forEach(btn => {
+        .querySelectorAll(
+            ".btn-delete-admin"
+        )
+        .forEach(button => {
 
-            btn.addEventListener("click", event => {
+            button.addEventListener(
+                "click",
+                event => {
 
-                const id =
-                    event.currentTarget
-                        .getAttribute("data-id");
-
-                deleteStudy(id);
-            });
+                    deleteStudy(
+                        event.currentTarget
+                            .dataset.id
+                    );
+                }
+            );
         });
 }
 
 
 // =========================================================
-// 3. LEARNER DASHBOARD
+// 7. LEARNER DASHBOARD
 // =========================================================
 
 function renderLearnerDashboard() {
@@ -475,54 +910,97 @@ function renderLearnerDashboard() {
             "continueStudyingCard"
         );
 
+
     const activeStudy =
         loadActiveStudyProgress();
 
 
-    if (activeStudy && continueCard) {
+    if (
+        activeStudy &&
+        continueCard
+    ) {
 
-        continueCard.style.display = "block";
+        continueCard.style.display =
+            "block";
 
-        document.getElementById(
-            "activeStudyTitle"
-        ).textContent =
-            activeStudy.title ||
-            "In-Progress Study";
 
-        document.getElementById(
-            "activeStudyScripture"
-        ).textContent =
-            `📖 ${activeStudy.scripture || ""}`;
-
-        document.getElementById(
-            "activeStudySummary"
-        ).textContent =
-            snippetText(
-                activeStudy.content || "",
-                140
+        const title =
+            document.getElementById(
+                "activeStudyTitle"
             );
 
-        document.getElementById(
-            "activeProgressBadge"
-        ).textContent =
-            activeStudy.progress ||
-            "In Progress";
+        const scripture =
+            document.getElementById(
+                "activeStudyScripture"
+            );
+
+        const summary =
+            document.getElementById(
+                "activeStudySummary"
+            );
+
+        const badge =
+            document.getElementById(
+                "activeProgressBadge"
+            );
 
 
-        const continueBtn =
+        if (title) {
+
+            title.textContent =
+                activeStudy.title ||
+                "In-Progress Study";
+        }
+
+
+        if (scripture) {
+
+            scripture.textContent =
+                `📖 ${
+                    activeStudy.scripture ||
+                    ""
+                }`;
+        }
+
+
+        if (summary) {
+
+            summary.textContent =
+                snippetText(
+                    activeStudy.content ||
+                    "",
+                    140
+                );
+        }
+
+
+        if (badge) {
+
+            badge.textContent =
+                activeStudy.progress ||
+                "In Progress";
+        }
+
+
+        const continueButton =
             document.getElementById(
                 "continueStudyBtn"
             );
 
-        if (continueBtn) {
 
-            continueBtn.onclick =
-                () => openStudyViewer(activeStudy);
+        if (continueButton) {
+
+            continueButton.onclick =
+                () =>
+                    openStudyViewer(
+                        activeStudy
+                    );
         }
 
     } else if (continueCard) {
 
-        continueCard.style.display = "none";
+        continueCard.style.display =
+            "none";
     }
 
 
@@ -541,7 +1019,11 @@ function renderMySavedStudies() {
             "myStudiesList"
         );
 
-    if (!container) return;
+
+    if (!container) {
+        return;
+    }
+
 
     const completed =
         JSON.parse(
@@ -554,14 +1036,18 @@ function renderMySavedStudies() {
     if (completed.length === 0) {
 
         container.innerHTML = `
+
             <div class="journal-card">
-                <h3>No completed studies yet</h3>
+
+                <h3>
+                    No completed studies yet
+                </h3>
 
                 <p>
                     Select a lesson from the
-                    library below to begin
-                    your discipleship study.
+                    library below to begin.
                 </p>
+
             </div>
         `;
 
@@ -577,16 +1063,20 @@ function renderMySavedStudies() {
         const card =
             document.createElement("div");
 
-        card.className = "journal-card";
+        card.className =
+            "journal-card";
 
 
         card.innerHTML = `
+
             <div>
 
                 <div class="journal-title-row">
 
                     <h3>
-                        ${escapeHtml(item.title)}
+                        ${escapeHtml(
+                            item.title
+                        )}
                     </h3>
 
                     <span class="badge-gold">
@@ -595,18 +1085,23 @@ function renderMySavedStudies() {
 
                 </div>
 
+
                 <p class="scripture-reference">
                     📖 ${escapeHtml(
                         item.scripture || ""
                     )}
                 </p>
 
+
                 <p class="date">
                     Completed on:
-                    ${item.completedAt}
+                    ${escapeHtml(
+                        item.completedAt
+                    )}
                 </p>
 
             </div>
+
 
             <div class="card-actions-row">
 
@@ -619,35 +1114,43 @@ function renderMySavedStudies() {
             </div>
         `;
 
+
         container.appendChild(card);
     });
 
 
     document
         .querySelectorAll(".btn-review")
-        .forEach(btn => {
+        .forEach(button => {
 
-            btn.addEventListener(
+            button.addEventListener(
                 "click",
                 event => {
 
-                    const id =
-                        event.currentTarget
-                            .getAttribute("data-id");
-
                     const study =
                         allStudies.find(
-                            s => s.id == id
+                            item =>
+                                item.id ==
+                                event.currentTarget
+                                    .dataset.id
                         );
 
+
                     if (study) {
-                        openStudyViewer(study);
+
+                        openStudyViewer(
+                            study
+                        );
                     }
                 }
             );
         });
 }
 
+
+// =========================================================
+// ACTIVE STUDY
+// =========================================================
 
 function loadActiveStudyProgress() {
 
@@ -656,14 +1159,29 @@ function loadActiveStudyProgress() {
             "activeStudyProgress"
         );
 
-    return saved
-        ? JSON.parse(saved)
-        : null;
+
+    if (!saved) {
+        return null;
+    }
+
+
+    try {
+
+        return JSON.parse(saved);
+
+    } catch (error) {
+
+        localStorage.removeItem(
+            "activeStudyProgress"
+        );
+
+        return null;
+    }
 }
 
 
 // =========================================================
-// 4. PUBLIC BIBLE STUDY LIBRARY
+// 8. PUBLIC LIBRARY
 // =========================================================
 
 function renderPublicLibrary() {
@@ -673,7 +1191,10 @@ function renderPublicLibrary() {
             "publicStudyGrid"
         );
 
-    if (!grid) return;
+
+    if (!grid) {
+        return;
+    }
 
 
     const searchTerm =
@@ -692,78 +1213,95 @@ function renderPublicLibrary() {
         )?.value || "";
 
 
-    // Only published studies
     let publicStudies =
         allStudies.filter(
-            study => study.published !== false
+            study =>
+                study.published !== false
         );
 
 
-    // Search
     if (searchTerm) {
 
         publicStudies =
-            publicStudies.filter(study => {
+            publicStudies.filter(
+                study => {
 
-                const title =
-                    (study.title || "")
-                        .toLowerCase();
-
-                const scripture =
-                    (study.scripture || "")
-                        .toLowerCase();
-
-                const content =
-                    (
-                        study.content ||
-                        study.summary ||
-                        ""
-                    ).toLowerCase();
-
-                const category =
-                    getCategoryName(
-                        study.category_id
-                    ).toLowerCase();
+                    const title =
+                        (
+                            study.title ||
+                            ""
+                        ).toLowerCase();
 
 
-                return (
-                    title.includes(searchTerm) ||
-                    scripture.includes(searchTerm) ||
-                    content.includes(searchTerm) ||
-                    category.includes(searchTerm)
-                );
-            });
+                    const scripture =
+                        (
+                            study.scripture ||
+                            ""
+                        ).toLowerCase();
+
+
+                    const content =
+                        (
+                            study.content ||
+                            study.summary ||
+                            ""
+                        ).toLowerCase();
+
+
+                    const category =
+                        getCategoryName(
+                            study.category_id
+                        ).toLowerCase();
+
+
+                    return (
+                        title.includes(
+                            searchTerm
+                        ) ||
+                        scripture.includes(
+                            searchTerm
+                        ) ||
+                        content.includes(
+                            searchTerm
+                        ) ||
+                        category.includes(
+                            searchTerm
+                        )
+                    );
+                }
+            );
     }
 
 
-    // Category filter
     if (
         selectedCategory &&
         selectedCategory !== "all"
     ) {
 
-        const selectedCategoryId =
-            parseInt(
-                selectedCategory,
-                10
-            );
-
         publicStudies =
             publicStudies.filter(
                 study =>
-                    Number(study.category_id) ===
-                    selectedCategoryId
+                    Number(
+                        study.category_id
+                    ) ===
+                    Number(
+                        selectedCategory
+                    )
             );
     }
 
 
-    if (publicStudies.length === 0) {
+    if (
+        publicStudies.length === 0
+    ) {
 
         grid.innerHTML = `
+
             <p class="no-data">
+
                 No Bible studies match
                 your criteria.
-                Check back soon!
+
             </p>
         `;
 
@@ -772,419 +1310,259 @@ function renderPublicLibrary() {
 
 
     grid.innerHTML =
-        publicStudies.map(study => {
+        publicStudies
+            .map(study => {
 
-            const categoryName =
-                getCategoryName(
-                    study.category_id
-                );
+                const categoryName =
+                    getCategoryName(
+                        study.category_id
+                    );
 
-            return `
-                <div
-                    class="study-card"
-                    data-id="${escapeHtml(study.id)}">
 
-                    <img
-                        src="${escapeHtml(
-                            study.coverImage ||
-                            "placeholder.jpg"
-                        )}"
-                        alt="${escapeHtml(
-                            study.title
-                        )}"
-                        class="study-card-img"
-                    />
+                return `
 
-                    <div class="study-card-body">
+                    <div
+                        class="study-card"
+                        data-id="${study.id}">
 
-                        <span class="badge">
-                            ${escapeHtml(
-                                categoryName
-                            )}
-                        </span>
+                        ${
+                            study.coverImage
+                                ? `
+                                    <img
+                                        src="${escapeHtml(
+                                            study.coverImage
+                                        )}"
+                                        alt="${escapeHtml(
+                                            study.title
+                                        )}"
+                                        class="study-card-img"
+                                    />
+                                `
+                                : ""
+                        }
 
-                        <h3>
-                            ${escapeHtml(
-                                study.title
-                            )}
-                        </h3>
 
-                        <p>
-                            ${escapeHtml(
-                                snippetText(
-                                    study.content ||
-                                    study.summary ||
-                                    "",
-                                    120
-                                )
-                            )}
-                        </p>
+                        <div class="study-card-body">
 
-                        <div class="card-actions">
+                            <span class="badge">
 
-                            <button
-                                class="btn btn-primary view-study-btn"
-                                data-id="${escapeHtml(
-                                    study.id
-                                )}">
-                                Start Study
-                            </button>
+                                ${escapeHtml(
+                                    categoryName
+                                )}
 
-                            <button
-                                class="btn btn-outline save-study-btn"
-                                data-id="${escapeHtml(
-                                    study.id
-                                )}">
-                                Save for Later
-                            </button>
+                            </span>
+
+
+                            <h3>
+
+                                ${escapeHtml(
+                                    study.title ||
+                                    "Bible Study"
+                                )}
+
+                            </h3>
+
+
+                            <p>
+
+                                ${escapeHtml(
+                                    snippetText(
+                                        study.content ||
+                                        study.summary ||
+                                        "",
+                                        120
+                                    )
+                                )}
+
+                            </p>
+
+
+                            <div class="card-actions">
+
+                                <button
+                                    class="btn btn-primary view-study-btn"
+                                    data-id="${study.id}">
+
+                                    Start Study
+
+                                </button>
+
+
+                                <button
+                                    class="btn btn-outline save-study-btn"
+                                    data-id="${study.id}">
+
+                                    Save
+
+                                </button>
+
+                            </div>
 
                         </div>
 
                     </div>
-                </div>
-            `;
-        }).join("");
+                `;
+            })
+            .join("");
 
+
+    bindPublicLibraryButtons();
+}
+
+
+// =========================================================
+// PUBLIC LIBRARY BUTTONS
+// =========================================================
+
+function bindPublicLibraryButtons() {
 
     document
         .querySelectorAll(".view-study-btn")
-        .forEach(btn => {
+        .forEach(button => {
 
-            btn.addEventListener(
-                "click",
-                event => {
+            button.addEventListener("click", event => {
 
-                    const id =
-                        event.currentTarget
-                            .getAttribute("data-id");
+                const studyId =
+                    event.currentTarget.dataset.id;
 
-                    const study =
-                        allStudies.find(
-                            s => s.id == id
-                        );
+                const study =
+                    allStudies.find(item => item.id == studyId);
 
-                    if (study) {
-                        openStudyViewer(study);
-                    }
+                if (study) {
+                    openStudyViewer(study);
                 }
-            );
+            });
+        });
+
+
+    document
+        .querySelectorAll(".save-study-btn")
+        .forEach(button => {
+
+            button.addEventListener("click", event => {
+
+                const studyId =
+                    event.currentTarget.dataset.id;
+
+                saveStudyForLater(studyId);
+            });
         });
 }
 
 
 // =========================================================
-// 5. STUDY VIEWER
+// 9. EVENT LISTENERS & MODAL HANDLERS
 // =========================================================
 
-function openStudyViewer(study) {
+function setupEventListeners() {
 
-    activeStudyForViewer = study;
+    // Admin Tabs Switching
+    const publishedTab =
+        document.getElementById("tabPublished");
 
-
-    const overlay =
-        document.getElementById(
-            "studyViewerOverlay"
-        );
-
-    const titleEl =
-        document.getElementById(
-            "viewerStudyTitle"
-        );
-
-    const scriptureEl =
-        document.getElementById(
-            "viewerScripture"
-        );
-
-    const contentEl =
-        document.getElementById(
-            "viewerContent"
-        );
-
-    const videoContainer =
-        document.getElementById(
-            "videoContainer"
-        );
-
-    const videoPlayer =
-        document.getElementById(
-            "videoPlayer"
-        );
-
-    const notesInput =
-        document.getElementById(
-            "learnerNotesInput"
-        );
+    const draftsTab =
+        document.getElementById("tabDrafts");
 
 
-    if (titleEl) {
-        titleEl.textContent =
-            study.title || "Bible Study";
+    if (publishedTab) {
+
+        publishedTab.addEventListener("click", () => {
+
+            currentAdminTab = "published";
+
+            publishedTab.classList.add("active");
+
+            if (draftsTab) draftsTab.classList.remove("active");
+
+            renderAdminGrid();
+        });
     }
 
 
-    if (scriptureEl) {
+    if (draftsTab) {
 
-        scriptureEl.textContent =
-            study.scripture
-                ? `📖 ${study.scripture}`
-                : "";
+        draftsTab.addEventListener("click", () => {
+
+            currentAdminTab = "drafts";
+
+            draftsTab.classList.add("active");
+
+            if (publishedTab) publishedTab.classList.remove("active");
+
+            renderAdminGrid();
+        });
     }
 
 
-    if (contentEl) {
+    // Search & Filter Inputs
+    const searchBox =
+        document.getElementById("searchBox");
 
-        contentEl.innerHTML =
-            formatMarkdownParagraphs(
-                study.content || ""
-            );
+    const categoryFilter =
+        document.getElementById("categoryFilter");
+
+
+    if (searchBox) {
+
+        searchBox.addEventListener("input", renderPublicLibrary);
     }
 
 
-    // YouTube
-    if (
-        study.video_url &&
-        videoContainer &&
-        videoPlayer
-    ) {
+    if (categoryFilter) {
 
-        const embedUrl =
-            convertToEmbedUrl(
-                study.video_url
-            );
-
-        videoPlayer.src = embedUrl;
-
-        videoContainer.style.display =
-            "block";
-
-    } else {
-
-        if (videoContainer) {
-            videoContainer.style.display =
-                "none";
-        }
-
-        if (videoPlayer) {
-            videoPlayer.src = "";
-        }
+        categoryFilter.addEventListener("change", renderPublicLibrary);
     }
 
 
-    // Notes
-    if (notesInput) {
+    // Admin Form Submission (Create / Update Study)
+    const studyForm =
+        document.getElementById("studyForm");
 
-        const allNotes =
-            JSON.parse(
-                localStorage.getItem(
-                    "studyNotes"
-                ) || "{}"
-            );
 
-        notesInput.value =
-            allNotes[study.id] || "";
+    if (studyForm) {
+
+        studyForm.addEventListener("submit", handleStudyFormSubmit);
     }
 
 
-    saveActiveStudyProgress(study);
+    // Modal Close Buttons
+    document
+        .querySelectorAll(".modal-close, .btn-close-modal")
+        .forEach(button => {
 
+            button.addEventListener("click", () => {
 
-    if (overlay) {
-        overlay.classList.add("open");
-    }
-}
-
-
-function closeStudyViewer() {
-
-    const overlay =
-        document.getElementById(
-            "studyViewerOverlay"
-        );
-
-    const videoPlayer =
-        document.getElementById(
-            "videoPlayer"
-        );
-
-
-    if (videoPlayer) {
-        videoPlayer.src = "";
-    }
-
-    if (overlay) {
-        overlay.classList.remove("open");
-    }
-
-    activeStudyForViewer = null;
+                closeAllModals();
+            });
+        });
 }
 
 
 // =========================================================
-// 6. API - FETCH STUDIES
+// 10. CRUD OPERATIONS (API CALLS)
 // =========================================================
 
-async function fetchAllStudies() {
-
-    try {
-
-        const response =
-            await fetch(
-                `${API_URL}/bible-studies`
-            );
-
-
-        if (!response.ok) {
-            throw new Error(
-                "Failed to load studies"
-            );
-        }
-
-
-        allStudies =
-            await response.json();
-
-
-        localStorage.setItem(
-            "your_exodus_studies",
-            JSON.stringify(allStudies)
-        );
-
-    } catch (error) {
-
-        console.error(
-            "API Fetch Error:",
-            error
-        );
-
-
-        const savedLocal =
-            localStorage.getItem(
-                "your_exodus_studies"
-            );
-
-
-        if (savedLocal) {
-
-            try {
-
-                allStudies =
-                    JSON.parse(savedLocal);
-
-                return;
-
-            } catch (e) {
-
-                console.error(
-                    "Local storage parse error",
-                    e
-                );
-            }
-        }
-
-
-        allStudies =
-            getFallbackMockData();
-    }
-}
-
-
-// =========================================================
-// 7. CREATE / UPDATE BIBLE STUDY
-// =========================================================
-
-async function handleStudyFormSubmit(
-    event,
-    forceDraft = false
-) {
+async function handleStudyFormSubmit(event) {
 
     event.preventDefault();
 
-
-    const id =
-        document.getElementById(
-            "editStudyId"
-        )?.value;
-
+    const studyId =
+        document.getElementById("studyIdInput")?.value;
 
     const title =
-        document.getElementById(
-            "studyTitleInput"
-        )?.value.trim();
-
+        document.getElementById("studyTitleInput")?.value;
 
     const scripture =
-        document.getElementById(
-            "studyScriptureInput"
-        )?.value.trim();
+        document.getElementById("studyScriptureInput")?.value;
 
-
-    const category_id =
-        parseInt(
-            document.getElementById(
-                "studyCategorySelect"
-            )?.value,
-            10
-        );
-
-
-    const video_url =
-        document.getElementById(
-            "studyVideoInput"
-        )?.value.trim();
-
+    const categoryId =
+        document.getElementById("studyCategorySelect")?.value;
 
     const content =
-        document.getElementById(
-            "studyContentInput"
-        )?.value.trim();
+        document.getElementById("studyContentInput")?.value;
 
-
-    const user =
-        getCurrentUser();
-
-
-    const user_id =
-        user?.id;
-
-
-    // Validation
-    if (!title || !scripture || !content) {
-
-        alert(
-            "Please complete the title, scripture, and lesson content."
-        );
-
-        return;
-    }
-
-
-    if (
-        !category_id ||
-        Number.isNaN(category_id)
-    ) {
-
-        alert(
-            "Please select a Bible study category."
-        );
-
-        return;
-    }
-
-
-    if (!user_id) {
-
-        alert(
-            "Your user information could not be found. Please log in again."
-        );
-
-        console.error(
-            "Missing user ID:",
-            user
-        );
-
-        return;
-    }
+    const isPublished =
+        document.getElementById("studyPublishedCheckbox")?.checked;
 
 
     const payload = {
@@ -1193,678 +1571,145 @@ async function handleStudyFormSubmit(
 
         scripture: scripture,
 
-        summary: "",
+        category_id: categoryId ? Number(categoryId) : null,
 
         content: content,
 
-        published: !forceDraft,
-
-        category_id: category_id,
-
-        user_id: user_id,
-
-        video_url: video_url || null
+        published: Boolean(isPublished)
     };
 
 
-    console.log(
-        "BIBLE STUDY PAYLOAD:",
-        payload
-    );
+    const isEdit = Boolean(studyId);
+
+    const url = isEdit
+        ? `${API_URL}/bible-studies/${studyId}`
+        : `${API_URL}/bible-studies`;
+
+    const method = isEdit ? "PUT" : "POST";
 
 
     try {
 
-        const method =
-            id ? "PUT" : "POST";
+        const response = await fetch(url, {
 
+            method: method,
 
-        const endpoint =
-            id
-                ? `${API_URL}/bible-studies/${id}`
-                : `${API_URL}/bible-studies`;
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-
-        const response =
-            await fetch(
-                endpoint,
-                {
-                    method: method,
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify(
-                            payload
-                        )
-                }
-            );
-
-
-        const responseData =
-            await response
-                .json()
-                .catch(() => null);
+            body: JSON.stringify(payload)
+        });
 
 
         if (!response.ok) {
 
-            console.error(
-                "Bible Study API Error:",
-                responseData
-            );
-
-            throw new Error(
-                responseData?.message ||
-                `Save operation failed (${response.status})`
-            );
+            throw new Error(`Failed to save study (${response.status})`);
         }
 
 
-        console.log(
-            "Bible Study saved:",
-            responseData
-        );
+        closeAllModals();
+
+        await loadInitialData();
 
 
-        alert(
-            forceDraft
-                ? "Draft saved successfully!"
-                : "Bible study published successfully!"
-        );
+    } catch (error) {
+
+        console.error("Save Study Error:", error);
+
+        alert("Failed to save the Bible study. Please try again.");
+    }
+}
 
 
-        closeAdminModal();
+async function togglePublishStatus(id) {
+
+    const study =
+        allStudies.find(item => item.id == id);
+
+    if (!study) return;
+
+
+    const updatedStatus = study.published === false;
+
+
+    try {
+
+        const response = await fetch(`${API_URL}/bible-studies/${id}`, {
+
+            method: "PUT",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                published: updatedStatus
+            })
+        });
+
+
+        if (!response.ok) {
+
+            throw new Error(`Toggle publish failed (${response.status})`);
+        }
 
 
         await loadInitialData();
 
 
-    } catch (err) {
+    } catch (error) {
 
-        console.error(
-            "Bible Study Save Error:",
-            err
-        );
+        console.error("Publish Toggle Error:", error);
 
-
-        alert(
-            `Bible study could not be saved.\n\n${err.message}`
-        );
+        alert("Failed to update status.");
     }
 }
 
-
-// =========================================================
-// 8. PUBLISH / UNPUBLISH
-// =========================================================
-
-async function togglePublishStatus(id) {
-
-    const study =
-        allStudies.find(
-            s => s.id == id
-        );
-
-
-    if (!study) return;
-
-
-    study.published =
-        study.published === false
-            ? true
-            : false;
-
-
-    try {
-
-        const response =
-            await fetch(
-                `${API_URL}/bible-studies/${id}`,
-                {
-                    method: "PUT",
-
-                    headers: {
-                        "Content-Type":
-                            "application/json"
-                    },
-
-                    body:
-                        JSON.stringify(study)
-                }
-            );
-
-
-        if (!response.ok) {
-            throw new Error(
-                "Failed to update publish status"
-            );
-        }
-
-
-    } catch (e) {
-
-        console.warn(
-            "Updated publish state locally",
-            e
-        );
-    }
-
-
-    renderAdminDashboard();
-    renderPublicLibrary();
-}
-
-
-// =========================================================
-// 9. DELETE STUDY
-// =========================================================
 
 async function deleteStudy(id) {
 
-    if (
-        !confirm(
-            "Are you sure you want to delete this study?"
-        )
-    ) {
+    if (!confirm("Are you sure you want to delete this Bible study?")) {
+
         return;
     }
 
 
     try {
 
-        const response =
-            await fetch(
-                `${API_URL}/bible-studies/${id}`,
-                {
-                    method: "DELETE"
-                }
-            );
+        const response = await fetch(`${API_URL}/bible-studies/${id}`, {
 
-
-        if (!response.ok) {
-            throw new Error(
-                "Delete failed"
-            );
-        }
-
-
-    } catch (e) {
-
-        console.warn(
-            "Deleted study locally",
-            e
-        );
-    }
-
-
-    allStudies =
-        allStudies.filter(
-            s => s.id != id
-        );
-
-
-    renderAdminDashboard();
-    renderPublicLibrary();
-}
-
-
-// =========================================================
-// 10. EVENT LISTENERS
-// =========================================================
-
-function setupEventListeners() {
-
-    // Admin tabs
-
-    const tabPub =
-        document.getElementById(
-            "tabPublished"
-        );
-
-    const tabDraft =
-        document.getElementById(
-            "tabDrafts"
-        );
-
-
-    if (tabPub && tabDraft) {
-
-        tabPub.addEventListener(
-            "click",
-            () => {
-
-                currentAdminTab =
-                    "published";
-
-                tabPub.classList.add(
-                    "active"
-                );
-
-                tabDraft.classList.remove(
-                    "active"
-                );
-
-                renderAdminGrid();
-            }
-        );
-
-
-        tabDraft.addEventListener(
-            "click",
-            () => {
-
-                currentAdminTab =
-                    "drafts";
-
-                tabDraft.classList.add(
-                    "active"
-                );
-
-                tabPub.classList.remove(
-                    "active"
-                );
-
-                renderAdminGrid();
-            }
-        );
-    }
-
-
-    // Create
-
-    const openCreateBtn =
-        document.getElementById(
-            "openCreateStudyBtn"
-        );
-
-
-    if (openCreateBtn) {
-
-        openCreateBtn.addEventListener(
-            "click",
-            openCreateModal
-        );
-    }
-
-
-    // Close form
-
-    const closeFormBtn =
-        document.getElementById(
-            "closeFormModal"
-        );
-
-
-    if (closeFormBtn) {
-
-        closeFormBtn.addEventListener(
-            "click",
-            closeAdminModal
-        );
-    }
-
-
-    // Close viewer
-
-    const closeViewerBtn =
-        document.getElementById(
-            "closeViewerModal"
-        );
-
-
-    if (closeViewerBtn) {
-
-        closeViewerBtn.addEventListener(
-            "click",
-            closeStudyViewer
-        );
-    }
-
-
-    // Form submit
-
-    const form =
-        document.getElementById(
-            "studyAdminForm"
-        );
-
-
-    if (form) {
-
-        form.addEventListener(
-            "submit",
-            event =>
-                handleStudyFormSubmit(
-                    event,
-                    false
-                )
-        );
-    }
-
-
-    // Save draft
-
-    const draftBtn =
-        document.getElementById(
-            "saveDraftBtn"
-        );
-
-
-    if (draftBtn) {
-
-        draftBtn.addEventListener(
-            "click",
-            event =>
-                handleStudyFormSubmit(
-                    event,
-                    true
-                )
-        );
-    }
-
-
-    // Search
-
-    const searchBox =
-        document.getElementById(
-            "searchBox"
-        );
-
-
-    if (searchBox) {
-
-        searchBox.addEventListener(
-            "input",
-            renderPublicLibrary
-        );
-    }
-
-
-    // Category filter
-
-    const categoryFilter =
-        document.getElementById(
-            "categoryFilter"
-        );
-
-
-    if (categoryFilter) {
-
-        categoryFilter.addEventListener(
-            "change",
-            renderPublicLibrary
-        );
-    }
-
-
-    // Notes
-
-    const saveNotesBtn =
-        document.getElementById(
-            "saveNotesBtn"
-        );
-
-
-    if (saveNotesBtn) {
-
-        saveNotesBtn.addEventListener(
-            "click",
-            saveLearnerNotes
-        );
-    }
-
-
-    // Complete
-
-    const markCompleteBtn =
-        document.getElementById(
-            "markCompleteBtn"
-        );
-
-
-    if (markCompleteBtn) {
-
-        markCompleteBtn.addEventListener(
-            "click",
-            markStudyComplete
-        );
-    }
-}
-
-
-// =========================================================
-// 11. CREATE MODAL
-// =========================================================
-
-function openCreateModal() {
-
-    document
-        .getElementById(
-            "studyAdminForm"
-        )
-        ?.reset();
-
-
-    document.getElementById(
-        "editStudyId"
-    ).value = "";
-
-
-    document.getElementById(
-        "studyCategorySelect"
-    ).value = "";
-
-
-    document.getElementById(
-        "modalTitle"
-    ).textContent =
-        "✏ Create New Bible Study";
-
-
-    document
-        .getElementById(
-            "studyFormOverlay"
-        )
-        ?.classList.add("open");
-}
-
-
-// =========================================================
-// 12. EDIT MODAL
-// =========================================================
-
-function openEditModal(id) {
-
-    const study =
-        allStudies.find(
-            s => s.id == id
-        );
-
-
-    if (!study) return;
-
-
-    document.getElementById(
-        "editStudyId"
-    ).value =
-        study.id;
-
-
-    document.getElementById(
-        "studyTitleInput"
-    ).value =
-        study.title || "";
-
-
-    document.getElementById(
-        "studyScriptureInput"
-    ).value =
-        study.scripture || "";
-
-
-    document.getElementById(
-        "studyCategorySelect"
-    ).value =
-        study.category_id || "";
-
-
-    document.getElementById(
-        "studyVideoInput"
-    ).value =
-        study.video_url || "";
-
-
-    document.getElementById(
-        "studyContentInput"
-    ).value =
-        study.content || "";
-
-
-    document.getElementById(
-        "modalTitle"
-    ).textContent =
-        "✏ Edit Bible Study";
-
-
-    document
-        .getElementById(
-            "studyFormOverlay"
-        )
-        ?.classList.add("open");
-}
-
-
-// =========================================================
-// CLOSE ADMIN MODAL
-// =========================================================
-
-function closeAdminModal() {
-
-    document
-        .getElementById(
-            "studyFormOverlay"
-        )
-        ?.classList.remove("open");
-}
-
-
-// =========================================================
-// 13. NOTES
-// =========================================================
-
-function saveLearnerNotes() {
-
-    if (!activeStudyForViewer) return;
-
-
-    const text =
-        document.getElementById(
-            "learnerNotesInput"
-        )?.value || "";
-
-
-    const allNotes =
-        JSON.parse(
-            localStorage.getItem(
-                "studyNotes"
-            ) || "{}"
-        );
-
-
-    allNotes[
-        activeStudyForViewer.id
-    ] = text;
-
-
-    localStorage.setItem(
-        "studyNotes",
-        JSON.stringify(allNotes)
-    );
-
-
-    alert(
-        "Notes saved successfully!"
-    );
-}
-
-
-// =========================================================
-// 14. MARK STUDY COMPLETE
-// =========================================================
-
-function markStudyComplete() {
-
-    if (!activeStudyForViewer) return;
-
-
-    const completed =
-        JSON.parse(
-            localStorage.getItem(
-                "completedStudies"
-            ) || "[]"
-        );
-
-
-    const exists =
-        completed.some(
-            item =>
-                item.id ==
-                activeStudyForViewer.id
-        );
-
-
-    if (!exists) {
-
-        completed.push({
-
-            id:
-                activeStudyForViewer.id,
-
-            title:
-                activeStudyForViewer.title,
-
-            scripture:
-                activeStudyForViewer.scripture,
-
-            completedAt:
-                new Date()
-                    .toLocaleDateString()
+            method: "DELETE"
         });
 
 
-        localStorage.setItem(
-            "completedStudies",
-            JSON.stringify(completed)
-        );
+        if (!response.ok) {
+
+            throw new Error(`Delete request failed (${response.status})`);
+        }
+
+
+        await loadInitialData();
+
+
+    } catch (error) {
+
+        console.error("Delete Study Error:", error);
+
+        alert("Failed to delete Bible study.");
     }
-
-
-    localStorage.removeItem(
-        "activeStudyProgress"
-    );
-
-
-    alert(
-        "Praise God! Study marked as complete."
-    );
-
-
-    closeStudyViewer();
-
-    renderLearnerDashboard();
 }
 
 
 // =========================================================
-// 15. ACTIVE STUDY PROGRESS
+// 11. MODAL AND VIEWER CONTROLS
 // =========================================================
 
-function saveActiveStudyProgress(study) {
+function openStudyViewer(study) {
 
+    activeStudyForViewer = study;
+
+    // Save as active progress in localStorage for learners
     localStorage.setItem(
         "activeStudyProgress",
         JSON.stringify({
@@ -1873,212 +1718,151 @@ function saveActiveStudyProgress(study) {
 
             title: study.title,
 
-            scripture:
-                study.scripture,
+            scripture: study.scripture,
 
-            content:
-                study.content,
+            content: study.content,
 
-            progress:
-                "In Progress"
+            progress: "In Progress"
         })
     );
+
+
+    const modal =
+        document.getElementById("studyViewerModal");
+
+    const titleEl =
+        document.getElementById("viewerTitle");
+
+    const scriptureEl =
+        document.getElementById("viewerScripture");
+
+    const contentEl =
+        document.getElementById("viewerContent");
+
+
+    if (titleEl) titleEl.textContent = study.title || "Untitled";
+
+    if (scriptureEl) scriptureEl.textContent = study.scripture || "";
+
+    if (contentEl) contentEl.innerHTML = escapeHtml(study.content || "");
+
+
+    if (modal) modal.style.display = "block";
+
+
+    // Refresh learner view dashboard state
+    if (!isAdmin()) {
+
+        renderLearnerDashboard();
+    }
+}
+
+
+function openEditModal(id) {
+
+    const study =
+        allStudies.find(item => item.id == id);
+
+    if (!study) return;
+
+
+    document.getElementById("studyIdInput").value = study.id;
+
+    document.getElementById("studyTitleInput").value = study.title || "";
+
+    document.getElementById("studyScriptureInput").value = study.scripture || "";
+
+    document.getElementById("studyCategorySelect").value = study.category_id || "";
+
+    document.getElementById("studyContentInput").value = study.content || "";
+
+    document.getElementById("studyPublishedCheckbox").checked = study.published !== false;
+
+
+    const modal = document.getElementById("studyModal");
+
+    if (modal) modal.style.display = "block";
+}
+
+
+function closeAllModals() {
+
+    document
+        .querySelectorAll(".modal")
+        .forEach(modal => {
+
+            modal.style.display = "none";
+        });
+}
+
+
+function saveStudyForLater(studyId) {
+
+    const study =
+        allStudies.find(item => item.id == studyId);
+
+    if (!study) return;
+
+
+    let saved =
+        JSON.parse(localStorage.getItem("savedStudies") || "[]");
+
+
+    if (!saved.some(item => item.id == studyId)) {
+
+        saved.push(study);
+
+        localStorage.setItem("savedStudies", JSON.stringify(saved));
+
+        alert(`Saved "${study.title}" to your list!`);
+
+    } else {
+
+        alert("This study is already in your saved list.");
+    }
 }
 
 
 // =========================================================
-// 16. CATEGORY LOOKUP
+// 12. UTILITY FUNCTIONS
 // =========================================================
 
-function getCategoryName(categoryId) {
+function snippetText(text, maxLength = 100) {
 
-    const categories = {
+    if (!text) return "";
 
-        1: "Faith",
+    if (text.length <= maxLength) return text;
 
-        2: "Prayer",
-
-        3: "God's Word",
-
-        4: "Trusting God",
-
-        5: "Purpose & Calling",
-
-        6: "Overcoming",
-
-        7: "Relationships",
-
-        8: "Wisdom & Decisions",
-
-        9: "Healing & Restoration",
-
-        10: "Character & Growth"
-    };
-
-
-    return (
-        categories[Number(categoryId)] ||
-        "General"
-    );
+    return text.substring(0, maxLength).trim() + "...";
 }
 
-
-// =========================================================
-// 17. HTML ESCAPING
-// =========================================================
 
 function escapeHtml(str) {
 
-    return String(str || "")
-        .replace(
-            /[&<>"']/g,
-            match => {
-
-                const escapeMap = {
-
-                    "&": "&amp;",
-
-                    "<": "&lt;",
-
-                    ">": "&gt;",
-
-                    '"': "&quot;",
-
-                    "'": "&#039;"
-                };
-
-
-                return escapeMap[match];
-            }
-        );
-}
-
-
-// =========================================================
-// 18. TEXT SNIPPET
-// =========================================================
-
-function snippetText(str, length) {
-
     if (!str) return "";
 
-    return str.length > length
-        ? str.substring(0, length) + "..."
-        : str;
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 }
 
 
-// =========================================================
-// 19. FORMAT STUDY CONTENT
-// =========================================================
+function showApiError(message) {
 
-function formatMarkdownParagraphs(text) {
+    const alertContainer =
+        document.getElementById("apiErrorContainer");
 
-    return text
-        .split("\n\n")
-        .map(
-            paragraph =>
-                `<p style="margin-bottom: 15px;">${escapeHtml(
-                    paragraph
-                )}</p>`
-        )
-        .join("");
-}
+    if (alertContainer) {
 
+        alertContainer.textContent = message;
 
-// =========================================================
-// 20. YOUTUBE URL
-// =========================================================
+        alertContainer.style.display = "block";
 
-function convertToEmbedUrl(url) {
+    } else {
 
-    if (!url) return "";
-
-    if (url.includes("embed/")) {
-        return url;
+        console.warn(message);
     }
-
-
-    if (url.includes("watch?v=")) {
-
-        return url.replace(
-            "watch?v=",
-            "embed/"
-        );
-    }
-
-
-    if (url.includes("youtu.be/")) {
-
-        const videoId =
-            url.split("youtu.be/")[1]
-                ?.split("?")[0]
-                ?.split("&")[0];
-
-
-        return videoId
-            ? `https://www.youtube.com/embed/${videoId}`
-            : url;
-    }
-
-
-    return url;
-}
-
-
-// =========================================================
-// 21. FALLBACK DATA
-// =========================================================
-
-function getFallbackMockData() {
-
-    return [
-
-        {
-            id: 1,
-
-            title: "The Fig Tree",
-
-            scripture:
-                "Matthew 21:18-22",
-
-            category_id: 1,
-
-            content:
-                "Early in the morning, as Jesus was on his way back to the city, he was hungry. Seeing a fig tree by the road, he went up to it but found nothing on it except leaves. Then he said to it, 'May you never bear fruit again!' Immediately the tree withered.",
-
-            published: true,
-
-            learner_count: 84,
-
-            completion_count: 62,
-
-            created_at:
-                "2026-07-31"
-        },
-
-
-        {
-            id: 2,
-
-            title: "Walking in Faith",
-
-            scripture:
-                "Hebrews 11:1-6",
-
-            category_id: 1,
-
-            content:
-                "Now faith is confidence in what we hope for and assurance about what we do not see. This is what the ancients were commended for.",
-
-            published: false,
-
-            learner_count: 0,
-
-            completion_count: 0,
-
-            created_at:
-                "2026-08-01"
-        }
-    ];
 }
