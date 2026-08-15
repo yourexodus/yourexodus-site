@@ -592,6 +592,10 @@ function setupEventListeners() {
 // HANDLE STUDY FORM SUBMISSION (FIXED FOR 422)
 // ==========================================
 
+// ==========================================
+// HANDLE STUDY FORM SUBMISSION (FIXED)
+// ==========================================
+
 async function handleStudyFormSubmit(event) {
     event.preventDefault();
 
@@ -599,35 +603,33 @@ async function handleStudyFormSubmit(event) {
     const rawId = document.getElementById("studyIdInput")?.value;
     const title = document.getElementById("studyTitleInput")?.value.trim();
     const scripture = document.getElementById("studyScriptureInput")?.value.trim();
-    const category = document.getElementById("studyCategorySelect")?.value.trim();
+    const categoryRaw = document.getElementById("studyCategorySelect")?.value.trim();
     const content = document.getElementById("studyContentInput")?.value.trim();
     const isPublished = document.getElementById("studyPublishedCheckbox")?.checked ?? true;
 
     // 2. Client-side sanity check
-    if (!title || !scripture || !category || !content) {
+    if (!title || !scripture || !categoryRaw || !content) {
         alert("Please complete all required fields.");
         return;
     }
 
-    // 3. Build payload matching standard Marshmallow BibleStudySchema
-    // (Note: Adjust key names if your BibleStudySchema uses 'scripture_reference' instead of 'scripture')
+    // 3. Build payload matching backend Flask/Marshmallow schema
     const payload = {
         title: title,
-        scripture: scripture, 
-        category: category,
+        scripture_reference: scripture,
+        category_id: parseInt(categoryRaw, 10), // Parse to Integer for Foreign Key
         content: content,
-        is_published: isPublished
+        published: isPublished
     };
 
-    // 4. Determine Endpoint URL and Method matching your Flask Blueprint
-    // Your blueprint routes: /biblestudies or /biblestudies/<int:biblestudy_id>
-    let url = "https://your-render-api-url.onrender.com/biblestudies"; // Replace domain with your Render API base URL
+    // 4. Use central API_URL and consistent /bible-studies endpoint path
+    let url = `${API_URL}/bible-studies`;
     let method = "POST";
 
     if (rawId && rawId.trim() !== "") {
         const numericId = parseInt(rawId, 10);
         if (!isNaN(numericId)) {
-            url = `https://your-render-api-url.onrender.com/biblestudies/${numericId}`;
+            url = `${API_URL}/bible-studies/${numericId}`;
             method = "PUT";
         }
     }
@@ -642,10 +644,10 @@ async function handleStudyFormSubmit(event) {
             body: JSON.stringify(payload)
         });
 
-        // 5. Catch 422 details directly from smorest / Marshmallow error response
+        // 5. Catch validation errors directly from backend response
         if (response.status === 422) {
             const errorDetails = await response.json();
-            console.error("Smolrest/Marshmallow 422 Validation Error:", errorDetails);
+            console.error("422 Validation Error:", errorDetails);
             alert(`Validation Error (422): ${JSON.stringify(errorDetails.json || errorDetails)}`);
             return;
         }
@@ -657,20 +659,17 @@ async function handleStudyFormSubmit(event) {
         const savedStudy = await response.json();
         console.log("Successfully saved study:", savedStudy);
 
-        // Close modal and refresh UI
-        const modal = document.getElementById("studyModal");
-        if (modal) modal.style.display = "none";
-        
-        // Reload your dashboard studies list
-        if (typeof loadStudies === "function") {
-            loadStudies();
-        }
+        // Close modal and refresh UI data
+        closeAllModals();
+        await loadInitialData();
 
     } catch (error) {
         console.error("Error submitting study:", error);
         alert("Failed to submit study. Check browser console for details.");
     }
 }
+
+
 async function togglePublishStatus(id) {
     const study = allStudies.find(item => item.id == id);
     if (!study) return;
