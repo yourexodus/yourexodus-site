@@ -559,6 +559,15 @@ function setupEventListeners() {
         });
     }
 
+    // Attach Create Bible Study button handler (covers multiple common button IDs)
+    const createBtn = document.getElementById("createStudyBtn") || 
+                      document.getElementById("btnCreateStudy") || 
+                      document.getElementById("openCreateStudyBtn");
+                      
+    if (createBtn) {
+        createBtn.addEventListener("click", openCreateModal);
+    }
+
     const searchBox = document.getElementById("searchBox");
     const categoryFilter = document.getElementById("categoryFilter");
 
@@ -671,6 +680,27 @@ async function deleteStudy(id) {
 // =========================================================
 // 11. MODAL AND VIEWER CONTROLS
 // =========================================================
+
+function openCreateModal() {
+    const idInput = document.getElementById("studyIdInput");
+    const titleInput = document.getElementById("studyTitleInput");
+    const scriptureInput = document.getElementById("studyScriptureInput");
+    const categorySelect = document.getElementById("studyCategorySelect");
+    const contentInput = document.getElementById("studyContentInput");
+    const publishedCheckbox = document.getElementById("studyPublishedCheckbox");
+
+    if (idInput) idInput.value = "";
+    if (titleInput) titleInput.value = "";
+    if (scriptureInput) scriptureInput.value = "";
+    if (categorySelect) categorySelect.value = "";
+    if (contentInput) contentInput.value = "";
+    if (publishedCheckbox) publishedCheckbox.checked = true;
+
+    const modal = document.getElementById("studyModal");
+    if (modal) {
+        modal.style.display = "block";
+    }
+}
 
 function openStudyViewer(study) {
     activeStudyForViewer = study;
